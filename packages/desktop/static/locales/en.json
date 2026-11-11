@@ -34,7 +34,8 @@
       "closeWindow": "Close Window",
       "quit": "Quit",
       "preferences": "Preferences",
-      "addFolder": "Add Folder…"
+      "addFolder": "Add Folder…",
+      "autoSaveOnEnter": "Save on Enter"
     },
     "edit": {
       "edit": "Edit",
@@ -58,7 +59,8 @@
       "screenshot": "Screenshot",
       "lineEnding": "Line Ending",
       "lineEndingCrlf": "CRLF(Windows)",
-      "lineEndingLf": "LF(Linux/Mac)"
+      "lineEndingLf": "LF(Linux/Mac)",
+      "copyAsPlainText": "Copy as Plain Text"
     },
     "paragraph": {
       "title": "Paragraph",
@@ -221,7 +223,8 @@
       "copyPath": "Copy path",
       "showInFolder": "Show in folder",
       "showInSideBar": "Show in Side Bar"
-    }
+    },
+    "copyAsPlainText": "Copy as Plain Text"
   },
   "search": {
     "searchPlaceholder": "Search",
@@ -310,7 +313,13 @@
       "lastModified": "Modified",
       "unavailable": "—",
       "open": "Open document statistics"
-    }
+    },
+    "copyPlainText": "Copy TXT",
+    "copyPlainTextTooltip": "Copy as plain text without Markdown (.txt)",
+    "copiedPlainText": "Copied!",
+    "autoSaveButton": "Auto-save",
+    "autoSaveByTime": "Save by interval",
+    "autoSaveOnEnter": "Save on Enter"
   },
   "commandPalette": {
     "placeholder": "Type a command to execute",
@@ -432,7 +441,10 @@
       "autoSave": {
         "title": "Auto Save",
         "description": "Auto save",
-        "delayDescription": "Auto save delay"
+        "delayDescription": "Auto save delay",
+        "onEnter": "Save automatically whenever Enter is pressed",
+        "onEnterShort": "Save on Enter",
+        "intervalLabel": "Save interval"
       },
       "window": {
         "title": "Window",
@@ -831,7 +843,8 @@
       "findPrevious": "Find Previous",
       "replace": "Replace",
       "findInFolder": "Find in Folder",
-      "screenshot": "Screenshot"
+      "screenshot": "Screenshot",
+      "copyAsPlainText": "Edit: Copy as Plain Text"
     },
     "paragraph": {
       "heading1": "Heading 1",

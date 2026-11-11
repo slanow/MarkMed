@@ -20,6 +20,7 @@ export type FileSortOrder = 'asc' | 'desc'
 export interface PreferencesState {
   autoSave: boolean
   autoSaveDelay: number
+  autoSaveOnEnter: boolean
   titleBarStyle: TitleBarStyle | string
   openFilesInNewWindow: boolean
   openFolderInNewWindow: boolean
@@ -145,6 +146,7 @@ export const usePreferencesStore = defineStore('preferences', {
   state: (): PreferencesState => ({
     autoSave: false,
     autoSaveDelay: 5000,
+    autoSaveOnEnter: false,
     titleBarStyle: 'custom',
     openFilesInNewWindow: false,
     openFolderInNewWindow: false,

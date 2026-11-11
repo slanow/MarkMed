@@ -46,6 +46,7 @@ const COMMAND_KEY_MAP: Record<string, string> = {
   'edit.paste': 'commands.edit.paste',
   'edit.copy-as-rich': 'commands.edit.copyAsRich',
   'edit.copy-as-html': 'commands.edit.copyAsHtml',
+  'edit.copy-as-plaintext': 'commands.edit.copyAsPlainText',
   'edit.paste-as-plaintext': 'commands.edit.pasteAsPlaintext',
 
   'edit.select-all': 'commands.edit.selectAll',

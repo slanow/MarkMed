@@ -213,6 +213,12 @@ const commands: CommandDescriptor[] = [
     }
   },
   {
+    id: 'edit.copy-as-plaintext',
+    execute: async() => {
+      bus.emit('copyAsPlainText', 'copyAsPlainText')
+    }
+  },
+  {
     id: 'edit.find',
     execute: async() => {
       await delay(150)
@@ -534,33 +540,13 @@ const commands: CommandDescriptor[] = [
     subcommands: [
       {
         id: 'window.change-theme-light',
-        description: 'Cadmium Light',
+        description: 'Light',
         value: 'light'
       },
       {
         id: 'window.change-theme-dark',
         description: 'Dark',
         value: 'dark'
-      },
-      {
-        id: 'window.change-theme-graphite',
-        description: 'Graphite',
-        value: 'graphite'
-      },
-      {
-        id: 'window.change-theme-material-dark',
-        description: 'Material Dark',
-        value: 'material-dark'
-      },
-      {
-        id: 'window.change-theme-one-dark',
-        description: 'One Dark',
-        value: 'one-dark'
-      },
-      {
-        id: 'window.change-theme-ulysses',
-        description: 'Ulysses',
-        value: 'ulysses'
       }
     ],
     executeSubcommand: async(_, theme) => {
@@ -701,17 +687,9 @@ export const getCommandsWithDescriptions = async(): Promise<CommandDescriptor[]>
         for (const subcommand of subcommands) {
           const { value } = subcommand
           if (value === 'light') {
-            subcommand.description = t('menu.theme.cadmiumLight')
+            subcommand.description = t('preferences.theme.filter.light')
           } else if (value === 'dark') {
-            subcommand.description = t('menu.theme.dark')
-          } else if (value === 'graphite') {
-            subcommand.description = t('menu.theme.graphiteLight')
-          } else if (value === 'material-dark') {
-            subcommand.description = t('menu.theme.materialDark')
-          } else if (value === 'one-dark') {
-            subcommand.description = t('menu.theme.oneDark')
-          } else if (value === 'ulysses') {
-            subcommand.description = t('menu.theme.ulyssesLight')
+            subcommand.description = t('preferences.theme.filter.dark')
           }
         }
       }

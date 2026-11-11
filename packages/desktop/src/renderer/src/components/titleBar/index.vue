@@ -13,42 +13,6 @@
         { isOsx: isOsx }
       ]"
     >
-      <div
-        v-if="titleBarStyle !== 'native' || isOsx"
-        class="title"
-        @dblclick.stop="toggleMaxmizeOnMacOS"
-      >
-        <span v-if="!filename">MarkMed</span>
-        <span v-else>
-          <span
-            class="save-dot"
-            :class="{ show: !isSaved }"
-          />
-          <span class="path">
-            <bdi dir="ltr">
-              <span
-                v-for="(path, index) of paths"
-                :key="index"
-              >
-                {{ path }}
-                <el-icon
-                  class="path-arrow"
-                  :size="12"
-                >
-                  <ArrowRight />
-                </el-icon>
-              </span>
-              <span
-                class="filename"
-                :class="{ isOsx: platform === 'darwin' }"
-                @click="rename"
-              >
-                {{ filename }}
-              </span>
-            </bdi>
-          </span>
-        </span>
-      </div>
       <div :class="showCustomTitleBar ? 'left-toolbar title-no-drag' : 'right-toolbar'">
         <img
           v-if="showCustomTitleBar"
@@ -103,71 +67,199 @@
         />
       </div>
       <div
-        v-if="titleBarStyle === 'custom' && !isFullScreen && !isOsx"
-        class="right-toolbar window-controls"
-        :class="[{ 'title-no-drag': titleBarStyle === 'custom' }]"
+        v-if="titleBarStyle !== 'native' || isOsx"
+        class="title"
+        @dblclick.stop="toggleMaxmizeOnMacOS"
       >
-        <icon-tooltip :content="t('titleBar.minimize')">
-          <button
-            type="button"
-            class="plain-button frameless-titlebar-button frameless-titlebar-minimize"
-            :aria-label="t('titleBar.minimize')"
-            @click.stop="handleMinimizeClick"
-          >
-            <span>
-              <svg
-                width="10"
-                height="10"
+        <span v-if="!filename">MarkMed</span>
+        <span v-else>
+          <span
+            class="save-dot"
+            :class="{ show: !isSaved }"
+          />
+          <span class="path">
+            <bdi dir="ltr">
+              <span
+                v-for="(path, index) of paths"
+                :key="index"
               >
-                <path :d="windowIconMinimize" />
-              </svg>
-            </span>
-          </button>
-        </icon-tooltip>
-        <icon-tooltip :content="maximizeLabel">
-          <button
-            type="button"
-            class="plain-button frameless-titlebar-button frameless-titlebar-toggle"
-            :aria-label="maximizeLabel"
-            @click.stop="handleMaximizeClick"
-          >
-            <span>
-              <svg
-                width="10"
-                height="10"
+                {{ path }}
+                <el-icon
+                  class="path-arrow"
+                  :size="12"
+                >
+                  <ArrowRight />
+                </el-icon>
+              </span>
+              <span
+                class="filename"
+                :class="{ isOsx: platform === 'darwin' }"
+                @click="rename"
               >
-                <path
-                  v-show="!isMaximized"
-                  :d="windowIconMaximize"
+                {{ filename }}
+              </span>
+            </bdi>
+          </span>
+        </span>
+      </div>
+      <div class="right-cluster title-no-drag">
+        <div class="titlebar-quick-actions">
+          <el-popover
+            trigger="click"
+            placement="bottom-end"
+            :width="270"
+            :show-arrow="false"
+            popper-class="autosave-quick-popover"
+          >
+            <template #reference>
+              <button
+                type="button"
+                class="plain-button titlebar-pill-btn"
+                :class="{ 'is-active': autoSave || autoSaveOnEnter }"
+                :aria-label="t('titleBar.autoSaveButton')"
+              >
+                <span class="pill-dot" />
+                <span>{{ autoSaveBadgeText }}</span>
+              </button>
+            </template>
+            <div class="autosave-popover-body">
+              <div class="autosave-row">
+                <span class="autosave-row-label">{{ t('titleBar.autoSaveByTime') }}</span>
+                <el-switch
+                  :model-value="autoSave"
+                  size="small"
+                  @change="(val: boolean | string | number) => setAutoSave(Boolean(val))"
+                />
+              </div>
+              <div class="autosave-presets">
+                <button
+                  v-for="sec in autoSavePresets"
+                  :key="sec"
+                  type="button"
+                  class="plain-button autosave-preset-btn"
+                  :class="{ 'is-selected': autoSave && autoSaveDelay === sec * 1000 }"
+                  @click="selectAutoSaveInterval(sec * 1000)"
+                >
+                  {{ sec }}s
+                </button>
+              </div>
+              <div class="autosave-divider" />
+              <div class="autosave-row">
+                <span class="autosave-row-label">{{ t('titleBar.autoSaveOnEnter') }}</span>
+                <el-switch
+                  :model-value="autoSaveOnEnter"
+                  size="small"
+                  @change="(val: boolean | string | number) => setAutoSaveOnEnter(Boolean(val))"
+                />
+              </div>
+            </div>
+          </el-popover>
+
+          <icon-tooltip
+            v-if="hasCurrentFile"
+            :content="t('titleBar.copyPlainTextTooltip')"
+          >
+            <button
+              type="button"
+              class="plain-button titlebar-pill-btn titlebar-copy-txt-btn"
+              :class="{ 'is-copied': copiedPlainText }"
+              :aria-label="t('titleBar.copyPlainTextTooltip')"
+              @click.stop="handleCopyPlainTextClick"
+            >
+              <svg
+                width="13"
+                height="13"
+                viewBox="0 0 16 16"
+                fill="none"
+                aria-hidden="true"
+              >
+                <rect
+                  x="5"
+                  y="2"
+                  width="9"
+                  height="11"
+                  rx="1.5"
+                  stroke="currentColor"
+                  stroke-width="1.3"
                 />
                 <path
-                  v-show="isMaximized"
-                  :d="windowIconRestore"
+                  d="M3 5H2.5A1.5 1.5 0 0 0 1 6.5v7A1.5 1.5 0 0 0 2.5 15h7A1.5 1.5 0 0 0 11 13.5V13"
+                  stroke="currentColor"
+                  stroke-width="1.3"
+                  stroke-linecap="round"
                 />
               </svg>
-            </span>
-          </button>
-        </icon-tooltip>
-        <icon-tooltip
-          :content="t('titleBar.close')"
-          placement="bottom-end"
+              <span>{{ copiedPlainText ? t('titleBar.copiedPlainText') : t('titleBar.copyPlainText') }}</span>
+            </button>
+          </icon-tooltip>
+        </div>
+
+        <div
+          v-if="titleBarStyle === 'custom' && !isFullScreen && !isOsx"
+          class="window-controls-group"
         >
-          <button
-            type="button"
-            class="plain-button frameless-titlebar-button frameless-titlebar-close"
-            :aria-label="t('titleBar.close')"
-            @click.stop="handleCloseClick"
+          <icon-tooltip :content="t('titleBar.minimize')">
+            <button
+              type="button"
+              class="plain-button frameless-titlebar-button frameless-titlebar-minimize"
+              :aria-label="t('titleBar.minimize')"
+              @click.stop="handleMinimizeClick"
+            >
+              <span>
+                <svg
+                  width="10"
+                  height="10"
+                >
+                  <path :d="windowIconMinimize" />
+                </svg>
+              </span>
+            </button>
+          </icon-tooltip>
+          <icon-tooltip :content="maximizeLabel">
+            <button
+              type="button"
+              class="plain-button frameless-titlebar-button frameless-titlebar-toggle"
+              :aria-label="maximizeLabel"
+              @click.stop="handleMaximizeClick"
+            >
+              <span>
+                <svg
+                  width="10"
+                  height="10"
+                >
+                  <path
+                    v-show="!isMaximized"
+                    :d="windowIconMaximize"
+                  />
+                  <path
+                    v-show="isMaximized"
+                    :d="windowIconRestore"
+                  />
+                </svg>
+              </span>
+            </button>
+          </icon-tooltip>
+          <icon-tooltip
+            :content="t('titleBar.close')"
+            placement="bottom-end"
           >
-            <span>
-              <svg
-                width="10"
-                height="10"
-              >
-                <path :d="windowIconClose" />
-              </svg>
-            </span>
-          </button>
-        </icon-tooltip>
+            <button
+              type="button"
+              class="plain-button frameless-titlebar-button frameless-titlebar-close"
+              :aria-label="t('titleBar.close')"
+              @click.stop="handleCloseClick"
+            >
+              <span>
+                <svg
+                  width="10"
+                  height="10"
+                >
+                  <path :d="windowIconClose" />
+                </svg>
+              </span>
+            </button>
+          </icon-tooltip>
+        </div>
       </div>
     </div>
   </div>
@@ -189,6 +281,11 @@ import { ArrowRight } from '@element-plus/icons-vue'
 import IconTooltip from '@/components/iconTooltip/index.vue'
 import DocumentStatistics from './documentStatistics.vue'
 import MarkMedLogo from '../../assets/images/logo.png'
+import {
+  copyTextToClipboard,
+  getActiveEditorSelectionText,
+  resolvePlainTextToCopy
+} from '@/util/copyPlainText'
 import type { FileWordCount } from '@shared/types/files'
 
 interface ProjectInfo {
@@ -237,8 +334,62 @@ onMounted(async () => {
   }
 })
 
-const { titleBarStyle } = storeToRefs(preferencesStore)
+const { titleBarStyle, autoSave, autoSaveDelay, autoSaveOnEnter, sourceCode } =
+  storeToRefs(preferencesStore)
 const { showTabBar } = storeToRefs(layoutStore)
+
+const autoSavePresets = [1, 3, 5, 10, 30, 60] as const
+const copiedPlainText = ref(false)
+let copiedResetTimer: ReturnType<typeof setTimeout> | null = null
+
+const hasCurrentFile = computed(() => currentFile.value?.markdown !== undefined)
+
+const autoSaveBadgeText = computed(() => {
+  const base = t('titleBar.autoSaveButton')
+  if (autoSave.value && autoSaveOnEnter.value) {
+    return `${base} · ${Math.round(autoSaveDelay.value / 1000)}s+↵`
+  }
+  if (autoSave.value) {
+    return `${base} · ${Math.round(autoSaveDelay.value / 1000)}s`
+  }
+  if (autoSaveOnEnter.value) {
+    return `${base} · ↵`
+  }
+  return base
+})
+
+const setAutoSave = (enabled: boolean): void => {
+  preferencesStore.SET_SINGLE_PREFERENCE({ type: 'autoSave', value: enabled })
+}
+
+const setAutoSaveOnEnter = (enabled: boolean): void => {
+  preferencesStore.SET_SINGLE_PREFERENCE({ type: 'autoSaveOnEnter', value: enabled })
+}
+
+const selectAutoSaveInterval = (delayMs: number): void => {
+  preferencesStore.SET_SINGLE_PREFERENCE({ type: 'autoSaveDelay', value: delayMs })
+  if (!autoSave.value) {
+    preferencesStore.SET_SINGLE_PREFERENCE({ type: 'autoSave', value: true })
+  }
+}
+
+const handleCopyPlainTextClick = async (): Promise<void> => {
+  const markdown = currentFile.value?.markdown ?? ''
+  const selectedText = getActiveEditorSelectionText()
+  const plain = resolvePlainTextToCopy({
+    markdown,
+    selectedText,
+    isSourceCode: sourceCode.value && !currentFile.value?.readOnly
+  })
+  if (!plain) return
+  await copyTextToClipboard(plain)
+  copiedPlainText.value = true
+  if (copiedResetTimer) clearTimeout(copiedResetTimer)
+  copiedResetTimer = setTimeout(() => {
+    copiedResetTimer = null
+    copiedPlainText.value = false
+  }, 1800)
+}
 
 const paths = computed(() => pathBreadcrumb(props.pathname ?? '', PATH_SEPARATOR))
 
@@ -325,6 +476,7 @@ const offLeaveFullScreen = window.electron.ipcRenderer.on(
 )
 
 onBeforeUnmount(() => {
+  if (copiedResetTimer) clearTimeout(copiedResetTimer)
   offMaximize()
   offUnmaximize()
   offEnterFullScreen()
@@ -353,6 +505,9 @@ onBeforeUnmount(() => {
   top: 0;
   right: 0;
   z-index: 2;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  align-items: center;
   transition: color 0.4s ease-in-out;
   cursor: default;
 }
@@ -365,7 +520,10 @@ img {
   vertical-align: top;
 }
 .title {
-  padding: 0 190px;
+  padding: 0 12px;
+  min-width: 0;
+  max-width: 100%;
+  overflow: hidden;
   height: 100%;
   line-height: var(--titleBarHeight);
   font-size: 14px;
@@ -433,9 +591,7 @@ div.title > span > .path > bdi > span {
 .left-toolbar {
   padding: 0 10px;
   height: 100%;
-  position: absolute;
-  top: 0;
-  left: 0;
+  justify-self: start;
   width: auto;
   display: flex;
   flex-direction: row;
@@ -452,16 +608,70 @@ div.title > span > .path > bdi > span {
 }
 .right-toolbar {
   height: 100%;
-  position: absolute;
-  top: 0;
-  right: 0;
-  width: 190px;
   display: flex;
   align-items: center;
-  flex-direction: row-reverse;
-  & .item {
-    margin-right: 10px;
-  }
+  gap: 6px;
+  padding: 0 8px 0 10px;
+}
+.right-cluster {
+  grid-column: 3;
+  justify-self: end;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.titlebar-quick-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding-right: 4px;
+}
+.titlebar-pill-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  height: 22px;
+  padding: 0 8px;
+  border-radius: 6px;
+  font-size: 12px;
+  line-height: 1;
+  color: var(--editorColor50);
+  background: transparent;
+  border: 1px solid var(--editorColor10);
+  cursor: pointer;
+  white-space: nowrap;
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease,
+    border-color 0.15s ease;
+}
+.titlebar-pill-btn:hover {
+  background: var(--sideBarBgColor);
+  color: var(--editorColor);
+}
+.titlebar-pill-btn.is-active {
+  color: #3fa792;
+  border-color: rgba(63, 167, 146, 0.45);
+}
+.titlebar-pill-btn.is-copied {
+  color: #3fa792;
+  border-color: #3fa792;
+  background: rgba(63, 167, 146, 0.12);
+}
+.pill-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+  opacity: 0.75;
+}
+.window-controls-group {
+  display: flex;
+  align-items: center;
+  width: 138px;
+  height: 100%;
+  flex-direction: row;
 }
 
 .title-no-drag {
@@ -519,5 +729,59 @@ div.title > span > .path > bdi > span {
   display: inline-flex;
   align-items: center;
   line-height: 1;
+}
+</style>
+
+<style>
+.autosave-quick-popover.el-popover.el-popper {
+  padding: 12px 14px;
+  border: 1px solid var(--floatBorderColor);
+  border-radius: 10px;
+  background: var(--floatBgColor);
+  box-shadow: var(--floatShadow);
+  color: var(--editorColor);
+}
+.autosave-popover-body {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.autosave-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  font-size: 13px;
+}
+.autosave-row-label {
+  color: var(--editorColor);
+}
+.autosave-presets {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 4px;
+}
+.autosave-preset-btn {
+  height: 24px;
+  border-radius: 5px;
+  border: 1px solid var(--editorColor10);
+  background: transparent;
+  color: var(--editorColor50);
+  font-size: 11px;
+  cursor: pointer;
+}
+.autosave-preset-btn:hover {
+  color: var(--editorColor);
+  border-color: var(--editorColor30);
+}
+.autosave-preset-btn.is-selected {
+  color: #3fa792;
+  border-color: #3fa792;
+  background: rgba(63, 167, 146, 0.14);
+  font-weight: 600;
+}
+.autosave-divider {
+  height: 1px;
+  background: var(--editorColor10);
 }
 </style>

@@ -34,7 +34,8 @@
       "closeWindow": "Fechar Janela",
       "quit": "Sair",
       "preferences": "Preferências",
-      "addFolder": "Add Folder…"
+      "addFolder": "Add Folder…",
+      "autoSaveOnEnter": "Salvar ao apertar Enter"
     },
     "edit": {
       "edit": "Editar",
@@ -58,7 +59,8 @@
       "screenshot": "Captura de Tela",
       "lineEnding": "Terminação de Linha",
       "lineEndingCrlf": "CRLF(Windows)",
-      "lineEndingLf": "LF(Linux/Mac)"
+      "lineEndingLf": "LF(Linux/Mac)",
+      "copyAsPlainText": "Copiar como Texto Simples"
     },
     "paragraph": {
       "title": "Parágrafo",
@@ -221,7 +223,8 @@
       "copyPath": "Copiar caminho",
       "showInFolder": "Mostrar na pasta",
       "showInSideBar": "Mostrar na barra lateral"
-    }
+    },
+    "copyAsPlainText": "Copiar como Texto Simples"
   },
   "search": {
     "searchPlaceholder": "Pesquisar",
@@ -310,7 +313,13 @@
       "lastModified": "Modificado",
       "unavailable": "—",
       "open": "Abrir estatísticas do documento"
-    }
+    },
+    "copyPlainText": "Copiar TXT",
+    "copyPlainTextTooltip": "Copiar em texto simples sem Markdown (.txt)",
+    "copiedPlainText": "Copiado!",
+    "autoSaveButton": "Auto-salvar",
+    "autoSaveByTime": "Salvar por tempo",
+    "autoSaveOnEnter": "Salvar ao apertar Enter"
   },
   "commandPalette": {
     "placeholder": "Digite um comando para executar",
@@ -432,7 +441,10 @@
       "autoSave": {
         "title": "Salvamento Automático",
         "description": "Salvamento automático",
-        "delayDescription": "Atraso do salvamento automático"
+        "delayDescription": "Atraso do salvamento automático",
+        "onEnter": "Salvar automaticamente sempre que apertar Enter",
+        "onEnterShort": "Salvar ao apertar Enter",
+        "intervalLabel": "Intervalo de salvamento"
       },
       "window": {
         "title": "Janela",
@@ -831,7 +843,8 @@
       "findPrevious": "Localizar Anterior",
       "replace": "Substituir",
       "findInFolder": "Localizar na Pasta",
-      "screenshot": "Captura de Tela"
+      "screenshot": "Captura de Tela",
+      "copyAsPlainText": "Editar: Copiar como Texto Simples"
     },
     "paragraph": {
       "heading1": "Cabeçalho 1",

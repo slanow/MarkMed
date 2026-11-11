@@ -60,7 +60,10 @@
       width="min(800px, 90vw)"
       destroy-on-close
     >
-      <div class="theme-picker-tools">
+      <div
+        v-if="themes.length > 2"
+        class="theme-picker-tools"
+      >
         <el-input
           v-model="query"
           :aria-label="t('preferences.theme.searchThemes')"
@@ -95,12 +98,12 @@
           type="button"
           class="theme-option"
           :class="{ active: selectedTheme === item.name }"
-          :aria-label="themeLabel(item.name)"
+          :aria-label="localizedThemeLabel(item.name)"
           :aria-pressed="selectedTheme === item.name"
           @click="selectTheme(item.name)"
         >
           <theme-preview :name="item.name" />
-          <span>{{ themeLabel(item.name) }}</span>
+          <span>{{ localizedThemeLabel(item.name) }}</span>
         </button>
       </div>
     </el-dialog>
@@ -132,6 +135,11 @@ const pickerOpen = ref(false)
 const query = ref('')
 const filter = ref<(typeof filterOptions)[number]>('all')
 const selectedTheme = computed(() => store[pickerTarget.value])
+const localizedThemeLabel = (name: string): string => {
+  if (name === 'light') return t('preferences.theme.filter.light')
+  if (name === 'dark') return t('preferences.theme.filter.dark')
+  return themeLabel(name)
+}
 const visibleThemes = computed(() => themes.filter(item => {
   const mode = pickerTarget.value === 'theme' ? filter.value : pickerTarget.value === 'lightModeTheme' ? 'light' : 'dark'
   const matchesMode = mode === 'all' || isDarkThemeId(item.name) === (mode === 'dark')

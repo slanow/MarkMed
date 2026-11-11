@@ -34,7 +34,8 @@
       "closeWindow": "창 닫기",
       "quit": "종료",
       "preferences": "환경설정",
-      "addFolder": "Add Folder…"
+      "addFolder": "Add Folder…",
+      "autoSaveOnEnter": "Save on Enter"
     },
     "edit": {
       "edit": "편집",
@@ -58,7 +59,8 @@
       "screenshot": "스크린샷",
       "lineEnding": "줄 끝",
       "lineEndingCrlf": "CRLF(Windows)",
-      "lineEndingLf": "LF(Linux/Mac)"
+      "lineEndingLf": "LF(Linux/Mac)",
+      "copyAsPlainText": "Copy as Plain Text"
     },
     "paragraph": {
       "title": "단락",
@@ -221,7 +223,8 @@
       "copyPath": "경로 복사",
       "showInFolder": "폴더에서 보기",
       "showInSideBar": "사이드바에서 보기"
-    }
+    },
+    "copyAsPlainText": "Copy as Plain Text"
   },
   "search": {
     "searchPlaceholder": "검색",
@@ -310,7 +313,13 @@
       "lastModified": "수정됨",
       "unavailable": "—",
       "open": "문서 통계 열기"
-    }
+    },
+    "copyPlainText": "Copy TXT",
+    "copyPlainTextTooltip": "Copy as plain text without Markdown (.txt)",
+    "copiedPlainText": "Copied!",
+    "autoSaveButton": "Auto-save",
+    "autoSaveByTime": "Save by interval",
+    "autoSaveOnEnter": "Save on Enter"
   },
   "commandPalette": {
     "placeholder": "실행할 명령을 입력하세요",
@@ -432,7 +441,10 @@
       "autoSave": {
         "title": "자동 저장",
         "description": "자동 저장",
-        "delayDescription": "자동 저장 지연"
+        "delayDescription": "자동 저장 지연",
+        "onEnter": "Save automatically whenever Enter is pressed",
+        "onEnterShort": "Save on Enter",
+        "intervalLabel": "Save interval"
       },
       "window": {
         "title": "창",
@@ -831,7 +843,8 @@
       "findPrevious": "이전 찾기",
       "replace": "바꾸기",
       "findInFolder": "폴더에서 찾기",
-      "screenshot": "스크린샷"
+      "screenshot": "스크린샷",
+      "copyAsPlainText": "Edit: Copy as Plain Text"
     },
     "paragraph": {
       "heading1": "제목 1",

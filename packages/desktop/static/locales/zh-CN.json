@@ -34,7 +34,8 @@
       "closeWindow": "关闭窗口",
       "quit": "退出",
       "preferences": "偏好设置",
-      "addFolder": "添加文件夹…"
+      "addFolder": "添加文件夹…",
+      "autoSaveOnEnter": "Save on Enter"
     },
     "edit": {
       "edit": "编辑",
@@ -58,7 +59,8 @@
       "screenshot": "截图",
       "lineEnding": "行结束符",
       "lineEndingCrlf": "CRLF (Windows)",
-      "lineEndingLf": "LF (Unix/macOS)"
+      "lineEndingLf": "LF (Unix/macOS)",
+      "copyAsPlainText": "Copy as Plain Text"
     },
     "paragraph": {
       "title": "段落",
@@ -221,7 +223,8 @@
       "copyPath": "复制路径",
       "showInFolder": "在文件夹中显示",
       "showInSideBar": "在侧边栏中显示"
-    }
+    },
+    "copyAsPlainText": "Copy as Plain Text"
   },
   "search": {
     "searchPlaceholder": "搜索",
@@ -310,7 +313,13 @@
       "lastModified": "修改时间",
       "unavailable": "—",
       "open": "打开文档统计"
-    }
+    },
+    "copyPlainText": "Copy TXT",
+    "copyPlainTextTooltip": "Copy as plain text without Markdown (.txt)",
+    "copiedPlainText": "Copied!",
+    "autoSaveButton": "Auto-save",
+    "autoSaveByTime": "Save by interval",
+    "autoSaveOnEnter": "Save on Enter"
   },
   "commandPalette": {
     "placeholder": "输入要执行的命令",
@@ -432,7 +441,10 @@
       "autoSave": {
         "title": "自动保存",
         "description": "自动保存",
-        "delayDescription": "自动保存延迟"
+        "delayDescription": "自动保存延迟",
+        "onEnter": "Save automatically whenever Enter is pressed",
+        "onEnterShort": "Save on Enter",
+        "intervalLabel": "Save interval"
       },
       "window": {
         "title": "窗口",
@@ -831,7 +843,8 @@
       "findPrevious": "查找上一个",
       "replace": "替换",
       "findInFolder": "在文件夹中查找",
-      "screenshot": "截图"
+      "screenshot": "截图",
+      "copyAsPlainText": "Edit: Copy as Plain Text"
     },
     "paragraph": {
       "heading1": "标题 1",

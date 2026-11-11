@@ -34,7 +34,8 @@
       "closeWindow": "Cerrar Ventana",
       "quit": "Salir",
       "preferences": "Preferencias",
-      "addFolder": "Add Folder…"
+      "addFolder": "Add Folder…",
+      "autoSaveOnEnter": "Save on Enter"
     },
     "edit": {
       "edit": "Editar",
@@ -58,7 +59,8 @@
       "screenshot": "Captura de Pantalla",
       "lineEnding": "Final de Línea",
       "lineEndingCrlf": "CRLF(Windows)",
-      "lineEndingLf": "LF(Linux/Mac)"
+      "lineEndingLf": "LF(Linux/Mac)",
+      "copyAsPlainText": "Copy as Plain Text"
     },
     "paragraph": {
       "title": "Párrafo",
@@ -221,7 +223,8 @@
       "copyPath": "Copiar ruta",
       "showInFolder": "Mostrar en carpeta",
       "showInSideBar": "Mostrar en la barra lateral"
-    }
+    },
+    "copyAsPlainText": "Copy as Plain Text"
   },
   "search": {
     "searchPlaceholder": "Buscar",
@@ -310,7 +313,13 @@
       "lastModified": "Modificado",
       "unavailable": "—",
       "open": "Abrir estadísticas del documento"
-    }
+    },
+    "copyPlainText": "Copy TXT",
+    "copyPlainTextTooltip": "Copy as plain text without Markdown (.txt)",
+    "copiedPlainText": "Copied!",
+    "autoSaveButton": "Auto-save",
+    "autoSaveByTime": "Save by interval",
+    "autoSaveOnEnter": "Save on Enter"
   },
   "commandPalette": {
     "placeholder": "Escriba un comando para ejecutar",
@@ -432,7 +441,10 @@
       "autoSave": {
         "title": "Guardado Automático",
         "description": "Guardado automático",
-        "delayDescription": "Retraso del guardado automático"
+        "delayDescription": "Retraso del guardado automático",
+        "onEnter": "Save automatically whenever Enter is pressed",
+        "onEnterShort": "Save on Enter",
+        "intervalLabel": "Save interval"
       },
       "window": {
         "title": "Ventana",
@@ -831,7 +843,8 @@
       "findPrevious": "Buscar Anterior",
       "replace": "Reemplazar",
       "findInFolder": "Buscar en Carpeta",
-      "screenshot": "Captura de Pantalla"
+      "screenshot": "Captura de Pantalla",
+      "copyAsPlainText": "Edit: Copy as Plain Text"
     },
     "paragraph": {
       "heading1": "Encabezado 1",

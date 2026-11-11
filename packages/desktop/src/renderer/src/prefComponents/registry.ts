@@ -28,6 +28,10 @@ export const preferenceDefinitions: Record<string, PreferenceDefinition> = {
     "category": "files",
     "label": "preferences.general.autoSave.delayDescription"
   },
+  "autoSaveOnEnter": {
+    "category": "files",
+    "label": "preferences.general.autoSave.onEnter"
+  },
   "titleBarStyle": {
     "category": "appearance",
     "label": "preferences.general.window.titleBarStyle.title",

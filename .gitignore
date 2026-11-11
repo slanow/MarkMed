@@ -24,4 +24,5 @@ playwright-report/
 .agent/
 /0.24.0-dev/
 /0.24.1/
+/0.25.0/
 /backups/

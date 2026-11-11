@@ -8,7 +8,9 @@ export const useListenForMainStore = defineStore('listenForMain', () => {
   function EDITOR_EDIT_ACTION(type: string): void {
     if (
       useEditorStore().currentFile?.readOnly &&
-      !['copy', 'copyAsRich', 'copyAsHtml', 'selectAll', 'findInFolder'].includes(type)
+      !['copy', 'copyAsPlainText', 'copyAsRich', 'copyAsHtml', 'selectAll', 'findInFolder'].includes(
+        type
+      )
     )
       return
     const layoutStore = useLayoutStore()

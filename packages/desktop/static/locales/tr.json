@@ -34,7 +34,8 @@
       "closeWindow": "Pencereyi Kapat",
       "quit": "Çıkış",
       "preferences": "Tercihler",
-      "addFolder": "Add Folder…"
+      "addFolder": "Add Folder…",
+      "autoSaveOnEnter": "Save on Enter"
     },
     "edit": {
       "edit": "Düzen",
@@ -58,7 +59,8 @@
       "screenshot": "Ekran Görüntüsü",
       "lineEnding": "Satır Sonu",
       "lineEndingCrlf": "CRLF(Windows)",
-      "lineEndingLf": "LF(Linux/Mac)"
+      "lineEndingLf": "LF(Linux/Mac)",
+      "copyAsPlainText": "Copy as Plain Text"
     },
     "paragraph": {
       "title": "Paragraf",
@@ -221,7 +223,8 @@
       "copyPath": "Yolu kopyala",
       "showInFolder": "Klasörde göster",
       "showInSideBar": "Kenar çubuğunda göster"
-    }
+    },
+    "copyAsPlainText": "Copy as Plain Text"
   },
   "search": {
     "searchPlaceholder": "Ara",
@@ -310,7 +313,13 @@
       "lastModified": "Değişti",
       "unavailable": "—",
       "open": "Belge istatistiklerini aç"
-    }
+    },
+    "copyPlainText": "Copy TXT",
+    "copyPlainTextTooltip": "Copy as plain text without Markdown (.txt)",
+    "copiedPlainText": "Copied!",
+    "autoSaveButton": "Auto-save",
+    "autoSaveByTime": "Save by interval",
+    "autoSaveOnEnter": "Save on Enter"
   },
   "commandPalette": {
     "placeholder": "Çalıştırmak için bir komut yazın",
@@ -432,7 +441,10 @@
       "autoSave": {
         "title": "Otomatik Kaydet",
         "description": "Otomatik kaydet",
-        "delayDescription": "Otomatik kaydetme gecikmesi"
+        "delayDescription": "Otomatik kaydetme gecikmesi",
+        "onEnter": "Save automatically whenever Enter is pressed",
+        "onEnterShort": "Save on Enter",
+        "intervalLabel": "Save interval"
       },
       "window": {
         "title": "Pencere",
@@ -831,7 +843,8 @@
       "findPrevious": "Öncekini Bul",
       "replace": "Değiştir",
       "findInFolder": "Klasörde Bul",
-      "screenshot": "Ekran Görüntüsü"
+      "screenshot": "Ekran Görüntüsü",
+      "copyAsPlainText": "Edit: Copy as Plain Text"
     },
     "paragraph": {
       "heading1": "Başlık 1",

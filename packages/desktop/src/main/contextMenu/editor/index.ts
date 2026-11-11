@@ -3,6 +3,7 @@ import {
   getCUT,
   getCOPY,
   getPASTE,
+  getCopyAsPlainText,
   getCopyAsRich,
   getCopyAsHtml,
   getPasteAsPlainText,
@@ -47,6 +48,7 @@ const getContextItems = (): MenuItemConstructorOptions[] => [
   getCOPY(),
   getPASTE(),
   SEPARATOR,
+  getCopyAsPlainText(),
   getCopyAsRich(),
   getCopyAsHtml(),
   getPasteAsPlainText()

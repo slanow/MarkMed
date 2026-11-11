@@ -14,7 +14,7 @@ export default function(
   userPreference: Preference,
   recentlyUsedFiles: string[]
 ): MenuItemConstructorOptions {
-  const { autoSave, showPandocConvert } = userPreference.getAll()
+  const { autoSave, autoSaveOnEnter, showPandocConvert } = userPreference.getAll()
   const submenu: MenuItemConstructorOptions[] = [
     {
       label: t('menu.file.newTab'),
@@ -131,6 +131,15 @@ export default function(
       id: 'autoSaveMenuItem',
       click(menuItem, browserWindow) {
         actions.autoSave(menuItem, browserWindow as BrowserWindow | undefined)
+      }
+    },
+    {
+      label: t('menu.file.autoSaveOnEnter'),
+      type: 'checkbox',
+      checked: !!autoSaveOnEnter,
+      id: 'autoSaveOnEnterMenuItem',
+      click(menuItem, browserWindow) {
+        actions.autoSaveOnEnter(menuItem, browserWindow as BrowserWindow | undefined)
       }
     },
     {

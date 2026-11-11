@@ -1173,14 +1173,26 @@ export const useEditorStore = defineStore('editor', {
 
       const timer = setTimeout(() => {
         autoSaveTimers.delete(id)
-
-        const tab = this.tabs.find((t) => t.id === id)
-        if (tab && !tab.isSaved && !tab.readOnly && !tab.modeChanging && !tab.diskConflict) {
-          const session = getSessionActions()
-          if (session) void session.save(id).catch(console.error)
-        }
+        this.SAVE_IF_MODIFIED(id)
       }, autoSaveDelay)
       autoSaveTimers.set(id, timer)
+    },
+
+    SAVE_IF_MODIFIED(id: string): void {
+      const tab = this.tabs.find((t) => t.id === id)
+      if (tab && tab.pathname && !tab.isSaved && !tab.readOnly && !tab.modeChanging && !tab.diskConflict) {
+        const session = getSessionActions()
+        if (session) void session.save(id).catch(console.error)
+      }
+    },
+
+    SAVE_ON_ENTER(id: string): void {
+      if (autoSaveTimers.has(id)) {
+        const timer = autoSaveTimers.get(id)
+        clearTimeout(timer)
+        autoSaveTimers.delete(id)
+      }
+      this.SAVE_IF_MODIFIED(id)
     },
 
     SELECTION_CHANGE(changes: SelectionChange): void {
@@ -1451,6 +1463,9 @@ export const useEditorStore = defineStore('editor', {
     LISTEN_FOR_CONTEXT_MENU(): void {
       window.electron.ipcRenderer.on('mt::cm-copy-as-rich', () => {
         bus.emit('copyAsRich', 'copyAsRich')
+      })
+      window.electron.ipcRenderer.on('mt::cm-copy-as-plain-text', () => {
+        bus.emit('copyAsPlainText', 'copyAsPlainText')
       })
       window.electron.ipcRenderer.on('mt::cm-copy-as-html', () => {
         bus.emit('copyAsHtml', 'copyAsHtml')

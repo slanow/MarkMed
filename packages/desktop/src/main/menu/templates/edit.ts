@@ -71,6 +71,12 @@ export default function(keybindings: Keybindings): MenuItemConstructorOptions {
         type: 'separator'
       },
       {
+        label: t('menu.edit.copyAsPlainText'),
+        click(_menuItem, browserWindow) {
+          actions.editorCopyAsPlainText(browserWindow as BrowserWindow | undefined)
+        }
+      },
+      {
         label: t('menu.edit.copyAsRich'),
         accelerator: keybindings.getAccelerator(COMMANDS.EDIT_COPY_AS_RICH) ?? undefined,
         click(_menuItem, browserWindow) {

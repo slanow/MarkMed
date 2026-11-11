@@ -328,6 +328,21 @@ class AppMenu {
     })
   }
 
+  updateAutoSaveOnEnterMenu = (autoSaveOnEnter: boolean): void => {
+    this.windowMenus.forEach((value) => {
+      const { menu, type } = value
+      if (type !== MenuType.EDITOR || !menu) {
+        return
+      }
+
+      const item = menu.getMenuItemById('autoSaveOnEnterMenuItem')
+      if (!item) {
+        return
+      }
+      item.checked = autoSaveOnEnter
+    })
+  }
+
   _buildEditorMenu(recentUsedDocuments: string[] | null = null): EditorMenuEntry {
     if (!recentUsedDocuments) {
       recentUsedDocuments = this.getRecentlyUsedDocuments()
@@ -483,6 +498,9 @@ class AppMenu {
       }
       if (prefs.autoSave !== undefined) {
         this.updateAutoSaveMenu(prefs.autoSave)
+      }
+      if (prefs.autoSaveOnEnter !== undefined) {
+        this.updateAutoSaveOnEnterMenu(prefs.autoSaveOnEnter)
       }
       if (prefs.texMathDollars !== undefined || prefs.githubAlerts !== undefined) {
         this.updateAppMenu()

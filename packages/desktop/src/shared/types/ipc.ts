@@ -217,6 +217,7 @@ export interface IpcMainEventChannels extends StateIpcMainEvents {
   'mt::UPDATE_NOT_AVAILABLE': [info?: unknown]
   'mt::about-dialog': []
   'mt::cm-copy-as-html': []
+  'mt::cm-copy-as-plain-text': []
   'mt::cm-copy-as-rich': []
   'mt::cm-insert-paragraph': [direction: 'before' | 'after']
   'mt::cm-paste-as-plain-text': []

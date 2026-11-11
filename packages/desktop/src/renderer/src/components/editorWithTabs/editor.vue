@@ -131,6 +131,11 @@ import { SpellChecker } from '@/spellchecker'
 import { isMac, animatedScrollTo } from '@/util'
 import { moveImageToFolder, uploadImage } from '@/util/fileSystem'
 import { guessClipboardFilePath, copyImageToClipboard, readImagePng, clipboardImagePath } from '@/util/clipboard'
+import {
+  copyTextToClipboard,
+  getActiveEditorSelectionText,
+  resolvePlainTextToCopy
+} from '@/util/copyPlainText'
 import { dataURLToFile } from '@/util/dataURLToFile'
 import { getCssForOptions, type PdfCssOptions } from '@/util/pdf'
 import {
@@ -1012,6 +1017,17 @@ const handleCopyPaste = (type: unknown) => {
   }
 }
 
+const handleCopyAsPlainText = async (): Promise<void> => {
+  const markdown = editor.value?.getMarkdown() ?? currentFile.value?.markdown ?? ''
+  const selectedText = getActiveEditorSelectionText()
+  const plain = resolvePlainTextToCopy({
+    markdown,
+    selectedText,
+    isSourceCode: sourceCode.value
+  })
+  await copyTextToClipboard(plain)
+}
+
 const insertImage = (src: unknown) => {
   if (!sourceCode.value) {
     editor.value && editor.value.insertImage({ src: src as string })
@@ -1809,6 +1825,12 @@ onMounted(() => {
             }
           },
           {
+            label: t('menu.edit.copyAsPlainText'),
+            click: () => {
+              void handleCopyAsPlainText()
+            }
+          },
+          {
             label: t('menu.edit.copyAsRich'),
             enabled: hasSelection,
             click: () => muya.copyAsRich()
@@ -1888,6 +1910,7 @@ onMounted(() => {
   bus.on('flush-active-editor', flushActiveEditor)
   bus.on('editor-blur', blurEditor)
   bus.on('editor-focus', focusEditor)
+  bus.on('copyAsPlainText', handleCopyAsPlainText)
   bus.on('copyAsRich', handleCopyPaste)
   bus.on('copyAsHtml', handleCopyPaste)
   bus.on('pasteAsPlainText', handleCopyPaste)
@@ -2061,6 +2084,7 @@ onBeforeUnmount(() => {
   bus.off('flush-active-editor', flushActiveEditor)
   bus.off('editor-blur', blurEditor)
   bus.off('editor-focus', focusEditor)
+  bus.off('copyAsPlainText', handleCopyAsPlainText)
   bus.off('copyAsRich', handleCopyPaste)
   bus.off('copyAsHtml', handleCopyPaste)
   bus.off('pasteAsPlainText', handleCopyPaste)

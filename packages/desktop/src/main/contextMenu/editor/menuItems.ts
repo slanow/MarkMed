@@ -21,6 +21,16 @@ export const getPASTE = (): MenuItemConstructorOptions => ({
   role: 'paste'
 })
 
+export const getCopyAsPlainText = (): MenuItemConstructorOptions => ({
+  label: t('contextMenu.copyAsPlainText'),
+  id: 'copyAsPlainTextMenuItem',
+  click(_menuItem, targetWindow) {
+    if (targetWindow) {
+      ;(targetWindow as BrowserWindow).webContents.send('mt::cm-copy-as-plain-text')
+    }
+  }
+})
+
 export const getCopyAsRich = (): MenuItemConstructorOptions => ({
   label: t('contextMenu.copyAsRich'),
   id: 'copyAsRichMenuItem',

@@ -34,7 +34,8 @@
       "closeWindow": "ウィンドウを閉じる",
       "quit": "終了",
       "preferences": "環境設定",
-      "addFolder": "Add Folder…"
+      "addFolder": "Add Folder…",
+      "autoSaveOnEnter": "Save on Enter"
     },
     "edit": {
       "edit": "編集",
@@ -58,7 +59,8 @@
       "screenshot": "スクリーンショット",
       "lineEnding": "改行コード",
       "lineEndingCrlf": "CRLF (Windows)",
-      "lineEndingLf": "LF (Linux/Mac)"
+      "lineEndingLf": "LF (Linux/Mac)",
+      "copyAsPlainText": "Copy as Plain Text"
     },
     "paragraph": {
       "title": "段落",
@@ -221,7 +223,8 @@
       "copyPath": "パスのコピー",
       "showInFolder": "フォルダーの表示",
       "showInSideBar": "サイドバーに表示"
-    }
+    },
+    "copyAsPlainText": "Copy as Plain Text"
   },
   "search": {
     "searchPlaceholder": "検索",
@@ -310,7 +313,13 @@
       "lastModified": "変更日時",
       "unavailable": "—",
       "open": "文書の統計を開く"
-    }
+    },
+    "copyPlainText": "Copy TXT",
+    "copyPlainTextTooltip": "Copy as plain text without Markdown (.txt)",
+    "copiedPlainText": "Copied!",
+    "autoSaveButton": "Auto-save",
+    "autoSaveByTime": "Save by interval",
+    "autoSaveOnEnter": "Save on Enter"
   },
   "commandPalette": {
     "placeholder": "実行するコマンドの入力",
@@ -432,7 +441,10 @@
       "autoSave": {
         "title": "自動保存",
         "description": "自動保存",
-        "delayDescription": "自動保存の遅延"
+        "delayDescription": "自動保存の遅延",
+        "onEnter": "Save automatically whenever Enter is pressed",
+        "onEnterShort": "Save on Enter",
+        "intervalLabel": "Save interval"
       },
       "window": {
         "title": "ウィンドウ",
@@ -831,7 +843,8 @@
       "findPrevious": "前を検索",
       "replace": "置換",
       "findInFolder": "フォルダー内の検索",
-      "screenshot": "スクリーンショット"
+      "screenshot": "スクリーンショット",
+      "copyAsPlainText": "Edit: Copy as Plain Text"
     },
     "paragraph": {
       "heading1": "見出し 1",

@@ -29,6 +29,7 @@ export type UserPreferencesPatch = Partial<UserPreferences>
 export interface UserPreferences extends RecoveryPreferences {
   autoSave: boolean
   autoSaveDelay: number
+  autoSaveOnEnter: boolean
   titleBarStyle: 'custom' | 'native'
   openFilesInNewWindow: boolean
   openFolderInNewWindow: boolean

@@ -2,6 +2,7 @@ const COMMANDS = Object.freeze({
   VIEW_READ_ONLY_MODE: 'view.read-only-mode',
   EDIT_COPY: 'edit.copy',
   EDIT_COPY_AS_HTML: 'edit.copy-as-html',
+  EDIT_COPY_AS_PLAINTEXT: 'edit.copy-as-plaintext',
   EDIT_COPY_AS_RICH: 'edit.copy-as-rich',
   EDIT_CREATE_PARAGRAPH: 'edit.create-paragraph',
   EDIT_CUT: 'edit.cut',

@@ -34,7 +34,8 @@
       "closeWindow": "關閉視窗",
       "quit": "退出",
       "preferences": "偏好設定",
-      "addFolder": "加入資料夾…"
+      "addFolder": "加入資料夾…",
+      "autoSaveOnEnter": "Save on Enter"
     },
     "edit": {
       "edit": "編輯",
@@ -58,7 +59,8 @@
       "screenshot": "螢幕截圖",
       "lineEnding": "行結束符",
       "lineEndingCrlf": "CRLF(Windows)",
-      "lineEndingLf": "LF(Linux/Mac)"
+      "lineEndingLf": "LF(Linux/Mac)",
+      "copyAsPlainText": "Copy as Plain Text"
     },
     "paragraph": {
       "title": "段落",
@@ -221,7 +223,8 @@
       "copyPath": "複製路徑",
       "showInFolder": "在資料夾中顯示",
       "showInSideBar": "在側邊欄中顯示"
-    }
+    },
+    "copyAsPlainText": "Copy as Plain Text"
   },
   "search": {
     "searchPlaceholder": "搜尋",
@@ -310,7 +313,13 @@
       "lastModified": "修改時間",
       "unavailable": "—",
       "open": "開啟文件統計"
-    }
+    },
+    "copyPlainText": "Copy TXT",
+    "copyPlainTextTooltip": "Copy as plain text without Markdown (.txt)",
+    "copiedPlainText": "Copied!",
+    "autoSaveButton": "Auto-save",
+    "autoSaveByTime": "Save by interval",
+    "autoSaveOnEnter": "Save on Enter"
   },
   "commandPalette": {
     "placeholder": "輸入要執行的命令",
@@ -432,7 +441,10 @@
       "autoSave": {
         "title": "自動儲存",
         "description": "自動儲存",
-        "delayDescription": "自動儲存延遲"
+        "delayDescription": "自動儲存延遲",
+        "onEnter": "Save automatically whenever Enter is pressed",
+        "onEnterShort": "Save on Enter",
+        "intervalLabel": "Save interval"
       },
       "window": {
         "title": "視窗",
@@ -831,7 +843,8 @@
       "findPrevious": "尋找上一個",
       "replace": "取代",
       "findInFolder": "在資料夾中尋找",
-      "screenshot": "螢幕截圖"
+      "screenshot": "螢幕截圖",
+      "copyAsPlainText": "Edit: Copy as Plain Text"
     },
     "paragraph": {
       "heading1": "標題 1",

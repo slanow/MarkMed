@@ -34,7 +34,8 @@
       "closeWindow": "Fenster schließen",
       "quit": "Beenden",
       "preferences": "Einstellungen",
-      "addFolder": "Add Folder…"
+      "addFolder": "Add Folder…",
+      "autoSaveOnEnter": "Save on Enter"
     },
     "edit": {
       "edit": "Bearbeiten",
@@ -58,7 +59,8 @@
       "screenshot": "Screenshot",
       "lineEnding": "Zeilenendezeichen",
       "lineEndingCrlf": "CRLF (Windows)",
-      "lineEndingLf": "LF (Linux/Mac)"
+      "lineEndingLf": "LF (Linux/Mac)",
+      "copyAsPlainText": "Copy as Plain Text"
     },
     "paragraph": {
       "title": "Absatz",
@@ -221,7 +223,8 @@
       "copyPath": "Pfad kopieren",
       "showInFolder": "Im Ordner anzeigen",
       "showInSideBar": "In Seitenleiste anzeigen"
-    }
+    },
+    "copyAsPlainText": "Copy as Plain Text"
   },
   "search": {
     "searchPlaceholder": "Suchen",
@@ -310,7 +313,13 @@
       "lastModified": "Geändert",
       "unavailable": "—",
       "open": "Dokumentstatistik öffnen"
-    }
+    },
+    "copyPlainText": "Copy TXT",
+    "copyPlainTextTooltip": "Copy as plain text without Markdown (.txt)",
+    "copiedPlainText": "Copied!",
+    "autoSaveButton": "Auto-save",
+    "autoSaveByTime": "Save by interval",
+    "autoSaveOnEnter": "Save on Enter"
   },
   "commandPalette": {
     "placeholder": "Befehl zum Ausführen eingeben",
@@ -432,7 +441,10 @@
       "autoSave": {
         "title": "Automatisches Speichern",
         "description": "Automatisches Speichern",
-        "delayDescription": "Verzögerung beim automatischen Speichern"
+        "delayDescription": "Verzögerung beim automatischen Speichern",
+        "onEnter": "Save automatically whenever Enter is pressed",
+        "onEnterShort": "Save on Enter",
+        "intervalLabel": "Save interval"
       },
       "window": {
         "title": "Fenster",
@@ -831,7 +843,8 @@
       "findPrevious": "Rückwärts suchen",
       "replace": "Ersetzen",
       "findInFolder": "Im Ordner suchen",
-      "screenshot": "Screenshot"
+      "screenshot": "Screenshot",
+      "copyAsPlainText": "Edit: Copy as Plain Text"
     },
     "paragraph": {
       "heading1": "Überschrift 1",

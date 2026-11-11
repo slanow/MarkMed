@@ -613,6 +613,14 @@ export const autoSave = (menuItem: MenuItem, _browserWindow: BrowserWindow | und
   ipcMain.emit('set-user-preference', { autoSave: checked })
 }
 
+export const autoSaveOnEnter = (
+  menuItem: MenuItem,
+  _browserWindow: BrowserWindow | undefined
+): void => {
+  const { checked } = menuItem
+  ipcMain.emit('set-user-preference', { autoSaveOnEnter: checked })
+}
+
 export const moveTo = (win: Win): void => {
   if (win && win.webContents) {
     win.webContents.send('mt::editor-move-file')

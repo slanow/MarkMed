@@ -6,7 +6,10 @@
     <tabs v-show="showTabBar" />
     <div class="container">
       <document-outline />
-      <div class="document-body">
+      <div
+        class="document-body"
+        @keydown.capture="handleDocumentKeydown"
+      >
         <editor
           :markdown="markdown"
           :cursor="cursor"
@@ -26,7 +29,10 @@
 </template>
 
 <script setup lang="ts">
+import { onBeforeUnmount } from 'vue'
 import { useLayoutStore } from '@/store/layout'
+import { useEditorStore } from '@/store/editor'
+import { usePreferencesStore } from '@/store/preferences'
 import { MIN_EDITOR_WIDTH } from '@/util/editorLayout'
 import { storeToRefs } from 'pinia'
 import DocumentOutline from './outline.vue'
@@ -46,7 +52,33 @@ defineProps<{
   platform: string
 }>()
 
+const editorStore = useEditorStore()
+const preferencesStore = usePreferencesStore()
 const { effectiveSideBarWidth } = storeToRefs(useLayoutStore())
+
+let enterSaveTimer: ReturnType<typeof setTimeout> | null = null
+
+const handleDocumentKeydown = (event: KeyboardEvent): void => {
+  if (event.key !== 'Enter' || event.isComposing) return
+  if (!preferencesStore.autoSaveOnEnter) return
+  const active = editorStore.currentFile
+  if (!active?.id || !active.pathname || active.readOnly) return
+
+  if (enterSaveTimer) clearTimeout(enterSaveTimer)
+  const targetId = active.id
+  // Wait briefly so the editor finishes committing the Enter keystroke to the tab state.
+  enterSaveTimer = setTimeout(() => {
+    enterSaveTimer = null
+    editorStore.SAVE_ON_ENTER(targetId)
+  }, 25)
+}
+
+onBeforeUnmount(() => {
+  if (enterSaveTimer) {
+    clearTimeout(enterSaveTimer)
+    enterSaveTimer = null
+  }
+})
 </script>
 
 <style scoped>

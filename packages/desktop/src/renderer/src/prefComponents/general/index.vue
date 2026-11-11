@@ -57,10 +57,16 @@
           :description="preferenceLabel('autoSaveDelay')"
           :value="autoSaveDelay"
           :min="1000"
-          :max="10000"
+          :max="60000"
           unit="ms"
-          :step="100"
+          :step="500"
           :on-change="(value) => onSelectChange('autoSaveDelay', value)"
+        />
+        <bool
+          id="setting-autoSaveOnEnter"
+          :description="preferenceLabel('autoSaveOnEnter')"
+          :bool="autoSaveOnEnter"
+          :on-change="(value) => onSelectChange('autoSaveOnEnter', value)"
         />
       </template>
     </compound>
@@ -267,6 +273,7 @@ const {
   defaultOpenMode,
   autoSave,
   autoSaveDelay,
+  autoSaveOnEnter,
   titleBarStyle,
   openFilesInNewWindow,
   openFolderInNewWindow,

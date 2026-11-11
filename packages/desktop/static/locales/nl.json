@@ -34,7 +34,8 @@
       "closeWindow": "Venster sluiten",
       "quit": "Afsluiten",
       "preferences": "Voorkeuren",
-      "addFolder": "Add Folder…"
+      "addFolder": "Add Folder…",
+      "autoSaveOnEnter": "Save on Enter"
     },
     "edit": {
       "edit": "Bewerken",
@@ -58,7 +59,8 @@
       "screenshot": "Schermafbeelding",
       "lineEnding": "Regeleinde",
       "lineEndingCrlf": "CRLF (Windows)",
-      "lineEndingLf": "LF (Linux/Mac)"
+      "lineEndingLf": "LF (Linux/Mac)",
+      "copyAsPlainText": "Copy as Plain Text"
     },
     "paragraph": {
       "title": "Alinea",
@@ -221,7 +223,8 @@
       "copyPath": "Pad kopiëren",
       "showInFolder": "Tonen in map",
       "showInSideBar": "Tonen in zijbalk"
-    }
+    },
+    "copyAsPlainText": "Copy as Plain Text"
   },
   "search": {
     "searchPlaceholder": "Zoeken",
@@ -310,7 +313,13 @@
       "lastModified": "Gewijzigd",
       "unavailable": "—",
       "open": "Documentstatistieken openen"
-    }
+    },
+    "copyPlainText": "Copy TXT",
+    "copyPlainTextTooltip": "Copy as plain text without Markdown (.txt)",
+    "copiedPlainText": "Copied!",
+    "autoSaveButton": "Auto-save",
+    "autoSaveByTime": "Save by interval",
+    "autoSaveOnEnter": "Save on Enter"
   },
   "commandPalette": {
     "placeholder": "Typ een opdracht om uit te voeren",
@@ -432,7 +441,10 @@
       "autoSave": {
         "title": "Automatisch opslaan",
         "description": "Automatisch opslaan",
-        "delayDescription": "Vertraging automatisch opslaan"
+        "delayDescription": "Vertraging automatisch opslaan",
+        "onEnter": "Save automatically whenever Enter is pressed",
+        "onEnterShort": "Save on Enter",
+        "intervalLabel": "Save interval"
       },
       "window": {
         "title": "Venster",
@@ -831,7 +843,8 @@
       "findPrevious": "Vorige zoeken",
       "replace": "Vervangen",
       "findInFolder": "Zoeken in map",
-      "screenshot": "Schermafbeelding"
+      "screenshot": "Schermafbeelding",
+      "copyAsPlainText": "Edit: Copy as Plain Text"
     },
     "paragraph": {
       "heading1": "Kop 1",

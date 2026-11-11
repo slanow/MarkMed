@@ -34,7 +34,8 @@
       "closeWindow": "Закрыть окно",
       "quit": "Выход",
       "preferences": "Настройки",
-      "addFolder": "Add Folder…"
+      "addFolder": "Add Folder…",
+      "autoSaveOnEnter": "Save on Enter"
     },
     "edit": {
       "edit": "Правка",
@@ -58,7 +59,8 @@
       "screenshot": "Снимок экрана",
       "lineEnding": "Конец строки",
       "lineEndingCrlf": "CRLF (Windows)",
-      "lineEndingLf": "LF (Linux/Mac)"
+      "lineEndingLf": "LF (Linux/Mac)",
+      "copyAsPlainText": "Copy as Plain Text"
     },
     "paragraph": {
       "title": "Абзац",
@@ -221,7 +223,8 @@
       "copyPath": "Копировать путь",
       "showInFolder": "Показать в папке",
       "showInSideBar": "Показать на боковой панели"
-    }
+    },
+    "copyAsPlainText": "Copy as Plain Text"
   },
   "search": {
     "searchPlaceholder": "Поиск",
@@ -310,7 +313,13 @@
       "lastModified": "Изменён",
       "unavailable": "—",
       "open": "Открыть статистику документа"
-    }
+    },
+    "copyPlainText": "Copy TXT",
+    "copyPlainTextTooltip": "Copy as plain text without Markdown (.txt)",
+    "copiedPlainText": "Copied!",
+    "autoSaveButton": "Auto-save",
+    "autoSaveByTime": "Save by interval",
+    "autoSaveOnEnter": "Save on Enter"
   },
   "commandPalette": {
     "placeholder": "Введите команду",
@@ -432,7 +441,10 @@
       "autoSave": {
         "title": "Автосохранение",
         "description": "Автосохранение",
-        "delayDescription": "Задержка автосохранения"
+        "delayDescription": "Задержка автосохранения",
+        "onEnter": "Save automatically whenever Enter is pressed",
+        "onEnterShort": "Save on Enter",
+        "intervalLabel": "Save interval"
       },
       "window": {
         "title": "Окно",
@@ -831,7 +843,8 @@
       "findPrevious": "Найти ранее",
       "replace": "Заменить",
       "findInFolder": "Найти в папке",
-      "screenshot": "Снимок экрана"
+      "screenshot": "Снимок экрана",
+      "copyAsPlainText": "Edit: Copy as Plain Text"
     },
     "paragraph": {
       "heading1": "Заголовок 1",
