@@ -18,7 +18,7 @@ def select_release_base(tag: str, releases: list[dict]) -> str:
             if version < current:
                 candidates.append((version, release['tag_name']))
     if not candidates:
-        raise ValueError(f'No published stable release precedes {tag}')
+        return ''
     return max(candidates)[1]
 
 

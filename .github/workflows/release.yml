@@ -198,6 +198,10 @@ jobs:
           IS_PRERELEASE: ${{ contains(github.ref_name, '-') }}
         run: |
           {
+            if [[ -f RELEASE_NOTES.md ]]; then
+              cat RELEASE_NOTES.md
+              echo ""
+            fi
             if [[ "$IS_PRERELEASE" == "true" ]]; then
               echo "## ❗ This is a pre-release"
               echo "- May contain bugs and unfinished features."
