@@ -11,13 +11,13 @@ const writeLine = (s: string): boolean => write(s + '\n')
 const cli = (): ParsedArgs => {
   let argv = userArguments(process.argv, !!process.defaultApp, app.getAppPath())
   if (import.meta.env.DEV) {
-    // Don't pass electron development arguments to MarkText and change user data path.
-    argv = ['--user-data-dir', path.join(getPath('appData'), 'marktext-dev')]
+    // Don't pass electron development arguments to MarkMed and change user data path.
+    argv = ['--user-data-dir', path.join(getPath('appData'), 'markmed-dev')]
   }
 
   const args = parseArgs(argv, true)
   if (args['--help']) {
-    write(`Usage: marktext [commands] [path ...]
+    write(`Usage: markmed [commands] [path ...]
 
   Available commands:
 
@@ -36,7 +36,7 @@ const cli = (): ParsedArgs => {
   }
 
   if (args['--version']) {
-    writeLine(`MarkText: ${MARKTEXT_VERSION_STRING}`)
+    writeLine(`MarkMed: ${MARKTEXT_VERSION_STRING}`)
     writeLine(`Node.js: ${process.versions.node}`)
     writeLine(`Electron: ${process.versions.electron}`)
     writeLine(`Chromium: ${process.versions.chrome}`)
@@ -47,7 +47,12 @@ const cli = (): ParsedArgs => {
   // Check for portable mode and ensure the user data path is absolute. We assume
   // that the path is writable if not this lead to an application crash.
   if (!args['--user-data-dir']) {
-    const portablePath = path.join(app.getAppPath(), '..', '..', 'marktext-user-data')
+    const portableBaseDir = process.env.PORTABLE_EXECUTABLE_DIR
+      ? process.env.PORTABLE_EXECUTABLE_DIR
+      : process.env.APPIMAGE
+        ? path.dirname(process.env.APPIMAGE)
+        : path.join(app.getAppPath(), '..', '..')
+    const portablePath = path.join(portableBaseDir, 'markmed-user-data')
     if (isDirectory(portablePath)) {
       args['--user-data-dir'] = portablePath
     }

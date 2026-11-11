@@ -1,7 +1,7 @@
 {
   "name": "marktext",
   "version": "0.24.0-dev",
-  "description": "MarkText",
+  "description": "MarkMed",
   "main": "./out/main/index.js",
   "author": {
     "name": "Jocs",
@@ -25,10 +25,10 @@
       "url": "https://github.com/Tkaixiang"
     }
   ],
-  "homepage": "https://github.com/marktext/marktext",
+  "homepage": "https://github.com/slanow/MarkMed",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/marktext/marktext.git"
+    "url": "git+https://github.com/slanow/MarkMed.git"
   },
   "scripts": {
     "minify-locales": "tsx ../../scripts/minify-locales.ts",
@@ -45,7 +45,7 @@
     "build:mac:arm64": "tsx ../../scripts/minify-locales.ts && electron-rebuild && electron-vite build && electron-builder --mac --arm64 --publish never",
     "build:linux": "tsx ../../scripts/minify-locales.ts && electron-rebuild && electron-vite build && electron-builder --linux --publish never",
     "build:linux:x64": "tsx ../../scripts/minify-locales.ts && electron-rebuild && electron-vite build && electron-builder --linux --x64 --publish never",
-    "build:linux:arm64": "tsx ../../scripts/minify-locales.ts && electron-rebuild && electron-vite build && electron-builder --linux AppImage deb rpm tar.gz --arm64 -c.linux.artifactName='marktext-linux-arm64-${version}.${ext}' --publish never",
+    "build:linux:arm64": "tsx ../../scripts/minify-locales.ts && electron-rebuild && electron-vite build && electron-builder --linux AppImage deb rpm tar.gz --arm64 -c.linux.artifactName='markmed-linux-arm64-${version}.${ext}' --publish never",
     "perf:inspect": "electron-vite preview -- --inspect=5858",
     "perf:inspect-brk": "electron-vite preview -- --inspect-brk=5858",
     "test": "vitest run",

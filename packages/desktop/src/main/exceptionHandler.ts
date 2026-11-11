@@ -101,8 +101,8 @@ const setupExceptionHandler = (): void => {
   })
 
   crashReporter.start({
-    companyName: 'MarkText',
-    productName: 'MarkText',
+    companyName: 'MarkMed',
+    productName: 'MarkMed',
     submitURL: 'http://0.0.0.0/',
     uploadToServer: false,
     compress: true

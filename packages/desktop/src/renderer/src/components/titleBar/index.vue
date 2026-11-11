@@ -18,7 +18,7 @@
         class="title"
         @dblclick.stop="toggleMaxmizeOnMacOS"
       >
-        <span v-if="!filename">MarkText</span>
+        <span v-if="!filename">MarkMed</span>
         <span v-else>
           <span
             class="save-dot"
@@ -50,6 +50,12 @@
         </span>
       </div>
       <div :class="showCustomTitleBar ? 'left-toolbar title-no-drag' : 'right-toolbar'">
+        <img
+          v-if="showCustomTitleBar"
+          class="titlebar-logo"
+          :src="MarkMedLogo"
+          alt="MarkMed"
+        >
         <button
           v-if="showCustomTitleBar"
           type="button"
@@ -58,7 +64,32 @@
           :aria-label="t('titleBar.applicationMenu')"
           @click.stop="handleMenuClick"
         >
-          <span class="text-center-vertical">&#9776;</span>
+          <svg
+            class="frameless-titlebar-menu-icon"
+            width="14"
+            height="14"
+            viewBox="0 0 16 16"
+            aria-hidden="true"
+          >
+            <line
+              x1="2"
+              y1="4"
+              x2="14"
+              y2="4"
+            />
+            <line
+              x1="2"
+              y1="8"
+              x2="14"
+              y2="8"
+            />
+            <line
+              x1="2"
+              y1="12"
+              x2="14"
+              y2="12"
+            />
+          </svg>
         </button>
         <document-statistics
           v-if="wordCount"
@@ -157,6 +188,7 @@ import { useI18n } from 'vue-i18n'
 import { ArrowRight } from '@element-plus/icons-vue'
 import IconTooltip from '@/components/iconTooltip/index.vue'
 import DocumentStatistics from './documentStatistics.vue'
+import MarkMedLogo from '../../assets/images/logo.png'
 import type { FileWordCount } from '@shared/types/files'
 
 interface ProjectInfo {
@@ -249,8 +281,17 @@ const handleMinimizeClick = () => {
   window.electron.windowControl.minimize()
 }
 
-const handleMenuClick = () => {
-  window.electron.windowControl.popupApplicationMenu({ x: 23, y: 20 })
+const handleMenuClick = (event: MouseEvent) => {
+  const target = event.currentTarget
+  if (target instanceof HTMLElement) {
+    const rect = target.getBoundingClientRect()
+    window.electron.windowControl.popupApplicationMenu({
+      x: Math.round(rect.left + 4),
+      y: Math.round(rect.bottom + 2)
+    })
+    return
+  }
+  window.electron.windowControl.popupApplicationMenu({ x: 44, y: 26 })
 }
 
 const rename = () => {
@@ -395,10 +436,19 @@ div.title > span > .path > bdi > span {
   position: absolute;
   top: 0;
   left: 0;
-  width: 190px;
+  width: auto;
   display: flex;
   flex-direction: row;
+  align-items: center;
   gap: 8px;
+}
+.titlebar-logo {
+  width: 20px;
+  height: 20px;
+  margin-top: 0;
+  object-fit: contain;
+  flex: none;
+  pointer-events: none;
 }
 .right-toolbar {
   height: 100%;
@@ -438,6 +488,18 @@ div.title > span > .path > bdi > span {
 }
 .frameless-titlebar-menu {
   color: var(--sideBarColor);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 24px;
+  padding: 0 4px;
+  line-height: 1;
+}
+.frameless-titlebar-menu-icon {
+  display: block;
+  stroke: currentColor;
+  stroke-width: 1.5;
+  stroke-linecap: round;
 }
 .frameless-titlebar-close:hover {
   background-color: rgb(228, 79, 79);
@@ -454,8 +516,8 @@ div.title > span > .path > bdi > span {
 }
 
 .text-center-vertical {
-  display: inline-block;
-  vertical-align: middle;
-  line-height: normal;
+  display: inline-flex;
+  align-items: center;
+  line-height: 1;
 }
 </style>

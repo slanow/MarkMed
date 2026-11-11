@@ -2,7 +2,7 @@ import { expect, test } from '@playwright/test'
 import type { ElectronApplication, Page } from 'playwright'
 import { launchElectron } from './helpers'
 
-test.describe('Check Launch MarkText', () => {
+test.describe('Check Launch MarkMed', () => {
   let app: ElectronApplication
   let page: Page
 
@@ -16,8 +16,8 @@ test.describe('Check Launch MarkText', () => {
     if (app) await app.close()
   })
 
-  test('Empty MarkText', async() => {
-    const title = process.platform === 'darwin' ? 'Untitled-1' : 'Untitled-1 - MarkText'
+  test('Empty MarkMed', async() => {
+    const title = process.platform === 'darwin' ? 'Untitled-1' : 'Untitled-1 - MarkMed'
     await expect(page).toHaveTitle(title)
   })
 })

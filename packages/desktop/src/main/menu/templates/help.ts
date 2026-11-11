@@ -36,22 +36,7 @@ export default function(): MenuItemConstructorOptions {
     {
       label: t('menu.help.changelog'),
       click() {
-        shell.openExternal('https://github.com/marktext/marktext/releases')
-      }
-    },
-    {
-      type: 'separator'
-    },
-    {
-      label: t('menu.help.followUs'),
-      click() {
-        shell.openExternal('https://twitter.com/marktextapp')
-      }
-    },
-    {
-      label: t('menu.help.support'),
-      click() {
-        shell.openExternal('https://github.com/sponsors/marktext')
+        shell.openExternal('https://github.com/slanow/MarkMed/releases')
       }
     },
     {
@@ -60,19 +45,19 @@ export default function(): MenuItemConstructorOptions {
     {
       label: t('menu.help.askQuestion'),
       click() {
-        shell.openExternal('https://github.com/marktext/marktext/discussions')
+        shell.openExternal('https://github.com/slanow/MarkMed/discussions')
       }
     },
     {
       label: t('menu.help.reportBug'),
       click() {
-        shell.openExternal('https://github.com/marktext/marktext/issues')
+        shell.openExternal('https://github.com/slanow/MarkMed/issues')
       }
     },
     {
       label: t('menu.help.viewSource'),
       click() {
-        shell.openExternal('https://github.com/marktext/marktext')
+        shell.openExternal('https://github.com/slanow/MarkMed')
       }
     },
     {
@@ -81,7 +66,7 @@ export default function(): MenuItemConstructorOptions {
     {
       label: t('menu.help.license'),
       click() {
-        shell.openExternal('https://github.com/marktext/marktext/blob/develop/LICENSE')
+        shell.openExternal('https://github.com/slanow/MarkMed/blob/main/LICENSE')
       }
     }
   ]
