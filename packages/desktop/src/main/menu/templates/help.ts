@@ -29,7 +29,7 @@ export default function(): MenuItemConstructorOptions {
       label: t('menu.help.markdownReference'),
       click() {
         shell.openExternal(
-          'https://marktext.me/docs/markdown-syntax'
+          'https://github.com/slanow/MarkMed/blob/main/packages/website/content/docs/end-user/MARKDOWN_SYNTAX.md'
         )
       }
     },

@@ -1,6 +1,6 @@
 {
   "name": "markmed-monorepo",
-  "version": "0.24.0-dev",
+  "version": "0.24.1",
   "description": "MarkMed monorepo root",
   "private": true,
   "homepage": "https://github.com/slanow/MarkMed",
@@ -38,6 +38,7 @@
     "check": "pnpm lint && pnpm typecheck",
     "gen-third-party": "tsx scripts/generateThirdPartyLicense.ts",
     "validate-licenses": "tsx scripts/validateLicenses.ts",
+    "backup-version": "tsx scripts/backup-version.ts",
     "prepare": "husky"
   },
   "lint-staged": {

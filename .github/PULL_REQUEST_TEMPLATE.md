@@ -24,4 +24,4 @@ Closes #
 
 ---
 
-By submitting this pull request, I confirm that my contribution is made under the terms of the [MIT license](https://github.com/marktext/marktext/blob/develop/LICENSE).
+By submitting this pull request, I confirm that my contribution is made under the terms of the [MIT license](https://github.com/slanow/MarkMed/blob/main/LICENSE).

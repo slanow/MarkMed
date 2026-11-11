@@ -643,13 +643,13 @@ const commands: CommandDescriptor[] = [
   {
     id: 'docs.user-guide',
     execute: async() => {
-      window.electron.shell.openExternal('https://marktext.me/docs/basics')
+      window.electron.shell.openExternal('https://github.com/slanow/MarkMed/blob/main/packages/website/content/docs/end-user/BASICS.md')
     }
   },
   {
     id: 'docs.markdown-syntax',
     execute: async() => {
-      window.electron.shell.openExternal('https://marktext.me/docs/markdown-syntax')
+      window.electron.shell.openExternal('https://github.com/slanow/MarkMed/blob/main/packages/website/content/docs/end-user/MARKDOWN_SYNTAX.md')
     }
   },
 
