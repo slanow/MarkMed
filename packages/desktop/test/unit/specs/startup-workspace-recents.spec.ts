@@ -165,9 +165,9 @@ describe('workspace reopening templates', () => {
     const snapshot = window('a')
     const state = active(initial(), 'a')
     const result = rememberWindowContext(state, snapshot)
-    snapshot.layout.sidebar.visible = true
+    snapshot.layout.sidebar.visible = false
     snapshot.documents[0].saveFormat.encoding.encoding = 'ascii'
-    expect(result.recentWorkspaces[0].layout.sidebar.visible).toBe(false)
+    expect(result.recentWorkspaces[0].layout.sidebar.visible).toBe(true)
     expect(result.recentWorkspaces[0].files[0].saveFormat.encoding.encoding).toBe('utf8')
     expect(state.recentWorkspaces).toEqual([])
   })

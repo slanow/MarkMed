@@ -35,6 +35,9 @@
       <export-setting-dialog />
       <rename />
       <import-modal />
+      <first-run-dialog v-if="init" />
+      <backup-dialog />
+      <storage-bar v-if="init" />
     </div>
   </div>
 </template>
@@ -54,6 +57,9 @@ import ExportSettingDialog from '@/components/exportSettings/index.vue'
 import Rename from '@/components/rename/index.vue'
 import ImportModal from '@/components/import/index.vue'
 import SplashScreen from '@/components/splashScreen/index.vue'
+import FirstRunDialog from '@/components/firstRunDialog/index.vue'
+import StorageBar from '@/components/storageBar/index.vue'
+import BackupDialog from '@/components/backupDialog/index.vue'
 import bus from '@/bus'
 import { DEFAULT_STYLE } from '@/config'
 import { useLayoutStore } from '@/store/layout'

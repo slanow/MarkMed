@@ -343,6 +343,21 @@ class AppMenu {
     })
   }
 
+  updateStorageBarMenu = (showStorageBar: boolean): void => {
+    this.windowMenus.forEach((value) => {
+      const { menu, type } = value
+      if (type !== MenuType.EDITOR || !menu) {
+        return
+      }
+
+      const item = menu.getMenuItemById('storageBarMenuItem')
+      if (!item) {
+        return
+      }
+      item.checked = showStorageBar
+    })
+  }
+
   _buildEditorMenu(recentUsedDocuments: string[] | null = null): EditorMenuEntry {
     if (!recentUsedDocuments) {
       recentUsedDocuments = this.getRecentlyUsedDocuments()
@@ -501,6 +516,9 @@ class AppMenu {
       }
       if (prefs.autoSaveOnEnter !== undefined) {
         this.updateAutoSaveOnEnterMenu(prefs.autoSaveOnEnter)
+      }
+      if (prefs.showStorageBar !== undefined) {
+        this.updateStorageBarMenu(prefs.showStorageBar)
       }
       if (prefs.texMathDollars !== undefined || prefs.githubAlerts !== undefined) {
         this.updateAppMenu()

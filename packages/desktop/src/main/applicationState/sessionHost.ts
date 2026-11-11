@@ -12,6 +12,12 @@ import { loadMarkdownFile, loadCliMarkdownFile, writeMarkdownFile } from '../fil
 import { t } from '../i18n'
 import { documentWrites } from '../filesystem/documentWrites'
 import { createDefaultLayout } from '@shared/applicationState/defaults'
+import type { AutoRenameResult } from '@shared/types/markmed'
+import {
+  buildDatedPatientFilename,
+  extractPatientNameFromMarkdown,
+  formatDateStamp
+} from '@shared/utils/patientFilename'
 import { RecoveryStatus, SessionLifecycle } from '@shared/types/applicationState'
 import { StartupAction } from '@shared/types/preferences'
 import { activateSessionWindow } from '@shared/applicationState/session'
@@ -971,12 +977,37 @@ export class SessionHost {
         previousPath = resource.kind === 'file' ? resource.location.path : ''
         let destination = resource.kind === 'file' ? resource.location.path : ''
         if (saveAs || !destination) {
+          let defaultPath = destination
+          if (!defaultPath) {
+            const workspaceRoot =
+              this._editors.get(windowId)?.projectRoots.roots[0]?.pathname ??
+              app.getPath('documents')
+            const autoRenameEnabled = !!this._accessor.preferences.getItem<boolean>(
+              'autoRenameFromFirstLine'
+            )
+            const patientName = autoRenameEnabled
+              ? extractPatientNameFromMarkdown(capture.markdown)
+              : null
+            let suggestedFilename = `${capture.snapshot.title}.md`
+            if (patientName) {
+              suggestedFilename = buildDatedPatientFilename({
+                currentFilename: suggestedFilename,
+                patientName
+              })
+            } else if (autoRenameEnabled) {
+              suggestedFilename = `Prontuario_${formatDateStamp(new Date())}.md`
+            }
+            defaultPath = path.join(workspaceRoot, suggestedFilename)
+          }
+
           const choice = await dialog.showSaveDialog(native, {
-            defaultPath:
-              destination || path.join(app.getPath('documents'), `${capture.snapshot.title}.md`)
+            defaultPath,
+            filters: [{ name: 'Markdown', extensions: ['md', 'markdown', 'txt'] }]
           })
           if (choice.canceled || !choice.filePath) return null
-          destination = choice.filePath
+          destination = path.extname(choice.filePath)
+            ? choice.filePath
+            : `${choice.filePath}.md`
         } else {
           const current = await this._diskBaseline(destination)
           const baseline = capture.baseline
@@ -1190,6 +1221,132 @@ export class SessionHost {
     await this.moveResource(windowId, source, target, () => rename(source, target))
     const moved = this._owner().getDocument(documentId)
     if (moved.resource.kind === 'file') this._accessor.menu.addRecentlyUsedDocument(moved.resource.location.path)
+  }
+
+  async autoRenameDocumentQuietly(
+    windowId: string,
+    documentId: string,
+    newFilename: string
+  ): Promise<AutoRenameResult> {
+    const document = this._owner()
+      .getWindow(windowId)
+      ?.documents.find((doc) => doc.id === documentId)
+    if (!document || document.readOnly || typeof newFilename !== 'string') {
+      return { status: 'skipped' }
+    }
+
+    const sanitizedName = path.basename(newFilename.trim())
+    if (!sanitizedName) return { status: 'skipped' }
+
+    const resolveUniqueCandidate = async(dir: string, sourcePath = ''): Promise<string | null> => {
+      let candidate = path.resolve(dir, sanitizedName)
+      const parsed = path.parse(sanitizedName)
+      const stampMatch = /^(.+)(_\d{4}-\d{2}-\d{2}_\d{2}-\d{2})$/.exec(parsed.name)
+      let suffixIndex = 2
+      while (suffixIndex < 100) {
+        const baseline = await this._diskBaseline(candidate)
+        if (!baseline.exists || (sourcePath && candidate === sourcePath)) break
+        const nextStem = stampMatch
+          ? `${stampMatch[1]}-${suffixIndex}${stampMatch[2]}`
+          : `${parsed.name}-${suffixIndex}`
+        candidate = path.resolve(dir, `${nextStem}${parsed.ext}`)
+        suffixIndex++
+      }
+      if (sourcePath && candidate === sourcePath) return candidate
+      const finalCheck = await this._diskBaseline(candidate)
+      return finalCheck.exists ? null : candidate
+    }
+
+    if (document.resource.kind === 'untitled') {
+      const workspaceRoot = this._editors
+        .get(windowId)
+        ?.projectRoots.roots.find((root) => root.status === 'ready')?.pathname
+      if (!workspaceRoot) {
+        return { status: 'skipped' }
+      }
+      const candidate = await resolveUniqueCandidate(workspaceRoot)
+      if (!candidate) {
+        return { status: 'skipped', reason: 'target-exists' }
+      }
+      const sender = this._native(windowId).webContents
+      let savedMarkdown = ''
+      let savedFormat = document.saveFormat
+      const result = await this._owner().saveDocument(windowId, documentId, async(capture) => {
+        const epoch = documentWrites.capture(sender.id, documentId)
+        if (epoch === null) throw new Error('Document is read-only')
+        const written = await documentWrites.write(sender.id, documentId, epoch, async() => {
+          await writeMarkdownFile(candidate, capture.markdown, capture.snapshot.saveFormat)
+          return true
+        })
+        if (!written) throw new Error('Document became read-only before the save completed')
+        savedMarkdown = capture.markdown
+        savedFormat = capture.snapshot.saveFormat
+        const baseline = await this._diskBaseline(candidate)
+        const snapshot: DocumentSnapshot = {
+          ...capture.snapshot,
+          title: path.basename(candidate),
+          resource: {
+            kind: 'file',
+            location: createFileLocation(candidate),
+            pendingCreation: false
+          },
+          content: { kind: 'disk', baseline }
+        }
+        return { snapshot, markdown: capture.markdown }
+      })
+      if (result.status !== 'persisted') {
+        return { status: 'failed' }
+      }
+      const saved = this._owner().getDocument(documentId)
+      if (saved.resource.kind === 'file') {
+        const savedPath = saved.resource.location.path
+        this._editors.get(windowId)?.addToOpenedFiles(savedPath)
+        this._accessor.menu.addRecentlyUsedDocument(savedPath)
+        ipcMain.emit('window-file-saved', this._native(windowId).id, savedPath)
+        const response: Extract<ManagedSaveResult, { status: 'saved' }> = {
+          status: 'saved',
+          document: saved,
+          savedMarkdown,
+          savedFormat,
+          metadataRevision: this._owner().getState().revision
+        }
+        this._native(windowId).webContents.send('mt::state::document-saved', response)
+        return { status: 'renamed', pathname: savedPath, filename: path.basename(savedPath) }
+      }
+      return { status: 'renamed', pathname: candidate, filename: path.basename(candidate) }
+    }
+
+    if (document.resource.kind !== 'file' || document.resource.pendingCreation) {
+      return { status: 'skipped' }
+    }
+
+    const source = document.resource.location.path
+    const dir = path.dirname(source)
+    if (source === path.resolve(dir, sanitizedName)) {
+      return { status: 'unchanged', pathname: source, filename: path.basename(source) }
+    }
+
+    const candidate = await resolveUniqueCandidate(dir, source)
+    if (!candidate) {
+      return { status: 'skipped', reason: 'target-exists' }
+    }
+    if (source === candidate) {
+      return { status: 'unchanged', pathname: source, filename: path.basename(source) }
+    }
+
+    await this._owner().settlePendingSaves([documentId])
+    await this.moveResource(windowId, source, candidate, () => rename(source, candidate))
+    const moved = this._owner().getDocument(documentId)
+    if (moved.content.kind === 'recovery') {
+      await this.saveDocument(windowId, documentId)
+    }
+    const finalDoc = this._owner().getDocument(documentId)
+    if (finalDoc.resource.kind === 'file') {
+      const movedPath = finalDoc.resource.location.path
+      this._accessor.menu.addRecentlyUsedDocument(movedPath)
+      return { status: 'renamed', pathname: movedPath, filename: path.basename(movedPath) }
+    }
+    return { status: 'renamed', pathname: candidate, filename: path.basename(candidate) }
   }
 
   async moveDocument(windowId: string, documentId: string): Promise<void> {
@@ -1442,6 +1599,14 @@ export class SessionHost {
         const editor = editorFor(event.sender)
         if (!this._contextMatches(editor.sessionStateId!, token)) return { status: 'failed' }
         return this.saveDocument(editor.sessionStateId!, id, saveAs)
+      }
+    )
+    ipcMain.handle(
+      'mt::state::auto-rename-document',
+      async(event, token: string, id: string, newFilename: string): Promise<AutoRenameResult> => {
+        const editor = editorFor(event.sender)
+        if (!this._contextMatches(editor.sessionStateId!, token)) return { status: 'failed' }
+        return this.autoRenameDocumentQuietly(editor.sessionStateId!, id, newFilename)
       }
     )
     ipcMain.handle('mt::state::close-documents', (event, token: string, ids: string[]) => {

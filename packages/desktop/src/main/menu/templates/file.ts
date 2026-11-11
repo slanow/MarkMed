@@ -204,6 +204,27 @@ export default function(
       }
     },
     {
+      type: 'separator'
+    },
+    {
+      label: t('menu.file.encryptedBackup'),
+      click(_menuItem, browserWindow) {
+        ;(browserWindow as BrowserWindow | undefined)?.webContents.send('mt::show-backup-dialog', 'backup')
+      }
+    },
+    {
+      label: t('menu.file.decryptBackup'),
+      click(_menuItem, browserWindow) {
+        ;(browserWindow as BrowserWindow | undefined)?.webContents.send('mt::show-backup-dialog', 'decrypt')
+      }
+    },
+    {
+      label: t('menu.file.setupFolders'),
+      click(_menuItem, browserWindow) {
+        ;(browserWindow as BrowserWindow | undefined)?.webContents.send('mt::show-first-run-dialog')
+      }
+    },
+    {
       type: 'separator',
       visible: !isOsx
     },

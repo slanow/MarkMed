@@ -28,6 +28,10 @@ import {
 import notice from './notification'
 import bus from '../bus'
 import { t } from '@/i18n'
+import {
+  buildDatedPatientFilename,
+  extractPatientNameFromMarkdown
+} from '@shared/utils/patientFilename'
 
 /** Last locally captured content and its revision, retained until native persistence acknowledges it. */
 interface ObservedContent {
@@ -136,6 +140,7 @@ class WindowSession {
         void this._captureActiveView().catch((error) => this._failure(error))
       },
       save: (id, saveAs = false) => this._save(id, saveAs),
+      autoRename: (id, newFilename) => this._autoRename(id, newFilename),
       create: async(markdown, selected) => {
         if (!this._context) return
         const result = await ipc.invoke('mt::state::register-untitled', {
@@ -499,7 +504,17 @@ class WindowSession {
 
   private _applyResource(file: IFileState, document: DocumentSnapshot): void {
     file.pathname = document.resource.kind === 'file' ? document.resource.location.path : ''
-    file.filename = document.title
+    if (document.resource.kind === 'untitled' && this._preferences.autoRenameFromFirstLine) {
+      const patientName = extractPatientNameFromMarkdown(file.markdown)
+      file.filename = patientName
+        ? buildDatedPatientFilename({
+          currentFilename: file.filename || document.title,
+          patientName
+        })
+        : document.title
+    } else {
+      file.filename = document.title
+    }
     file.isPendingCreation = document.resource.kind === 'file' && document.resource.pendingCreation
     if (this._editor.currentFile?.id === file.id)
       window.DIRNAME = file.pathname ? window.path.dirname(file.pathname) : ''
@@ -544,6 +559,26 @@ class WindowSession {
       filename: result.document.title,
       savedMarkdown: result.savedMarkdown
     }
+  }
+
+  private async _autoRename(id: string, newFilename: string): Promise<{
+    status: 'renamed' | 'unchanged' | 'skipped' | 'failed'
+    pathname?: string
+    filename?: string
+    reason?: string
+  }> {
+    const checkpoint = await this._flush()
+    if (
+      !this._context ||
+      (checkpoint.status !== 'persisted' && checkpoint.reason !== 'storage-unavailable')
+    )
+      return { status: 'failed' }
+    return window.electron.ipcRenderer.invoke(
+      'mt::state::auto-rename-document',
+      this._context.contextToken,
+      id,
+      newFilename
+    )
   }
 
   private async _close(ids: string[]): Promise<void> {

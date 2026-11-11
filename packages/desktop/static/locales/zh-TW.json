@@ -35,7 +35,10 @@
       "quit": "退出",
       "preferences": "偏好設定",
       "addFolder": "加入資料夾…",
-      "autoSaveOnEnter": "Save on Enter"
+      "autoSaveOnEnter": "Save on Enter",
+      "encryptedBackup": "Encrypted Backup…",
+      "decryptBackup": "Decrypt Backup…",
+      "setupFolders": "Setup Initial Folders…"
     },
     "edit": {
       "edit": "編輯",
@@ -123,6 +126,7 @@
     "view": {
       "view": "檢視",
       "toggleSidebar": "切換側邊欄",
+      "toggleStorageBar": "Disk Space Bar",
       "toggleTabbar": "切換標籤欄",
       "commandPalette": "命令面板",
       "sourceCodeMode": "原始碼模式",
@@ -254,6 +258,7 @@
     },
     "tree": {
       "openedFiles": "已開啟的檔案",
+      "resizeOpenedFiles": "調整已開啟檔案清單的大小",
       "saveAll": "全部儲存",
       "closeAll": "全部關閉",
       "emptyProject": "空專案",
@@ -267,8 +272,7 @@
       "overlappingFolder": "此資料夾與已加入項目有包含關係，請先移除原有項目。",
       "folderAlreadyAdded": "此資料夾已加入。",
       "fileOutsideFolders": "此檔案不在已加入的資料夾中。",
-      "sessionSaveFailed": "無法儲存工作階段",
-      "resizeOpenedFiles": "調整已開啟檔案清單的大小"
+      "sessionSaveFailed": "無法儲存工作階段"
     },
     "toc": {
       "expand": "展開目錄",
@@ -319,15 +323,17 @@
     "copiedPlainText": "Copied!",
     "autoSaveButton": "Auto-save",
     "autoSaveByTime": "Save by interval",
-    "autoSaveOnEnter": "Save on Enter"
+    "autoSaveOnEnter": "Save on Enter",
+    "hideSidebar": "Hide sidebar",
+    "showSidebar": "Show sidebar"
   },
   "commandPalette": {
     "placeholder": "輸入要執行的命令",
     "placeholders": {
       "selectOption": "選擇選項",
       "searchFileToOpen": "搜尋要開啟的檔案",
-      "selectLanguage": "選擇語言",
-      "searchRecentFilesAndFolders": "搜尋最近開啟的檔案與資料夾"
+      "searchRecentFilesAndFolders": "搜尋最近開啟的檔案與資料夾",
+      "selectLanguage": "選擇語言"
     },
     "recentlyOpened": "最近開啟",
     "fileResults": "檔案結果",
@@ -446,6 +452,8 @@
         "onEnterShort": "Save on Enter",
         "intervalLabel": "Save interval"
       },
+      "autoRenameFromFirstLine": "Auto-rename file from first line (Patient name + date/time)",
+      "autoInsertDateTimeOnNewFile": "Automatically insert creation date and time on new files",
       "window": {
         "title": "視窗",
         "titleBarStyle": {
@@ -455,6 +463,7 @@
         },
         "requiresRestart": "需要重新啟動",
         "hideScrollbars": "隱藏捲軸",
+        "showStorageBar": "Show disk space bar at the bottom",
         "openFilesInNewWindow": "在新視窗中開啟檔案",
         "openFoldersInNewWindow": "在新視窗中開啟資料夾",
         "zoom": "縮放",
@@ -634,6 +643,7 @@
           "step3Description": "使用以下命令檢視目前設定：",
           "documentation": "檢視完整文件"
         },
+        "lastSuccessTime": "上次成功時間",
         "scriptDescription": "腳本描述",
         "scriptLocation": "腳本位置",
         "services": {
@@ -642,7 +652,6 @@
         },
         "pleaseInstall": "請安裝",
         "scriptPath": "腳本路徑",
-        "lastSuccessTime": "上次成功時間",
         "invalidScript": "請輸入存在且可執行的指令碼路徑。"
       },
       "defaultBehavior": "貼上或拖曳圖片到 MarkMed 後的預設行為"
@@ -887,12 +896,12 @@
     },
     "window": {
       "minimize": "最小化",
+      "close": "關閉",
       "toggleAlwaysOnTop": "切換總是在最上層",
       "zoomIn": "放大",
       "zoomOut": "縮小",
       "toggleFullScreen": "切換全螢幕",
-      "changeTheme": "變更主題",
-      "close": "關閉"
+      "changeTheme": "變更主題"
     },
     "view": {
       "commandPalette": "命令面板",
@@ -1073,5 +1082,61 @@
     "viewImage": "檢視圖片",
     "copyLink": "複製連結位址",
     "resumed": "已切換至編輯模式，自動儲存已恢復。"
+  },
+  "firstRun": {
+    "title": "MarkMed Initial Setup",
+    "description": "Would you like MarkMed to automatically create hidden folders for settings and images? On a USB drive this keeps everything portable; on your PC it keeps everything organized.",
+    "baseDirLabel": "Base folder where they will be created:",
+    "chooseFolder": "Choose folder...",
+    "configHint": "preferences, history and portable configuration",
+    "imagesHint": "images pasted into medical notes",
+    "hiddenNote": "Folders will be created as hidden on both Windows and Linux.",
+    "openWikiGuide": "Prefer setting up manually? Open Wiki step-by-step guide",
+    "doLater": "Configure manually / Later",
+    "createAutomatically": "Authorize & create folders",
+    "createFailed": "Could not create hidden folders.",
+    "createdTitle": "Folders created",
+    "createdAndRestarting": "Hidden folders created! MarkMed will now restart to activate the new portable configuration.",
+    "createdMessage": "Hidden folders created successfully at {dir}."
+  },
+  "storageBar": {
+    "driveLabel": "Drive space",
+    "summary": "{percent}% used · {free} free of {total}",
+    "refresh": "Refresh disk space",
+    "hide": "Hide",
+    "hideTooltip": "Hide disk space bar (re-enable under View)",
+    "lowSpaceTitle": "Low disk space",
+    "lowSpaceMessage": "Only {free} free ({percent}% used). Back up your records and free space on your drive."
+  },
+  "backup": {
+    "title": "Encrypted Patient Backup",
+    "sidebarButton": "Encrypted backup",
+    "createTab": "Create Backup (.mmbak)",
+    "decryptTab": "Decrypt / Restore",
+    "sourceFolderLabel": "Patient records folder:",
+    "noFolderSelected": "No folder selected",
+    "chooseFolder": "Choose...",
+    "chooseFile": "Select...",
+    "includeImages": "Include notes images folder",
+    "includeConfig": "Include MarkMed configuration folder",
+    "passwordLabel": "Encryption password:",
+    "passwordPlaceholder": "Enter a strong password",
+    "confirmPasswordLabel": "Confirm password:",
+    "confirmPasswordPlaceholder": "Repeat password",
+    "createAction": "Create Encrypted Backup",
+    "archiveFileLabel": "Backup archive (.mmbak):",
+    "archivePlaceholder": "Select a .mmbak file",
+    "destinationFolderLabel": "Destination folder to restore files:",
+    "destinationPlaceholder": "Choose a destination folder",
+    "decryptPasswordPlaceholder": "Enter backup password",
+    "decryptAction": "Decrypt & Restore",
+    "openRestoredFolder": "Open restored folder",
+    "errorEmptyPassword": "Please enter a password.",
+    "errorPasswordMismatch": "Passwords do not match.",
+    "errorNoArchive": "Select a .mmbak archive file.",
+    "errorNoDestination": "Select a destination folder.",
+    "errorGeneric": "Operation could not be completed.",
+    "createSuccess": "Backup created ({count} file(s)) at: {path}",
+    "decryptSuccess": "Decrypted {count} file(s) into: {dir}"
   }
 }

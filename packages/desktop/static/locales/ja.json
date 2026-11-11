@@ -35,7 +35,10 @@
       "quit": "終了",
       "preferences": "環境設定",
       "addFolder": "Add Folder…",
-      "autoSaveOnEnter": "Save on Enter"
+      "autoSaveOnEnter": "Save on Enter",
+      "encryptedBackup": "Encrypted Backup…",
+      "decryptBackup": "Decrypt Backup…",
+      "setupFolders": "Setup Initial Folders…"
     },
     "edit": {
       "edit": "編集",
@@ -123,6 +126,7 @@
     "view": {
       "view": "表示",
       "toggleSidebar": "サイドバーの切り替え",
+      "toggleStorageBar": "Disk Space Bar",
       "toggleTabbar": "タブバーの切り替え",
       "commandPalette": "コマンドパレット",
       "sourceCodeMode": "ソースコードモード",
@@ -254,6 +258,7 @@
     },
     "tree": {
       "openedFiles": "開いているファイル",
+      "resizeOpenedFiles": "開いているファイル一覧のサイズを変更",
       "saveAll": "すべて保存",
       "closeAll": "すべて閉じる",
       "emptyProject": "空のプロジェクト",
@@ -267,8 +272,7 @@
       "overlappingFolder": "This folder overlaps an existing folder. Remove the existing item first.",
       "folderAlreadyAdded": "This folder has already been added.",
       "fileOutsideFolders": "This file is not in an added folder.",
-      "sessionSaveFailed": "Unable to save session",
-      "resizeOpenedFiles": "開いているファイル一覧のサイズを変更"
+      "sessionSaveFailed": "Unable to save session"
     },
     "toc": {
       "expand": "目次を展開",
@@ -319,15 +323,17 @@
     "copiedPlainText": "Copied!",
     "autoSaveButton": "Auto-save",
     "autoSaveByTime": "Save by interval",
-    "autoSaveOnEnter": "Save on Enter"
+    "autoSaveOnEnter": "Save on Enter",
+    "hideSidebar": "Hide sidebar",
+    "showSidebar": "Show sidebar"
   },
   "commandPalette": {
     "placeholder": "実行するコマンドの入力",
     "placeholders": {
       "selectOption": "オプションの選択",
       "searchFileToOpen": "開くファイルの検索",
-      "selectLanguage": "言語の選択",
-      "searchRecentFilesAndFolders": "最近使ったファイルとフォルダーを検索"
+      "searchRecentFilesAndFolders": "最近使ったファイルとフォルダーを検索",
+      "selectLanguage": "言語の選択"
     },
     "recentlyOpened": "最近使った項目",
     "fileResults": "ファイルの検索結果",
@@ -446,6 +452,8 @@
         "onEnterShort": "Save on Enter",
         "intervalLabel": "Save interval"
       },
+      "autoRenameFromFirstLine": "Auto-rename file from first line (Patient name + date/time)",
+      "autoInsertDateTimeOnNewFile": "Automatically insert creation date and time on new files",
       "window": {
         "title": "ウィンドウ",
         "titleBarStyle": {
@@ -455,6 +463,7 @@
         },
         "requiresRestart": "再起動が必要",
         "hideScrollbars": "スクロールバーを隠す",
+        "showStorageBar": "Show disk space bar at the bottom",
         "openFilesInNewWindow": "新しいウィンドウでファイルを開く",
         "openFoldersInNewWindow": "新しいウィンドウでフォルダーを開く",
         "zoom": "ズーム",
@@ -634,6 +643,7 @@
           "step3Description": "以下のコマンドを使用して現在の設定を表示してください :",
           "documentation": "完全なドキュメントを表示"
         },
+        "lastSuccessTime": "最後の成功時刻",
         "scriptDescription": "スクリプトの説明",
         "scriptLocation": "スクリプトの場所",
         "services": {
@@ -642,7 +652,6 @@
         },
         "pleaseInstall": "インストールしてください",
         "scriptPath": "スクリプトパス",
-        "lastSuccessTime": "最後の成功時刻",
         "invalidScript": "存在する実行可能なスクリプトのパスを入力してください。"
       },
       "defaultBehavior": "MarkMed に画像を貼り付けまたはドラッグした後のデフォルト動作"
@@ -887,12 +896,12 @@
     },
     "window": {
       "minimize": "最小化",
+      "close": "閉じる",
       "toggleAlwaysOnTop": "常に手前に表示の切り替え",
       "zoomIn": "拡大",
       "zoomOut": "縮小",
       "toggleFullScreen": "フルスクリーンの切り替え",
-      "changeTheme": "テーマの変更",
-      "close": "閉じる"
+      "changeTheme": "テーマの変更"
     },
     "view": {
       "commandPalette": "コマンドパレット",
@@ -1073,5 +1082,61 @@
     "viewImage": "画像を表示",
     "copyLink": "リンクのアドレスをコピー",
     "resumed": "編集モードになりました。自動保存を再開しました。"
+  },
+  "firstRun": {
+    "title": "MarkMed Initial Setup",
+    "description": "Would you like MarkMed to automatically create hidden folders for settings and images? On a USB drive this keeps everything portable; on your PC it keeps everything organized.",
+    "baseDirLabel": "Base folder where they will be created:",
+    "chooseFolder": "Choose folder...",
+    "configHint": "preferences, history and portable configuration",
+    "imagesHint": "images pasted into medical notes",
+    "hiddenNote": "Folders will be created as hidden on both Windows and Linux.",
+    "openWikiGuide": "Prefer setting up manually? Open Wiki step-by-step guide",
+    "doLater": "Configure manually / Later",
+    "createAutomatically": "Authorize & create folders",
+    "createFailed": "Could not create hidden folders.",
+    "createdTitle": "Folders created",
+    "createdAndRestarting": "Hidden folders created! MarkMed will now restart to activate the new portable configuration.",
+    "createdMessage": "Hidden folders created successfully at {dir}."
+  },
+  "storageBar": {
+    "driveLabel": "Drive space",
+    "summary": "{percent}% used · {free} free of {total}",
+    "refresh": "Refresh disk space",
+    "hide": "Hide",
+    "hideTooltip": "Hide disk space bar (re-enable under View)",
+    "lowSpaceTitle": "Low disk space",
+    "lowSpaceMessage": "Only {free} free ({percent}% used). Back up your records and free space on your drive."
+  },
+  "backup": {
+    "title": "Encrypted Patient Backup",
+    "sidebarButton": "Encrypted backup",
+    "createTab": "Create Backup (.mmbak)",
+    "decryptTab": "Decrypt / Restore",
+    "sourceFolderLabel": "Patient records folder:",
+    "noFolderSelected": "No folder selected",
+    "chooseFolder": "Choose...",
+    "chooseFile": "Select...",
+    "includeImages": "Include notes images folder",
+    "includeConfig": "Include MarkMed configuration folder",
+    "passwordLabel": "Encryption password:",
+    "passwordPlaceholder": "Enter a strong password",
+    "confirmPasswordLabel": "Confirm password:",
+    "confirmPasswordPlaceholder": "Repeat password",
+    "createAction": "Create Encrypted Backup",
+    "archiveFileLabel": "Backup archive (.mmbak):",
+    "archivePlaceholder": "Select a .mmbak file",
+    "destinationFolderLabel": "Destination folder to restore files:",
+    "destinationPlaceholder": "Choose a destination folder",
+    "decryptPasswordPlaceholder": "Enter backup password",
+    "decryptAction": "Decrypt & Restore",
+    "openRestoredFolder": "Open restored folder",
+    "errorEmptyPassword": "Please enter a password.",
+    "errorPasswordMismatch": "Passwords do not match.",
+    "errorNoArchive": "Select a .mmbak archive file.",
+    "errorNoDestination": "Select a destination folder.",
+    "errorGeneric": "Operation could not be completed.",
+    "createSuccess": "Backup created ({count} file(s)) at: {path}",
+    "decryptSuccess": "Decrypted {count} file(s) into: {dir}"
   }
 }

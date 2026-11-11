@@ -57,7 +57,10 @@ O objetivo principal do MarkMed é oferecer um **ambiente confiável para criaç
 
 - **Botão `Copiar TXT` (sem Markdown):** converte a evolução em texto comum limpo com um único clique (na barra superior, menu _Editar_ ou clique direito), evitando caracteres de formatação ou quebras estranhas ao colar no sistema do hospital.
 - **Auto-salvar flexível:** escolha entre salvar automaticamente por **intervalo de tempo** (`1s` a `60s`) ou ativar o salvamento automático **sempre que apertar `Enter`**, garantindo que cada parágrafo digitado já fique gravado no disco ou no pendrive.
-- **Modo Portátil (Pendrive):** roda sem instalar e guarda preferências e dados ao lado do próprio executável quando a pasta `markmed-user-data` está presente.
+- **Nome automático pela 1ª linha + data e hora:** basta digitar o nome do paciente na primeira linha do arquivo para sugerir/renomear automaticamente no padrão `<Nome-Paciente>_YYYY-MM-DD_HH-mm.md`.
+- **Backup criptografado com senha (`.mmbak`):** crie cópias compactadas e criptografadas (**AES-256-GCM**) dos prontuários e imagens para guardar no Google Drive com tranquilidade pela LGPD, e descriptografe diretamente dentro do próprio MarkMed.
+- **Modo Portátil (Pendrive) com pastas ocultas:** na primeira abertura, o MarkMed configura automaticamente as pastas ocultas `.markmed-user-data` e `.markmed-imagens` no pendrive (ou na pasta escolhida) e monitora o espaço livre em disco com barra discreta no rodapé.
+- **Barra lateral visível e botão rápido:** acesso direto à árvore de prontuários com botão de mostrar/ocultar na barra superior.
 - **Temas Claro e Escuro:** interface limpa para uso confortável tanto em consultórios bem iluminados quanto em plantões noturnos.
 - **Escrita sem distrações:** modos Foco e Máquina de Escrever, suporte a listas, tabelas, títulos e exportação rápida para **PDF** e **HTML**.
 
@@ -74,7 +77,7 @@ Baixe a versão mais recente para o seu sistema na página oficial de lançament
 - **Para usar no Pendrive (recomendado no plantão):**
   1. Baixe o arquivo `markmed-win-x64-<versao>-portable.exe` (ou `arm64`, se aplicável).
   2. Copie esse arquivo para dentro de uma pasta no seu pendrive (por exemplo, `MarkMed\`).
-  3. _(Opcional, recomendado)_ Crie uma pasta vazia chamada **`markmed-user-data`** dentro dessa mesma pasta ao lado do `.exe`. Assim, configurações e histórico ficam gravados dentro do próprio pendrive, sem deixar rastro no computador do hospital.
+  3. Na primeira abertura, autorize o MarkMed a criar automaticamente as pastas ocultas **`.markmed-user-data`** e **`.markmed-imagens`** ao lado do executável (ou veja o passo a passo manual na [Wiki](https://github.com/slanow/MarkMed/wiki/Pastas-e-Configuracao-Inicial)). Assim, configurações, imagens e histórico ficam protegidos dentro do próprio pendrive, sem deixar rastro no computador do hospital.
   4. Crie também uma pasta **`Prontuarios`** no pendrive para salvar suas evoluções em `.md`.
 - **Para instalar no seu computador pessoal:**
   - Baixe e execute o instalador `markmed-win-x64-<versao>-setup.exe`.
@@ -86,7 +89,7 @@ Baixe a versão mais recente para o seu sistema na página oficial de lançament
    ```sh
    chmod +x markmed-linux-*.AppImage
    ```
-3. _(Opcional para pendrive)_ Crie uma pasta vazia chamada **`markmed-user-data`** na mesma pasta do `.AppImage` para manter todas as configurações portáteis.
+3. Na primeira abertura, aceite a criação automática das pastas ocultas **`.markmed-user-data`** e **`.markmed-imagens`** ao lado do `.AppImage` para manter todas as configurações portáteis.
 
 ### macOS
 
@@ -108,8 +111,9 @@ Depois do plantão ou ao final do dia, leve apenas alguns segundos para enviar s
    ```text
    📁 Meu_Pendrive/
    ├── 📁 MarkMed/
-   │   ├── markmed-win-x64-0.25.0-portable.exe
-   │   └── 📁 markmed-user-data/
+   │   ├── markmed-win-x64-0.26.0-portable.exe
+   │   ├── 📁 .markmed-user-data/
+   │   └── 📁 .markmed-imagens/
    └── 📁 Prontuarios/
        └── 📁 2026-11/
            └── 📁 Plantao_01_11/

@@ -42,6 +42,16 @@
           <Setting aria-hidden="true" />
         </button>
       </icon-tooltip>
+      <icon-tooltip :content="t('backup.sidebarButton')">
+        <button
+          type="button"
+          class="plain-button backup-button"
+          :aria-label="t('backup.sidebarButton')"
+          @click="openBackupDialog"
+        >
+          <Lock aria-hidden="true" />
+        </button>
+      </icon-tooltip>
       <icon-tooltip :content="t('menu.file.addFolder')">
         <button
           type="button"
@@ -66,8 +76,9 @@ import { useLayoutStore } from '@/store/layout'
 import { useProjectStore } from '@/store/project'
 import { useEditorStore } from '@/store/editor'
 
-import { Search, Setting, Plus } from '@element-plus/icons-vue'
+import { Search, Setting, Plus, Lock } from '@element-plus/icons-vue'
 import { useI18n } from 'vue-i18n'
+import bus from '@/bus'
 import Tree from './tree.vue'
 import SideBarSearch from './search.vue'
 import IconTooltip from '@/components/iconTooltip/index.vue'
@@ -86,6 +97,10 @@ const sideBarViewWidth = ref(280)
 const { rightColumn, showSideBar, sideBarWidth } = storeToRefs(layoutStore)
 
 const { tabs } = storeToRefs(editorStore)
+
+const openBackupDialog = (): void => {
+  bus.emit('backupDialog', 'backup')
+}
 
 watch(sideBarWidth, (width) => {
   sideBarViewWidth.value = Number(width)

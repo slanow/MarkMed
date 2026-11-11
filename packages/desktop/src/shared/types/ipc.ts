@@ -34,6 +34,15 @@ export type SaveDocumentResult =
   | { status: 'canceled' | 'failed' }
 
 import type { StateIpcInvokeChannels, StateIpcMainEvents } from './applicationState'
+import type {
+  CreateBackupRequest,
+  CreateBackupResult,
+  DecryptBackupRequest,
+  DecryptBackupResult,
+  FirstRunSetupResult,
+  FirstRunSetupStatus,
+  StorageSpaceInfo
+} from './markmed'
 
 export interface IpcInvokeChannels extends StateIpcInvokeChannels {
   'mt::get-recently-used-documents': { args: []; ret: RecentDocument[] }
@@ -99,6 +108,16 @@ export interface IpcInvokeChannels extends StateIpcInvokeChannels {
   'mt::uploader::upload': { args: [req: unknown]; ret: unknown }
   'mt::win::is-fullscreen': { args: []; ret: boolean }
   'mt::win::is-maximized': { args: []; ret: boolean }
+  'mt::setup::get-initial-status': { args: []; ret: FirstRunSetupStatus }
+  'mt::setup::pick-base-directory': { args: []; ret: string | null }
+  'mt::setup::create-hidden-folders': { args: [baseDir: string]; ret: FirstRunSetupResult }
+  'mt::setup::skip-setup': { args: []; ret: void }
+  'mt::storage::get-space-info': { args: [targetPath?: string]; ret: StorageSpaceInfo | null }
+  'mt::backup::pick-source-folder': { args: []; ret: string | null }
+  'mt::backup::pick-archive-file': { args: []; ret: string | null }
+  'mt::backup::pick-restore-folder': { args: []; ret: string | null }
+  'mt::backup::create': { args: [request: CreateBackupRequest]; ret: CreateBackupResult }
+  'mt::backup::decrypt': { args: [request: DecryptBackupRequest]; ret: DecryptBackupResult }
   // Main derives the BrowserWindow via BrowserWindow.fromWebContents(e.sender);
   // no need to pass windowId. Payload is the editor+project+layout snapshot.
 }
@@ -250,6 +269,8 @@ export interface IpcMainEventChannels extends StateIpcMainEvents {
   'mt::set-line-ending': [lineEnding: LineEnding]
   'mt::set-view-layout': [layout: unknown]
   'mt::show-command-palette': []
+  'mt::show-backup-dialog': [tab: 'backup' | 'decrypt']
+  'mt::show-first-run-dialog': []
   'mt::show-export-dialog': [type: ExportType]
   'mt::show-notification': [payload: unknown]
   'mt::spelling-replace-misspelling': [payload: unknown]

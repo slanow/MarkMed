@@ -8,7 +8,7 @@ export const createDefaultLayout = (
   }
 ): WindowLayoutState => ({
   sidebar: {
-    visible: false,
+    visible: true,
     activeView: 'files',
     preferredWidthPx: 280,
     openedFiles: { expanded: true, preferredHeightPx: 112 }

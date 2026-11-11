@@ -15,6 +15,26 @@
     "type": "boolean",
     "default": false
   },
+  "firstRunSetupCompleted": {
+    "description": "General--Whether initial hidden folders setup prompt was completed.--internal",
+    "type": "boolean",
+    "default": false
+  },
+  "showStorageBar": {
+    "description": "General--Show storage space usage bar at the bottom of the window.",
+    "type": "boolean",
+    "default": true
+  },
+  "autoRenameFromFirstLine": {
+    "description": "General--Automatically rename patient note files based on the first line and creation date/time.",
+    "type": "boolean",
+    "default": true
+  },
+  "autoInsertDateTimeOnNewFile": {
+    "description": "General--Automatically insert creation date and time header when creating a new file.",
+    "type": "boolean",
+    "default": true
+  },
   "titleBarStyle": {
     "description": "General--The title bar style (Windows and Linux system only).",
     "enum": ["custom", "native"],

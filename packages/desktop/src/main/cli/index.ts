@@ -1,7 +1,7 @@
 import path from 'path'
 import { app } from 'electron'
 import os from 'os'
-import { isDirectory } from 'common/filesystem'
+import { resolvePortableUserDataDir } from '../filesystem/hiddenDirs'
 import parseArgs, { userArguments, type ParsedArgs } from './parser'
 import { getPath } from '../utils'
 
@@ -44,16 +44,13 @@ const cli = (): ParsedArgs => {
     process.exit(0)
   }
 
-  // Check for portable mode and ensure the user data path is absolute. We assume
-  // that the path is writable if not this lead to an application crash.
+  // Check for portable mode and hidden config pointers before Bootstrap initializes `userData`.
   if (!args['--user-data-dir']) {
-    const portableBaseDir = process.env.PORTABLE_EXECUTABLE_DIR
-      ? process.env.PORTABLE_EXECUTABLE_DIR
-      : process.env.APPIMAGE
-        ? path.dirname(process.env.APPIMAGE)
-        : path.join(app.getAppPath(), '..', '..')
-    const portablePath = path.join(portableBaseDir, 'markmed-user-data')
-    if (isDirectory(portablePath)) {
+    const portablePath = resolvePortableUserDataDir({
+      appPath: app.getAppPath(),
+      defaultAppDataDir: getPath('appData')
+    })
+    if (portablePath) {
       args['--user-data-dir'] = portablePath
     }
   } else {

@@ -35,7 +35,10 @@
       "quit": "Esci",
       "preferences": "Preferenze",
       "addFolder": "Aggiungi cartella…",
-      "autoSaveOnEnter": "Save on Enter"
+      "autoSaveOnEnter": "Save on Enter",
+      "encryptedBackup": "Encrypted Backup…",
+      "decryptBackup": "Decrypt Backup…",
+      "setupFolders": "Setup Initial Folders…"
     },
     "edit": {
       "edit": "Modifica",
@@ -123,6 +126,7 @@
     "view": {
       "view": "Visualizza",
       "toggleSidebar": "Mostra/nascondi barra laterale",
+      "toggleStorageBar": "Disk Space Bar",
       "toggleTabbar": "Mostra/nascondi barra delle schede",
       "commandPalette": "Elenco dei comandi",
       "sourceCodeMode": "Modalità codice sorgente",
@@ -319,7 +323,9 @@
     "copiedPlainText": "Copied!",
     "autoSaveButton": "Auto-save",
     "autoSaveByTime": "Save by interval",
-    "autoSaveOnEnter": "Save on Enter"
+    "autoSaveOnEnter": "Save on Enter",
+    "hideSidebar": "Hide sidebar",
+    "showSidebar": "Show sidebar"
   },
   "commandPalette": {
     "placeholder": "Digita il comando da eseguire",
@@ -446,6 +452,8 @@
         "onEnterShort": "Save on Enter",
         "intervalLabel": "Save interval"
       },
+      "autoRenameFromFirstLine": "Auto-rename file from first line (Patient name + date/time)",
+      "autoInsertDateTimeOnNewFile": "Automatically insert creation date and time on new files",
       "window": {
         "title": "Finestra",
         "titleBarStyle": {
@@ -455,6 +463,7 @@
         },
         "requiresRestart": "Richiede il riavvio.",
         "hideScrollbars": "Nascondi le barre di scorrimento",
+        "showStorageBar": "Show disk space bar at the bottom",
         "openFilesInNewWindow": "Apri i file in una nuova finestra",
         "openFoldersInNewWindow": "Apri le cartelle in una nuova finestra",
         "zoom": "Zoom",
@@ -1073,5 +1082,61 @@
     "viewImage": "Visualizza immagine",
     "copyLink": "Copia indirizzo del link",
     "resumed": "La modalità modifica è attiva. Il salvataggio automatico è ripreso."
+  },
+  "firstRun": {
+    "title": "MarkMed Initial Setup",
+    "description": "Would you like MarkMed to automatically create hidden folders for settings and images? On a USB drive this keeps everything portable; on your PC it keeps everything organized.",
+    "baseDirLabel": "Base folder where they will be created:",
+    "chooseFolder": "Choose folder...",
+    "configHint": "preferences, history and portable configuration",
+    "imagesHint": "images pasted into medical notes",
+    "hiddenNote": "Folders will be created as hidden on both Windows and Linux.",
+    "openWikiGuide": "Prefer setting up manually? Open Wiki step-by-step guide",
+    "doLater": "Configure manually / Later",
+    "createAutomatically": "Authorize & create folders",
+    "createFailed": "Could not create hidden folders.",
+    "createdTitle": "Folders created",
+    "createdAndRestarting": "Hidden folders created! MarkMed will now restart to activate the new portable configuration.",
+    "createdMessage": "Hidden folders created successfully at {dir}."
+  },
+  "storageBar": {
+    "driveLabel": "Drive space",
+    "summary": "{percent}% used · {free} free of {total}",
+    "refresh": "Refresh disk space",
+    "hide": "Hide",
+    "hideTooltip": "Hide disk space bar (re-enable under View)",
+    "lowSpaceTitle": "Low disk space",
+    "lowSpaceMessage": "Only {free} free ({percent}% used). Back up your records and free space on your drive."
+  },
+  "backup": {
+    "title": "Encrypted Patient Backup",
+    "sidebarButton": "Encrypted backup",
+    "createTab": "Create Backup (.mmbak)",
+    "decryptTab": "Decrypt / Restore",
+    "sourceFolderLabel": "Patient records folder:",
+    "noFolderSelected": "No folder selected",
+    "chooseFolder": "Choose...",
+    "chooseFile": "Select...",
+    "includeImages": "Include notes images folder",
+    "includeConfig": "Include MarkMed configuration folder",
+    "passwordLabel": "Encryption password:",
+    "passwordPlaceholder": "Enter a strong password",
+    "confirmPasswordLabel": "Confirm password:",
+    "confirmPasswordPlaceholder": "Repeat password",
+    "createAction": "Create Encrypted Backup",
+    "archiveFileLabel": "Backup archive (.mmbak):",
+    "archivePlaceholder": "Select a .mmbak file",
+    "destinationFolderLabel": "Destination folder to restore files:",
+    "destinationPlaceholder": "Choose a destination folder",
+    "decryptPasswordPlaceholder": "Enter backup password",
+    "decryptAction": "Decrypt & Restore",
+    "openRestoredFolder": "Open restored folder",
+    "errorEmptyPassword": "Please enter a password.",
+    "errorPasswordMismatch": "Passwords do not match.",
+    "errorNoArchive": "Select a .mmbak archive file.",
+    "errorNoDestination": "Select a destination folder.",
+    "errorGeneric": "Operation could not be completed.",
+    "createSuccess": "Backup created ({count} file(s)) at: {path}",
+    "decryptSuccess": "Decrypted {count} file(s) into: {dir}"
   }
 }

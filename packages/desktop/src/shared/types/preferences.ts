@@ -30,6 +30,10 @@ export interface UserPreferences extends RecoveryPreferences {
   autoSave: boolean
   autoSaveDelay: number
   autoSaveOnEnter: boolean
+  firstRunSetupCompleted: boolean
+  showStorageBar: boolean
+  autoRenameFromFirstLine: boolean
+  autoInsertDateTimeOnNewFile: boolean
   titleBarStyle: 'custom' | 'native'
   openFilesInNewWindow: boolean
   openFolderInNewWindow: boolean

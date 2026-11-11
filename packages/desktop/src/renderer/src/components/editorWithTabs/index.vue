@@ -60,16 +60,21 @@ let enterSaveTimer: ReturnType<typeof setTimeout> | null = null
 
 const handleDocumentKeydown = (event: KeyboardEvent): void => {
   if (event.key !== 'Enter' || event.isComposing) return
-  if (!preferencesStore.autoSaveOnEnter) return
+  if (!preferencesStore.autoSaveOnEnter && !preferencesStore.autoRenameFromFirstLine) return
   const active = editorStore.currentFile
-  if (!active?.id || !active.pathname || active.readOnly) return
+  if (!active?.id || active.readOnly) return
 
   if (enterSaveTimer) clearTimeout(enterSaveTimer)
   const targetId = active.id
   // Wait briefly so the editor finishes committing the Enter keystroke to the tab state.
   enterSaveTimer = setTimeout(() => {
     enterSaveTimer = null
-    editorStore.SAVE_ON_ENTER(targetId)
+    if (preferencesStore.autoRenameFromFirstLine) {
+      void editorStore.TRY_AUTO_RENAME(targetId)
+    }
+    if (preferencesStore.autoSaveOnEnter && active.pathname) {
+      editorStore.SAVE_ON_ENTER(targetId)
+    }
   }, 25)
 }
 

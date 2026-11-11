@@ -86,9 +86,9 @@ describe('window defaults and contract fixtures', () => {
     const preferences = { tocPosition: 'right' as const, sourceCodeModeEnabled: true }
     const first = createDefaultLayout(preferences)
     const second = createDefaultLayout(preferences)
-    first.sidebar.visible = true
+    first.sidebar.visible = false
     first.outline.preferredWidthPx = 400
-    expect(second.sidebar.visible).toBe(false)
+    expect(second.sidebar.visible).toBe(true)
     expect(second.outline.preferredWidthPx).toBe(220)
     expect(second.outline.position).toBe('right')
     expect(second.modes.sourceCode).toBe(true)
@@ -133,8 +133,8 @@ describe('window defaults and contract fixtures', () => {
     const second = window(createStateId(), document(createStateId()))
     state.session.windows = [first, second]
     state.session.activeWindowId = second.id
-    first.layout.sidebar.visible = true
-    expect(second.layout.sidebar.visible).toBe(false)
+    first.layout.sidebar.visible = false
+    expect(second.layout.sidebar.visible).toBe(true)
     expect(first.documents[0].id).not.toBe(second.documents[0].id)
     expect(first.workspace?.id).toBe(second.workspace?.id)
     expect(state.session.lastWindow).toBeNull()

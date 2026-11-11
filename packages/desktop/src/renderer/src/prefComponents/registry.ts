@@ -32,6 +32,18 @@ export const preferenceDefinitions: Record<string, PreferenceDefinition> = {
     "category": "files",
     "label": "preferences.general.autoSave.onEnter"
   },
+  "autoRenameFromFirstLine": {
+    "category": "files",
+    "label": "preferences.general.autoRenameFromFirstLine"
+  },
+  "autoInsertDateTimeOnNewFile": {
+    "category": "files",
+    "label": "preferences.general.autoInsertDateTimeOnNewFile"
+  },
+  "showStorageBar": {
+    "category": "appearance",
+    "label": "preferences.general.window.showStorageBar"
+  },
   "titleBarStyle": {
     "category": "appearance",
     "label": "preferences.general.window.titleBarStyle.title",

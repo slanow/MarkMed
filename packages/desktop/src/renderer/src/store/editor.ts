@@ -21,12 +21,19 @@ import { t } from '../i18n'
 import { scheduleWindowCheckpoint } from './checkpoint'
 import type { IFileState, FileNotification, FileWordCount, LineEnding, PageOptions, TabOptions } from '@shared/types/files'
 import type { SaveDocumentResult } from '@shared/types/ipc'
+import type { AutoRenameResult } from '@shared/types/markmed'
+import {
+  buildDatedPatientFilename,
+  extractPatientNameFromMarkdown,
+  shouldAutoRenamePath
+} from '@shared/utils/patientFilename'
 
 export interface SessionActions {
   checkpoint(transactionId?: string): Promise<unknown>
   scheduleCheckpoint(): void
   captureView(): void
   save(id: string, saveAs?: boolean): Promise<SaveDocumentResult>
+  autoRename?(id: string, newFilename: string): Promise<AutoRenameResult>
   create(markdown: string, selected: boolean): Promise<void>
   close(ids: string[]): Promise<void>
   saveAll(closeTabs: boolean): Promise<void>
@@ -139,6 +146,8 @@ export interface EditorState {
 }
 
 const autoSaveTimers = new Map<string, ReturnType<typeof setTimeout>>()
+const autoRenameTimers = new Map<string, ReturnType<typeof setTimeout>>()
+const activeAutoRenames = new Set<string>()
 
 interface OpenIntent {
   focus: boolean
@@ -543,10 +552,16 @@ export const useEditorStore = defineStore('editor', {
       if (!this.currentFile || this.currentFile.readOnly || this.currentFile.modeChanging) return
       const session = getSessionActions()
       if (!session) return
+      const targetId = this.currentFile.id
       this.flushActiveEditor()
-      const result = session.save(this.currentFile.id)
-      if (waitForResult) return result
-      void result.catch(console.error)
+      const promise = session.save(targetId).then((res) => {
+        if (res.status === 'saved') {
+          void this.TRY_AUTO_RENAME(targetId)
+        }
+        return res
+      })
+      if (waitForResult) return promise
+      void promise.catch(console.error)
     },
 
     LISTEN_FOR_SAVE(): void {
@@ -788,6 +803,11 @@ export const useEditorStore = defineStore('editor', {
         const timer = autoSaveTimers.get(file.id)
         if (timer) clearTimeout(timer)
         autoSaveTimers.delete(file.id)
+      }
+      if (file.id && autoRenameTimers.has(file.id)) {
+        const timer = autoRenameTimers.get(file.id)
+        if (timer) clearTimeout(timer)
+        autoRenameTimers.delete(file.id)
       }
 
       this.updateTabIdToIndex() // Update before sending it out to prevent stale mappings.
@@ -1047,7 +1067,8 @@ export const useEditorStore = defineStore('editor', {
 
     NEW_UNTITLED_TAB({ markdown = '', selected = true }: { markdown?: string; selected?: boolean }): void {
       const session = getSessionActions()
-      if (session) void session.create(markdown, selected).catch(console.error)
+      if (!session) return
+      void session.create(markdown, selected).catch(console.error)
     },
 
     SET_SAVE_STATUS_WHEN_REMOVE({ pathname }: { pathname: string }): void {
@@ -1152,6 +1173,16 @@ export const useEditorStore = defineStore('editor', {
       if (markdown !== oldMarkdown) {
         tab.isPreview = false
         tab.isSaved = false
+        if (preferencesStore.autoRenameFromFirstLine && !tab.modeChanging) {
+          const patientName = extractPatientNameFromMarkdown(markdown)
+          if (!pathname && patientName) {
+            tab.filename = buildDatedPatientFilename({
+              currentFilename: tab.filename || 'Untitled-1.md',
+              patientName
+            })
+          }
+          this.SCHEDULE_AUTO_RENAME(tab.id)
+        }
         if (pathname && autoSave && !tab.modeChanging) this.HANDLE_AUTO_SAVE(tab)
       }
       scheduleWindowCheckpoint()
@@ -1182,7 +1213,115 @@ export const useEditorStore = defineStore('editor', {
       const tab = this.tabs.find((t) => t.id === id)
       if (tab && tab.pathname && !tab.isSaved && !tab.readOnly && !tab.modeChanging && !tab.diskConflict) {
         const session = getSessionActions()
-        if (session) void session.save(id).catch(console.error)
+        if (session) {
+          void session
+            .save(id)
+            .then((res) => {
+              if (res.status === 'saved') {
+                void this.TRY_AUTO_RENAME(id)
+              }
+            })
+            .catch(console.error)
+        }
+      }
+    },
+
+    SCHEDULE_AUTO_RENAME(id: string): void {
+      if (autoRenameTimers.has(id)) {
+        clearTimeout(autoRenameTimers.get(id))
+        autoRenameTimers.delete(id)
+      }
+      const timer = setTimeout(() => {
+        autoRenameTimers.delete(id)
+        void this.TRY_AUTO_RENAME(id)
+      }, 1500)
+      autoRenameTimers.set(id, timer)
+    },
+
+    async TRY_AUTO_RENAME(id: string): Promise<void> {
+      const preferencesStore = usePreferencesStore()
+      if (!preferencesStore.autoRenameFromFirstLine) return
+      if (activeAutoRenames.has(id)) return
+
+      if (this.currentFile?.id === id) {
+        this.flushActiveEditor()
+      }
+
+      const tab = this.tabs.find((t) => t.id === id)
+      if (
+        !tab ||
+        tab.isPendingCreation ||
+        tab.readOnly ||
+        tab.modeChanging ||
+        tab.diskConflict
+      ) {
+        return
+      }
+
+      const projectStore = useProjectStore()
+      if (projectStore.renameCache) return
+
+      const patientName = extractPatientNameFromMarkdown(tab.markdown)
+      if (!patientName) return
+
+      if (!tab.pathname) {
+        const targetFilename = buildDatedPatientFilename({
+          currentFilename: tab.filename || 'Untitled-1.md',
+          patientName
+        })
+        tab.filename = targetFilename
+        if (projectStore.availableRoots.length === 0) return
+
+        const session = getSessionActions()
+        if (!session || !session.autoRename) return
+
+        activeAutoRenames.add(id)
+        try {
+          const res = await session.autoRename(id, targetFilename)
+          if (res.status === 'renamed' && res.pathname && res.filename) {
+            tab.pathname = res.pathname
+            tab.filename = res.filename
+          }
+        } catch (error) {
+          console.error('Auto rename failed:', error)
+        } finally {
+          activeAutoRenames.delete(id)
+        }
+        return
+      }
+
+      if (!shouldAutoRenamePath(tab.pathname)) return
+
+      const diskFilename = window.path.basename(tab.pathname)
+      const targetFilename = buildDatedPatientFilename({
+        currentFilename: diskFilename,
+        patientName
+      })
+      tab.filename = targetFilename
+      if (targetFilename === diskFilename) return
+
+      const session = getSessionActions()
+      if (!session || !session.autoRename) return
+
+      const oldPathname = tab.pathname
+      activeAutoRenames.add(id)
+      try {
+        const res = await session.autoRename(id, targetFilename)
+        if (res.status === 'renamed' && res.pathname && res.filename) {
+          tab.pathname = res.pathname
+          tab.filename = res.filename
+          if (projectStore.activeItem?.pathname === oldPathname) {
+            projectStore.CHANGE_ACTIVE_ITEM({
+              ...projectStore.activeItem,
+              pathname: res.pathname,
+              name: res.filename
+            })
+          }
+        }
+      } catch (error) {
+        console.error('Auto rename failed:', error)
+      } finally {
+        activeAutoRenames.delete(id)
       }
     },
 

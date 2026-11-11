@@ -1,9 +1,14 @@
-import { type BrowserWindow, type MenuItemConstructorOptions } from 'electron'
+import { ipcMain, type BrowserWindow, type MenuItemConstructorOptions } from 'electron'
 import * as actions from '../actions/view'
 import { t } from '../../i18n'
 import type Keybindings from '../../keyboard/shortcutHandler'
+import type Preference from '../../preferences'
 
-export default function(keybindings: Keybindings): MenuItemConstructorOptions {
+export default function(
+  keybindings: Keybindings,
+  userPreference?: Preference
+): MenuItemConstructorOptions {
+  const showStorageBar = userPreference ? !!userPreference.getItem('showStorageBar') : true
   const submenu: MenuItemConstructorOptions[] = [
     {
       label: t('menu.view.commandPalette'),
@@ -62,9 +67,18 @@ export default function(keybindings: Keybindings): MenuItemConstructorOptions {
       id: 'sideBarMenuItem',
       accelerator: keybindings.getAccelerator('view.toggle-sidebar') ?? undefined,
       type: 'checkbox',
-      checked: false,
+      checked: true,
       click(_item, focusedWindow) {
         actions.toggleSidebar(focusedWindow as BrowserWindow | undefined)
+      }
+    },
+    {
+      label: t('menu.view.toggleStorageBar'),
+      id: 'storageBarMenuItem',
+      type: 'checkbox',
+      checked: showStorageBar,
+      click(menuItem) {
+        ipcMain.emit('set-user-preference', { showStorageBar: !!menuItem.checked })
       }
     },
     {

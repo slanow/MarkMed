@@ -2,6 +2,7 @@ import type { ProjectRootsSnapshot } from './project'
 
 import type { PreferenceUpdateResult, UserPreferences, UserPreferencesPatch } from './preferences'
 import type { DocumentViewState, DiskBaseline, SaveFormatState } from './files'
+import type { AutoRenameResult } from './markmed'
 /** UUID of a native editor window; independent of Electron process IDs. */
 export type WindowStateId = string
 /** UUID shared by windows belonging to one application launch. */
@@ -324,6 +325,10 @@ export interface StateIpcInvokeChannels {
   }
   'mt::preferences::choose-directory': { args: []; ret: string | null }
   'mt::state::save-document': { args: [contextToken: string, documentId: string, saveAs: boolean]; ret: ManagedSaveResult }
+  'mt::state::auto-rename-document': {
+    args: [contextToken: string, documentId: string, newFilename: string]
+    ret: AutoRenameResult
+  }
   'mt::state::close-documents': { args: [contextToken: string, documentIds: string[]]; ret: { status: 'closed' | 'canceled' | 'failed' } }
 }
 

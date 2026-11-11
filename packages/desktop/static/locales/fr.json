@@ -35,7 +35,10 @@
       "quit": "Quitter",
       "preferences": "Préférences",
       "addFolder": "Add Folder…",
-      "autoSaveOnEnter": "Save on Enter"
+      "autoSaveOnEnter": "Save on Enter",
+      "encryptedBackup": "Encrypted Backup…",
+      "decryptBackup": "Decrypt Backup…",
+      "setupFolders": "Setup Initial Folders…"
     },
     "edit": {
       "edit": "Édition",
@@ -123,6 +126,7 @@
     "view": {
       "view": "Affichage",
       "toggleSidebar": "Basculer la barre latérale",
+      "toggleStorageBar": "Disk Space Bar",
       "toggleTabbar": "Basculer la barre d'onglets",
       "commandPalette": "Palette de commandes",
       "sourceCodeMode": "Mode code source",
@@ -254,6 +258,7 @@
     },
     "tree": {
       "openedFiles": "Fichiers ouverts",
+      "resizeOpenedFiles": "Redimensionner la liste des fichiers ouverts",
       "saveAll": "Tout enregistrer",
       "closeAll": "Tout fermer",
       "emptyProject": "Projet vide",
@@ -267,8 +272,7 @@
       "overlappingFolder": "This folder overlaps an existing folder. Remove the existing item first.",
       "folderAlreadyAdded": "This folder has already been added.",
       "fileOutsideFolders": "This file is not in an added folder.",
-      "sessionSaveFailed": "Unable to save session",
-      "resizeOpenedFiles": "Redimensionner la liste des fichiers ouverts"
+      "sessionSaveFailed": "Unable to save session"
     },
     "toc": {
       "expand": "Développer la table des matières",
@@ -319,15 +323,17 @@
     "copiedPlainText": "Copied!",
     "autoSaveButton": "Auto-save",
     "autoSaveByTime": "Save by interval",
-    "autoSaveOnEnter": "Save on Enter"
+    "autoSaveOnEnter": "Save on Enter",
+    "hideSidebar": "Hide sidebar",
+    "showSidebar": "Show sidebar"
   },
   "commandPalette": {
     "placeholder": "Tapez une commande à exécuter",
     "placeholders": {
       "selectOption": "Sélectionner une option",
       "searchFileToOpen": "Rechercher un fichier à ouvrir",
-      "selectLanguage": "Sélectionner la langue",
-      "searchRecentFilesAndFolders": "Rechercher des fichiers et dossiers récents"
+      "searchRecentFilesAndFolders": "Rechercher des fichiers et dossiers récents",
+      "selectLanguage": "Sélectionner la langue"
     },
     "recentlyOpened": "ouverts récemment",
     "fileResults": "résultats de fichiers",
@@ -446,6 +452,8 @@
         "onEnterShort": "Save on Enter",
         "intervalLabel": "Save interval"
       },
+      "autoRenameFromFirstLine": "Auto-rename file from first line (Patient name + date/time)",
+      "autoInsertDateTimeOnNewFile": "Automatically insert creation date and time on new files",
       "window": {
         "title": "Fenêtre",
         "titleBarStyle": {
@@ -455,6 +463,7 @@
         },
         "requiresRestart": "Nécessite un redémarrage",
         "hideScrollbars": "Masquer les barres de défilement",
+        "showStorageBar": "Show disk space bar at the bottom",
         "openFilesInNewWindow": "Ouvrir les fichiers dans une nouvelle fenêtre",
         "openFoldersInNewWindow": "Ouvrir les dossiers dans une nouvelle fenêtre",
         "zoom": "Zoom",
@@ -634,6 +643,7 @@
           "step3Description": "Utilisez la commande suivante pour voir la configuration actuelle :",
           "documentation": "Voir la documentation complète"
         },
+        "lastSuccessTime": "Dernière heure de succès",
         "scriptDescription": "Description du script",
         "scriptLocation": "Emplacement du script",
         "services": {
@@ -642,7 +652,6 @@
         },
         "pleaseInstall": "Veuillez installer",
         "scriptPath": "Chemin du script",
-        "lastSuccessTime": "Dernière heure de succès",
         "invalidScript": "Saisissez le chemin d’un script existant et exécutable."
       },
       "defaultBehavior": "Comportement par défaut après avoir collé ou glissé une image dans MarkMed"
@@ -887,12 +896,12 @@
     },
     "window": {
       "minimize": "Réduire",
+      "close": "Fermer",
       "toggleAlwaysOnTop": "Basculer toujours au premier plan",
       "zoomIn": "Agrandir",
       "zoomOut": "Réduire",
       "toggleFullScreen": "Basculer le plein écran",
-      "changeTheme": "Changer de thème",
-      "close": "Fermer"
+      "changeTheme": "Changer de thème"
     },
     "view": {
       "commandPalette": "Palette de commandes",
@@ -1073,5 +1082,61 @@
     "viewImage": "Afficher l’image",
     "copyLink": "Copier l’adresse du lien",
     "resumed": "Le mode édition est activé. L’enregistrement automatique a repris."
+  },
+  "firstRun": {
+    "title": "MarkMed Initial Setup",
+    "description": "Would you like MarkMed to automatically create hidden folders for settings and images? On a USB drive this keeps everything portable; on your PC it keeps everything organized.",
+    "baseDirLabel": "Base folder where they will be created:",
+    "chooseFolder": "Choose folder...",
+    "configHint": "preferences, history and portable configuration",
+    "imagesHint": "images pasted into medical notes",
+    "hiddenNote": "Folders will be created as hidden on both Windows and Linux.",
+    "openWikiGuide": "Prefer setting up manually? Open Wiki step-by-step guide",
+    "doLater": "Configure manually / Later",
+    "createAutomatically": "Authorize & create folders",
+    "createFailed": "Could not create hidden folders.",
+    "createdTitle": "Folders created",
+    "createdAndRestarting": "Hidden folders created! MarkMed will now restart to activate the new portable configuration.",
+    "createdMessage": "Hidden folders created successfully at {dir}."
+  },
+  "storageBar": {
+    "driveLabel": "Drive space",
+    "summary": "{percent}% used · {free} free of {total}",
+    "refresh": "Refresh disk space",
+    "hide": "Hide",
+    "hideTooltip": "Hide disk space bar (re-enable under View)",
+    "lowSpaceTitle": "Low disk space",
+    "lowSpaceMessage": "Only {free} free ({percent}% used). Back up your records and free space on your drive."
+  },
+  "backup": {
+    "title": "Encrypted Patient Backup",
+    "sidebarButton": "Encrypted backup",
+    "createTab": "Create Backup (.mmbak)",
+    "decryptTab": "Decrypt / Restore",
+    "sourceFolderLabel": "Patient records folder:",
+    "noFolderSelected": "No folder selected",
+    "chooseFolder": "Choose...",
+    "chooseFile": "Select...",
+    "includeImages": "Include notes images folder",
+    "includeConfig": "Include MarkMed configuration folder",
+    "passwordLabel": "Encryption password:",
+    "passwordPlaceholder": "Enter a strong password",
+    "confirmPasswordLabel": "Confirm password:",
+    "confirmPasswordPlaceholder": "Repeat password",
+    "createAction": "Create Encrypted Backup",
+    "archiveFileLabel": "Backup archive (.mmbak):",
+    "archivePlaceholder": "Select a .mmbak file",
+    "destinationFolderLabel": "Destination folder to restore files:",
+    "destinationPlaceholder": "Choose a destination folder",
+    "decryptPasswordPlaceholder": "Enter backup password",
+    "decryptAction": "Decrypt & Restore",
+    "openRestoredFolder": "Open restored folder",
+    "errorEmptyPassword": "Please enter a password.",
+    "errorPasswordMismatch": "Passwords do not match.",
+    "errorNoArchive": "Select a .mmbak archive file.",
+    "errorNoDestination": "Select a destination folder.",
+    "errorGeneric": "Operation could not be completed.",
+    "createSuccess": "Backup created ({count} file(s)) at: {path}",
+    "decryptSuccess": "Decrypted {count} file(s) into: {dir}"
   }
 }

@@ -35,7 +35,10 @@
       "quit": "退出",
       "preferences": "偏好设置",
       "addFolder": "添加文件夹…",
-      "autoSaveOnEnter": "Save on Enter"
+      "autoSaveOnEnter": "Save on Enter",
+      "encryptedBackup": "Encrypted Backup…",
+      "decryptBackup": "Decrypt Backup…",
+      "setupFolders": "Setup Initial Folders…"
     },
     "edit": {
       "edit": "编辑",
@@ -123,6 +126,7 @@
     "view": {
       "view": "视图",
       "toggleSidebar": "切换侧边栏",
+      "toggleStorageBar": "Disk Space Bar",
       "toggleTabbar": "切换标签栏",
       "commandPalette": "命令面板",
       "sourceCodeMode": "源码模式",
@@ -254,6 +258,7 @@
     },
     "tree": {
       "openedFiles": "已打开的文件",
+      "resizeOpenedFiles": "调整已打开文件列表的大小",
       "saveAll": "保存全部",
       "closeAll": "关闭全部",
       "emptyProject": "空项目",
@@ -267,8 +272,7 @@
       "overlappingFolder": "此文件夹与已添加项存在包含关系，请先移除已有项。",
       "folderAlreadyAdded": "该文件夹已添加。",
       "fileOutsideFolders": "此文件不在已添加的文件夹中。",
-      "sessionSaveFailed": "无法保存会话",
-      "resizeOpenedFiles": "调整已打开文件列表的大小"
+      "sessionSaveFailed": "无法保存会话"
     },
     "toc": {
       "expand": "展开目录",
@@ -319,15 +323,17 @@
     "copiedPlainText": "Copied!",
     "autoSaveButton": "Auto-save",
     "autoSaveByTime": "Save by interval",
-    "autoSaveOnEnter": "Save on Enter"
+    "autoSaveOnEnter": "Save on Enter",
+    "hideSidebar": "Hide sidebar",
+    "showSidebar": "Show sidebar"
   },
   "commandPalette": {
     "placeholder": "输入要执行的命令",
     "placeholders": {
       "selectOption": "选择一个选项",
       "searchFileToOpen": "搜索要打开的文件",
-      "selectLanguage": "选择要切换的语言",
-      "searchRecentFilesAndFolders": "搜索最近打开的文件和文件夹"
+      "searchRecentFilesAndFolders": "搜索最近打开的文件和文件夹",
+      "selectLanguage": "选择要切换的语言"
     },
     "recentlyOpened": "最近打开",
     "fileResults": "文件结果",
@@ -338,6 +344,7 @@
     "noRecentFiles": "暂无最近打开的文件或文件夹"
   },
   "exportSettings": {
+    "autoNumberingHeadings": "自动编号标题",
     "title": "导出选项",
     "page": {
       "label": "页面",
@@ -349,6 +356,7 @@
       "leftRight": "左/右：",
       "widthHeight": "宽度/高度（毫米）："
     },
+    "showFrontMatter": "显示前置元数据",
     "style": {
       "label": "样式",
       "overwriteThemeFont": "覆盖主题字体设置",
@@ -362,29 +370,27 @@
       "theme": "主题"
     },
     "headerFooter": {
-      "label": "页眉和页脚",
-      "description": "如果定义了页眉和/或页脚，文本将出现在所有页面上。",
-      "headerType": "页眉类型",
-      "footerType": "页脚类型",
-      "leftHeaderText": "左页眉文本",
-      "mainHeaderText": "主页眉文本",
-      "rightHeaderText": "右页眉文本",
-      "leftFooterText": "左页脚文本",
-      "mainFooterText": "主页脚文本",
-      "rightFooterText": "右页脚文本",
-      "customizeStyle": "自定义样式",
       "allowStyled": "允许样式文本",
-      "fontSize": "字体大小"
+      "customizeStyle": "自定义样式",
+      "fontSize": "字体大小",
+      "footerType": "页脚类型",
+      "headerType": "页眉类型",
+      "label": "页眉和页脚",
+      "leftFooterText": "左页脚文本",
+      "leftHeaderText": "左页眉文本",
+      "mainFooterText": "主页脚文本",
+      "mainHeaderText": "主页眉文本",
+      "rightFooterText": "右页脚文本",
+      "rightHeaderText": "右页眉文本",
+      "description": "如果定义了页眉和/或页脚，文本将出现在所有页面上。"
     },
     "toc": {
       "description": "要在导出文档中显示目录，请在正文中单独一行输入 [TOC]。目录将生成在该位置。",
-      "label": "目录",
-      "title": "目录",
       "includeTopHeading": "包含一级标题",
-      "includeTopHeadingDetail": "在目录中包含所有一级（H1）标题。"
+      "includeTopHeadingDetail": "在目录中包含所有一级（H1）标题。",
+      "label": "目录",
+      "title": "目录"
     },
-    "autoNumberingHeadings": "自动编号标题",
-    "showFrontMatter": "显示前置元数据",
     "export": "导出",
     "options": {
       "pageSizes": {
@@ -446,6 +452,8 @@
         "onEnterShort": "Save on Enter",
         "intervalLabel": "Save interval"
       },
+      "autoRenameFromFirstLine": "Auto-rename file from first line (Patient name + date/time)",
+      "autoInsertDateTimeOnNewFile": "Automatically insert creation date and time on new files",
       "window": {
         "title": "窗口",
         "titleBarStyle": {
@@ -455,6 +463,7 @@
         },
         "requiresRestart": "需要重启",
         "hideScrollbars": "隐藏滚动条",
+        "showStorageBar": "Show disk space bar at the bottom",
         "openFilesInNewWindow": "在新窗口中打开文件",
         "openFoldersInNewWindow": "在新窗口中打开文件夹",
         "zoom": "缩放",
@@ -703,13 +712,13 @@
       "lists": {
         "bulletListMarker": "无序列表标记",
         "listIndentation": {
+          "title": "列表缩进",
           "dfm": "DFM 样式",
           "fourSpaces": "四个空格",
           "oneSpace": "一个空格",
           "tab": "制表符",
           "threeSpaces": "三个空格",
-          "twoSpaces": "两个空格",
-          "title": "列表缩进"
+          "twoSpaces": "两个空格"
         },
         "orderListDelimiter": "有序列表分隔符",
         "preferLooseListItem": "首选宽松列表项",
@@ -809,6 +818,7 @@
       "quickOpen": "快速打开",
       "quickOpenRecent": "快速打开最近使用",
       "changeEncoding": "更改编码",
+      "changeLineEnding": "更改行结束符",
       "trailingNewline": "尾随换行",
       "print": "打印",
       "preferences": "偏好设置",
@@ -822,7 +832,6 @@
       "exportFilePdf": "导出为 PDF",
       "zoom": "缩放",
       "checkUpdate": "检查更新",
-      "changeLineEnding": "更改行结束符",
       "addFolder": "添加文件夹…"
     },
     "edit": {
@@ -858,7 +867,6 @@
       "table": "表格",
       "codeFence": "代码围栏",
       "quoteBlock": "引用块",
-      "mathBlock": "数学块",
       "mathFormula": "数学公式",
       "htmlBlock": "HTML 块",
       "orderList": "有序列表",
@@ -866,10 +874,11 @@
       "taskList": "任务列表",
       "looseListItem": "宽松列表项",
       "paragraph": "段落",
-      "horizontalRule": "水平分割线",
       "horizontalLine": "水平分割线",
       "frontMatter": "前置元数据",
-      "resetParagraph": "重置段落"
+      "resetParagraph": "重置段落",
+      "mathBlock": "数学块",
+      "horizontalRule": "水平分割线"
     },
     "format": {
       "strong": "粗体",
@@ -908,11 +917,11 @@
       "toggleToc": "切换目录",
       "toggleTabbar": "切换标签栏",
       "toggleDevTools": "切换开发者工具",
-      "actualSize": "实际大小",
-      "devToggleDeveloperTools": "切换开发者工具",
       "devReload": "开发者重载",
       "reloadImages": "重新加载图片",
-      "textDirection": "文本方向"
+      "textDirection": "文本方向",
+      "actualSize": "实际大小",
+      "devToggleDeveloperTools": "切换开发者工具"
     },
     "tabs": {
       "cycleForward": "向前循环",
@@ -1009,6 +1018,11 @@
       "saveMessage": "保存文档后，图片将存入配置的相对目录。取消保存将把图片存入全局图片目录。",
       "failed": "图片插入失败"
     },
+    "export": {
+      "error": "导出错误",
+      "errorExporting": "导出 {type} 文件时出错",
+      "failed": "{type} 导出失败"
+    },
     "insertTable": {
       "title": "插入表格",
       "rows": "行",
@@ -1032,25 +1046,20 @@
     "notifications": {
       "notificationNotFound": "未找到通知"
     },
-    "sourceCode": {
-      "cursorNullComment": "光标位置无注释",
-      "imageStructureDeletedComment": "图片结构注释已删除"
-    },
-    "export": {
-      "error": "导出错误",
-      "errorExporting": "导出 {type} 文件时出错",
-      "failed": "{type} 导出失败"
-    },
     "print": {
       "error": "打印 \"{title}\" 时出错",
       "failed": "打印失败"
     },
+    "sourceCode": {
+      "cursorNullComment": "光标位置无注释",
+      "imageStructureDeletedComment": "图片结构注释已删除"
+    },
     "spellcheck": {
-      "title": "拼写检查",
       "disabledError": "拼写检查已禁用错误",
       "errorSwitchingLanguage": "切换拼写检查语言时出错 {languageCode}",
       "languageMissing": "拼写检查语言缺失 {languageCode}",
-      "switchError": "{languageCode} 拼写检查切换错误，{error}"
+      "switchError": "{languageCode} 拼写检查切换错误，{error}",
+      "title": "拼写检查"
     },
     "tabs": {
       "close": "关闭 {name}",
@@ -1073,5 +1082,61 @@
     "viewImage": "查看图片",
     "copyLink": "复制链接地址",
     "resumed": "已切换到编辑模式，自动保存已恢复。"
+  },
+  "firstRun": {
+    "title": "MarkMed Initial Setup",
+    "description": "Would you like MarkMed to automatically create hidden folders for settings and images? On a USB drive this keeps everything portable; on your PC it keeps everything organized.",
+    "baseDirLabel": "Base folder where they will be created:",
+    "chooseFolder": "Choose folder...",
+    "configHint": "preferences, history and portable configuration",
+    "imagesHint": "images pasted into medical notes",
+    "hiddenNote": "Folders will be created as hidden on both Windows and Linux.",
+    "openWikiGuide": "Prefer setting up manually? Open Wiki step-by-step guide",
+    "doLater": "Configure manually / Later",
+    "createAutomatically": "Authorize & create folders",
+    "createFailed": "Could not create hidden folders.",
+    "createdTitle": "Folders created",
+    "createdAndRestarting": "Hidden folders created! MarkMed will now restart to activate the new portable configuration.",
+    "createdMessage": "Hidden folders created successfully at {dir}."
+  },
+  "storageBar": {
+    "driveLabel": "Drive space",
+    "summary": "{percent}% used · {free} free of {total}",
+    "refresh": "Refresh disk space",
+    "hide": "Hide",
+    "hideTooltip": "Hide disk space bar (re-enable under View)",
+    "lowSpaceTitle": "Low disk space",
+    "lowSpaceMessage": "Only {free} free ({percent}% used). Back up your records and free space on your drive."
+  },
+  "backup": {
+    "title": "Encrypted Patient Backup",
+    "sidebarButton": "Encrypted backup",
+    "createTab": "Create Backup (.mmbak)",
+    "decryptTab": "Decrypt / Restore",
+    "sourceFolderLabel": "Patient records folder:",
+    "noFolderSelected": "No folder selected",
+    "chooseFolder": "Choose...",
+    "chooseFile": "Select...",
+    "includeImages": "Include notes images folder",
+    "includeConfig": "Include MarkMed configuration folder",
+    "passwordLabel": "Encryption password:",
+    "passwordPlaceholder": "Enter a strong password",
+    "confirmPasswordLabel": "Confirm password:",
+    "confirmPasswordPlaceholder": "Repeat password",
+    "createAction": "Create Encrypted Backup",
+    "archiveFileLabel": "Backup archive (.mmbak):",
+    "archivePlaceholder": "Select a .mmbak file",
+    "destinationFolderLabel": "Destination folder to restore files:",
+    "destinationPlaceholder": "Choose a destination folder",
+    "decryptPasswordPlaceholder": "Enter backup password",
+    "decryptAction": "Decrypt & Restore",
+    "openRestoredFolder": "Open restored folder",
+    "errorEmptyPassword": "Please enter a password.",
+    "errorPasswordMismatch": "Passwords do not match.",
+    "errorNoArchive": "Select a .mmbak archive file.",
+    "errorNoDestination": "Select a destination folder.",
+    "errorGeneric": "Operation could not be completed.",
+    "createSuccess": "Backup created ({count} file(s)) at: {path}",
+    "decryptSuccess": "Decrypted {count} file(s) into: {dir}"
   }
 }

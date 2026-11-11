@@ -55,6 +55,41 @@
             />
           </svg>
         </button>
+        <icon-tooltip :content="showSideBar ? t('titleBar.hideSidebar') : t('titleBar.showSidebar')">
+          <button
+            type="button"
+            class="plain-button titlebar-pill-btn titlebar-sidebar-btn title-no-drag"
+            :class="{ 'is-active': showSideBar }"
+            :aria-label="showSideBar ? t('titleBar.hideSidebar') : t('titleBar.showSidebar')"
+            @click.stop="toggleSideBar"
+          >
+            <svg
+              width="14"
+              height="14"
+              viewBox="0 0 16 16"
+              fill="none"
+              aria-hidden="true"
+            >
+              <rect
+                x="1.5"
+                y="2.5"
+                width="13"
+                height="11"
+                rx="1.5"
+                stroke="currentColor"
+                stroke-width="1.3"
+              />
+              <line
+                x1="6"
+                y1="2.5"
+                x2="6"
+                y2="13.5"
+                stroke="currentColor"
+                stroke-width="1.3"
+              />
+            </svg>
+          </button>
+        </icon-tooltip>
         <document-statistics
           v-if="wordCount"
           :pathname="pathname"
@@ -268,6 +303,7 @@
 <script setup lang="ts">
 import { usePreferencesStore } from '@/store/preferences.js'
 import { useLayoutStore } from '@/store/layout.js'
+import bus from '@/bus'
 import { ref, computed, watch, onMounted, onBeforeUnmount } from 'vue'
 import { storeToRefs } from 'pinia'
 import { minimizePath, restorePath, maximizePath, closePath } from '../../assets/window-controls.js'
@@ -336,7 +372,11 @@ onMounted(async () => {
 
 const { titleBarStyle, autoSave, autoSaveDelay, autoSaveOnEnter, sourceCode } =
   storeToRefs(preferencesStore)
-const { showTabBar } = storeToRefs(layoutStore)
+const { showTabBar, showSideBar } = storeToRefs(layoutStore)
+
+const toggleSideBar = (): void => {
+  bus.emit('view:toggle-layout-entry', 'showSideBar')
+}
 
 const autoSavePresets = [1, 3, 5, 10, 30, 60] as const
 const copiedPlainText = ref(false)
@@ -636,7 +676,7 @@ div.title > span > .path > bdi > span {
   border-radius: 6px;
   font-size: 12px;
   line-height: 1;
-  color: var(--editorColor50);
+  color: var(--editorColor60);
   background: transparent;
   border: 1px solid var(--editorColor10);
   cursor: pointer;

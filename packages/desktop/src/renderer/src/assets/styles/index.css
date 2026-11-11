@@ -235,16 +235,115 @@ body {
 }
 
 .el-dialog,
+.el-dialog.ag-dialog-table,
+.el-popover {
+  --el-bg-color: var(--floatBgColor);
+  --el-fill-color-blank: var(--inputBgColor);
+  --el-text-color-primary: var(--editorColor80);
+  --el-text-color-regular: var(--editorColor);
+  --el-text-color-secondary: var(--editorColor60);
+  --el-text-color-placeholder: var(--editorColor40);
+  --el-border-color: var(--editorColor10);
+  --el-border-color-light: var(--editorColor10);
+  --el-color-primary: var(--themeColor);
+  --el-button-text-color: var(--buttonFontColor);
+  --el-button-bg-color: var(--buttonBgColor);
+  --el-button-border-color: var(--editorColor30);
+}
+.el-dialog,
 .el-dialog.ag-dialog-table {
   border-radius: 8px;
   box-shadow: 0 4px 8px 0 var(--floatBorderColor);
   border: solid 1px var(--floatBorderColor);
   background-color: var(--floatBgColor);
+  color: var(--editorColor);
 }
 .el-dialog__header {
   position: relative;
   display: block;
   padding: 8px 6px;
+}
+.el-dialog.markmed-dialog .el-dialog__header {
+  padding: 14px 20px 10px;
+}
+.el-dialog.markmed-dialog .el-dialog__body {
+  padding: 8px 20px 18px;
+}
+.el-dialog__title {
+  color: var(--editorColor80) !important;
+  font-weight: 600;
+}
+.el-dialog__headerbtn .el-dialog__close {
+  color: var(--editorColor60);
+}
+.el-dialog__headerbtn:hover .el-dialog__close {
+  color: var(--editorColor80);
+}
+.el-dialog__body {
+  color: var(--editorColor);
+}
+
+.el-dialog .el-input__wrapper,
+.el-popover .el-input__wrapper {
+  background-color: var(--inputBgColor) !important;
+  box-shadow: 0 0 0 1px var(--editorColor10) inset !important;
+}
+.el-dialog .el-input__inner,
+.el-popover .el-input__inner {
+  background: transparent !important;
+  border: none !important;
+  color: var(--editorColor80) !important;
+}
+.el-dialog .el-input__inner::placeholder,
+.el-popover .el-input__inner::placeholder {
+  color: var(--editorColor40) !important;
+}
+.el-dialog .el-input__suffix,
+.el-dialog .el-input__icon,
+.el-popover .el-input__suffix,
+.el-popover .el-input__icon {
+  color: var(--editorColor60) !important;
+}
+
+.el-dialog .el-checkbox,
+.el-dialog .el-checkbox__label {
+  color: var(--editorColor80) !important;
+}
+.el-dialog .el-checkbox__inner {
+  background-color: var(--inputBgColor);
+  border-color: var(--editorColor40);
+}
+.el-dialog .el-checkbox__input.is-checked .el-checkbox__inner {
+  background-color: var(--themeColor);
+  border-color: var(--themeColor);
+}
+.el-dialog .el-checkbox__input.is-checked + .el-checkbox__label {
+  color: var(--editorColor80) !important;
+}
+
+.el-dialog .el-tabs__item {
+  color: var(--editorColor60) !important;
+}
+.el-dialog .el-tabs__item:hover,
+.el-dialog .el-tabs__item.is-active {
+  color: var(--themeColor) !important;
+}
+.el-dialog .el-tabs__nav-wrap::after {
+  background-color: var(--editorColor10) !important;
+}
+
+.el-dialog .el-alert--error {
+  background-color: rgba(217, 67, 67, 0.14) !important;
+  border: 1px solid rgba(217, 67, 67, 0.4) !important;
+  color: var(--editorColor80) !important;
+}
+.el-dialog .el-alert--success {
+  background-color: rgba(33, 181, 111, 0.14) !important;
+  border: 1px solid rgba(33, 181, 111, 0.4) !important;
+  color: var(--editorColor80) !important;
+}
+.el-dialog .el-alert .el-alert__title {
+  color: var(--editorColor80) !important;
 }
 
 input.el-input__inner {
@@ -255,7 +354,7 @@ input.el-input__inner {
 
 .el-input.is-focus .el-input__wrapper,
 .el-input__wrapper.is-focus {
-  box-shadow: 0 0 0 1px var(--themeColor) inset;
+  box-shadow: 0 0 0 1px var(--themeColor) inset !important;
 }
 
 .input-focus-border:has(> input:focus):not(.error) {

@@ -12,10 +12,19 @@ import { registerDialogHandlers } from './dialog'
 import { registerDiagramHandlers } from './diagram'
 import { registerLinkHtmlHandler } from './linkHtml'
 import { registerImageClipboardHandlers } from './clipboardImage'
+import { registerSetupHandlers } from './setup'
+import { registerStorageHandlers } from './storage'
+import { registerBackupHandlers } from './backup'
+import type Accessor from '../app/accessor'
 
-export const registerSandboxIpcHandlers = (fileOperations?: FileOperations): void => {
+export interface SandboxIpcContext {
+  fileOperations?: FileOperations
+  getAccessor?: () => Accessor
+}
+
+export const registerSandboxIpcHandlers = (context?: SandboxIpcContext): void => {
   registerBootInfo()
-  registerFsHandlers(fileOperations)
+  registerFsHandlers(context?.fileOperations)
   registerPathHandlers()
   registerRipgrepHandlers()
   registerUploaderHandlers()
@@ -28,4 +37,10 @@ export const registerSandboxIpcHandlers = (fileOperations?: FileOperations): voi
   registerDiagramHandlers()
   registerLinkHtmlHandler()
   registerImageClipboardHandlers()
+  if (context?.getAccessor) {
+    const getAccessor = context.getAccessor
+    registerSetupHandlers(getAccessor)
+    registerStorageHandlers(() => getAccessor().paths.userDataPath)
+    registerBackupHandlers(getAccessor)
+  }
 }

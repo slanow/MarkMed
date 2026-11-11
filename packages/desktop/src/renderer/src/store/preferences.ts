@@ -21,6 +21,10 @@ export interface PreferencesState {
   autoSave: boolean
   autoSaveDelay: number
   autoSaveOnEnter: boolean
+  firstRunSetupCompleted: boolean
+  showStorageBar: boolean
+  autoRenameFromFirstLine: boolean
+  autoInsertDateTimeOnNewFile: boolean
   titleBarStyle: TitleBarStyle | string
   openFilesInNewWindow: boolean
   openFolderInNewWindow: boolean
@@ -147,6 +151,10 @@ export const usePreferencesStore = defineStore('preferences', {
     autoSave: false,
     autoSaveDelay: 5000,
     autoSaveOnEnter: false,
+    firstRunSetupCompleted: false,
+    showStorageBar: true,
+    autoRenameFromFirstLine: true,
+    autoInsertDateTimeOnNewFile: true,
     titleBarStyle: 'custom',
     openFilesInNewWindow: false,
     openFolderInNewWindow: false,

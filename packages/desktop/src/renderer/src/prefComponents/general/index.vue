@@ -68,6 +68,12 @@
           :bool="autoSaveOnEnter"
           :on-change="(value) => onSelectChange('autoSaveOnEnter', value)"
         />
+        <bool
+          id="setting-autoRenameFromFirstLine"
+          :description="preferenceLabel('autoRenameFromFirstLine')"
+          :bool="autoRenameFromFirstLine"
+          :on-change="(value) => onSelectChange('autoRenameFromFirstLine', value)"
+        />
       </template>
     </compound>
 
@@ -93,6 +99,13 @@
           :description="preferenceLabel('hideScrollbar')"
           :bool="hideScrollbar"
           :on-change="(value) => onSelectChange('hideScrollbar', value)"
+        />
+        <bool
+          v-if="show('windowAppearance')"
+          id="setting-showStorageBar"
+          :description="preferenceLabel('showStorageBar')"
+          :bool="showStorageBar"
+          :on-change="(value) => onSelectChange('showStorageBar', value)"
         />
         <bool
           v-if="show('windowOpening')"
@@ -274,6 +287,8 @@ const {
   autoSave,
   autoSaveDelay,
   autoSaveOnEnter,
+  autoRenameFromFirstLine,
+  showStorageBar,
   titleBarStyle,
   openFilesInNewWindow,
   openFolderInNewWindow,

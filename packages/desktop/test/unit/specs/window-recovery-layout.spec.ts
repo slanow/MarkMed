@@ -106,7 +106,9 @@ describe('window-owned layout', () => {
   })
   it('does not expand a hidden sidebar when a folder loads', () => {
     const layout = useLayoutStore()
-    layout.INITIALIZE_WINDOW_LAYOUT(createDefaultLayout())
+    const hiddenLayout = createDefaultLayout()
+    hiddenLayout.sidebar.visible = false
+    layout.INITIALIZE_WINDOW_LAYOUT(hiddenLayout)
     useProjectStore().APPLY_ROOTS({ revision: 1, roots: [{ key: '/notes', pathname: '/notes', watchToken: 'root', status: 'loading' }], reason: 'restore' })
     expect(layout.showSideBar).toBe(false)
   })

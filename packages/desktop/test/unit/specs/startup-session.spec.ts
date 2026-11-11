@@ -324,7 +324,7 @@ describe('startup planning without filesystem or Electron effects', () => {
         for (const restoreViewState of [true, false]) {
           it(`${action}: editors=${restoreEditors}, layout=${restoreLayoutState}, view=${restoreViewState}`, () => {
             const previous = state(window('a'))
-            previous.session.windows[0].layout.sidebar.visible = true
+            previous.session.windows[0].layout.sidebar.visible = false
             const reading = {
               contentSha256: 'a'.repeat(64),
               sourceSelection: { anchor: { line: 5, ch: 2 }, focus: { line: 5, ch: 2 } },
@@ -369,7 +369,7 @@ describe('startup planning without filesystem or Electron effects', () => {
               expect(
                 (plan[0].kind === 'restore' ? plan[0].snapshot.layout : plan[0].layout).sidebar
                   .visible
-              ).toBe(restoreLayoutState && action !== 'blank')
+              ).toBe(!(restoreLayoutState && action !== 'blank'))
             const entries =
               plan[0].kind === 'restore'
                 ? plan[0].snapshot.documents

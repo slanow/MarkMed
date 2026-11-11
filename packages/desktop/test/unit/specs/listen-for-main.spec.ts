@@ -73,6 +73,7 @@ describe('listenForMain store EDITOR_EDIT_ACTION', () => {
 
   it("opens the search side panel for 'findInFolder'", () => {
     const layoutStore = useLayoutStore()
+    layoutStore.$patch({ showSideBar: false })
     expect(layoutStore.rightColumn).toBe('files')
     expect(layoutStore.showSideBar).toBe(false)
 
