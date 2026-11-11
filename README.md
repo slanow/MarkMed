@@ -13,6 +13,9 @@
   <a href="https://github.com/slanow/MarkMed/releases">
     <img src="https://img.shields.io/github/v/release/slanow/MarkMed?label=Download" alt="Download MarkMed">
   </a>
+  <a href="#apoiar-via-pix">
+    <img src="https://img.shields.io/badge/Apoiar-Pix-32BCAD?logo=pix&logoColor=white" alt="Apoiar via Pix">
+  </a>
   <a href="https://github.com/sponsors/slanow">
     <img src="https://img.shields.io/badge/Apoiar-GitHub%20Sponsors-ea4aaa?logo=githubsponsors" alt="Apoiar no GitHub Sponsors">
   </a>
@@ -150,7 +153,20 @@ pnpm run build:mac
 
 ## Apoiar o Projeto
 
-O **MarkMed** é gratuito e de código aberto. Se ele ajuda no seu dia a dia médico ou no plantão, você pode apoiar o desenvolvimento contínuo pelo **[Ko-fi](https://ko-fi.com/ronymarkmed)**, pelo **[GitHub Sponsors](https://github.com/sponsors/slanow)** ou pelo botão **Sponsor** no topo do repositório.
+O **MarkMed** é gratuito e de código aberto. Se ele ajuda no seu dia a dia médico ou no plantão, você pode apoiar o desenvolvimento contínuo pelo **[Pix](#apoiar-via-pix)**, pelo **[Ko-fi](https://ko-fi.com/ronymarkmed)**, pelo **[GitHub Sponsors](https://github.com/sponsors/slanow)** ou pelo botão **Sponsor** no topo do repositório.
+
+### Apoiar via Pix
+
+<p><img src="docs/assets/pix-qrcode.png" alt="QR Code Pix MarkMed" width="220"></p>
+
+- **Chave Aleatória:** `9f927cf7-bf61-4a3a-80c7-8cfef0f89e2e`
+- **Página dedicada na Wiki:** [Apoiar via Pix](https://github.com/slanow/MarkMed/wiki/Apoiar-via-Pix)
+
+**Pix Copia e Cola:**
+
+```text
+00020126950014BR.GOV.BCB.PIX01369f927cf7-bf61-4a3a-80c7-8cfef0f89e2e0233Muito obrigado pela contribuição.5204000053039865802BR5925Ronald Nicolas Ferreira S6009SAO PAULO62140510o8jFdp8r2Y6304D1DB
+```
 
 ---
 
