@@ -1,3 +1,4 @@
+import { spawn } from 'child_process'
 import fs from 'fs'
 import path from 'path'
 import { app, BrowserWindow, dialog, ipcMain } from 'electron'
@@ -7,6 +8,7 @@ import {
   HIDDEN_IMAGES_DIR_NAME,
   LEGACY_CONFIG_DIR_NAME,
   PORTABLE_POINTER_FILENAME,
+  buildCleanAppImageRelaunchEnv,
   getPortableBaseDir,
   isPortableExecution,
   seedHiddenConfigDirectories
@@ -93,7 +95,28 @@ export const registerSetupHandlers = (getAccessor: () => Accessor): void => {
 
         if (requiresRestart) {
           setTimeout(() => {
-            app.relaunch()
+            app.releaseSingleInstanceLock()
+            const appImagePath = process.env.APPIMAGE
+            if (appImagePath) {
+              // Wait briefly so the current FUSE mount exits cleanly before mounting again.
+              const child = spawn('/bin/sh', ['-c', 'sleep 0.8 && exec "$1"', '_', appImagePath], {
+                detached: true,
+                stdio: 'ignore',
+                env: buildCleanAppImageRelaunchEnv(process.env)
+              })
+              child.unref()
+              app.exit(0)
+              return
+            }
+            const portableExe = process.env.PORTABLE_EXECUTABLE_FILE
+            if (portableExe) {
+              app.relaunch({
+                execPath: portableExe,
+                args: process.argv.slice(1)
+              })
+            } else {
+              app.relaunch()
+            }
             app.exit(0)
           }, 300)
         }

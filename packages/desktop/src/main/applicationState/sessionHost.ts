@@ -96,12 +96,14 @@ export class SessionHost {
   private readonly _untitledNumbers = new Map<string, number>()
 
   constructor(private readonly _accessor: {
+    paths?: { userDataPath: string }
     preferences: Preference
     menu: Pick<AppMenu, 'removeWindowMenu' | 'addRecentlyUsedDocument' | 'relocateRecentlyUsedDocuments'>
     windowManager: Pick<WindowManager, 'withIgnoredFileDeletions'>
   }) {
-    this._metadata = new ApplicationStateStore(app.getPath('userData'))
-    this._recovery = new RecoveryStore(app.getPath('userData'))
+    const stateRoot = this._accessor.paths?.userDataPath ?? app.getPath('userData')
+    this._metadata = new ApplicationStateStore(stateRoot)
+    this._recovery = new RecoveryStore(stateRoot)
     this._loaded = this._metadata.load().then((result) => result.value)
     this._coordinator = new CloseCoordinator({
       getSession: () => this._owner().getState().session,

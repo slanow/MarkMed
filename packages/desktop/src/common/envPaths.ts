@@ -7,13 +7,13 @@ class EnvPaths {
   private readonly _preferencesPath: string
   private readonly _dataCenterPath: string
 
-  constructor(userDataPath: string) {
+  constructor(userDataPath: string, electronUserDataPath?: string) {
     const currentDate = new Date()
     if (!userDataPath) {
       throw new Error('"userDataPath" is not set.')
     }
 
-    this._electronUserDataPath = userDataPath
+    this._electronUserDataPath = electronUserDataPath || userDataPath
     this._userDataPath = userDataPath
     this._logPath = path.join(
       this._userDataPath,

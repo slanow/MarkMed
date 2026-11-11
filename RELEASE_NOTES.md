@@ -1,14 +1,16 @@
-## Novidades e Melhorias — MarkMed v0.26.0
+## Novidades e Correções — MarkMed v0.26.1
 
-### Modo Pendrive, Organização e Espaço em Disco
+### Correções para Modo Pendrive (FAT32 / exFAT e AppImage)
 
-- **Configuração inicial de pastas ocultas (`.markmed-user-data` e `.markmed-imagens`):** ao iniciar pela primeira vez (ou em **Arquivo → Configurar Pastas Iniciais...**), o MarkMed permite criar automaticamente com sua autorização as pastas de configurações e imagens já ocultas no Windows (`attrib +h`) e no Linux/macOS (iniciadas com `.`), além de trazer link direto para o guia passo a passo na Wiki caso prefira configurar manualmente.
-- **Aviso de pouco espaço e barra de armazenamento no rodapé:** verificação automática de espaço livre na inicialização com alerta quando o pendrive ou disco estiver com pouco espaço, acompanhada de uma barra discreta no rodapé mostrando porcentagem usada, valores livres/totais e botão rápido para ocultar (reexibível em **Preferências**).
+- **Compatibilidade total com pendrives FAT32 / exFAT no Linux:** corrigido o erro que impedia o MarkMed de abrir quando `.markmed-user-data` ficava em um pendrive FAT32/exFAT (onde o sistema de arquivos não permite o link simbólico `SingletonLock` do Chromium). Suas preferências, estado e logs continuam portáteis dentro da pasta oculta do pendrive, enquanto o lock interno do navegador usa um diretório temporário local.
+- **Reinício automático limpo no `.AppImage` e no Windows Portátil:** corrigido o erro de montagem FUSE (`Cannot mount AppImage`) após autorizar a criação das pastas iniciais pela primeira vez, garantindo que o aplicativo reinicie normalmente direto no executável portátil.
 
-### Segurança, Privacidade e Fluxo Clínico
+### Recursos da linha 0.26
 
-- **Backup criptografado de pacientes (`.mmbak`) e descriptografador integrado:** gere pacotes `.mmbak` protegidos por senha com criptografia forte (**AES-256-GCM + scrypt**) para enviar suas evoluções e imagens com segurança para a nuvem (Google Drive/OneDrive) em conformidade com a LGPD, e restaure/descriptografe o backup dentro do próprio MarkMed sempre que precisar (botão de cadeado na barra lateral ou em **Arquivo → Backup Criptografado de Pacientes...**).
-- **Nome automático pela primeira linha + data e hora no arquivo salvo:** ao digitar o nome do paciente na primeira linha do prontuário, o arquivo é renomeado/sugerido automaticamente no formato `<Nome-Paciente>_YYYY-MM-DD_HH-mm.md`, mantendo a data e a hora apenas no nome do arquivo salvo (sem poluir o corpo do texto).
-- **Barra lateral ativada por padrão + botão rápido:** a barra lateral de arquivos já abre visível por padrão e conta com botão dedicado de **Mostrar/Ocultar** na barra superior.
+- **Pastas ocultas automáticas no pendrive (`.markmed-user-data` e `.markmed-imagens`)** com assistente de primeira execução e link direto para a Wiki.
+- **Aviso de pouco espaço + barra de armazenamento no rodapé** com porcentagem, valores livre/total e opção de ocultar.
+- **Backup criptografado de pacientes (`.mmbak` em AES-256-GCM) e descriptografador integrado** dentro do MarkMed.
+- **Nome automático pela 1ª linha (`<Nome-Paciente>_YYYY-MM-DD_HH-mm.md`)**, mantendo a data e a hora apenas no nome do arquivo salvo.
+- **Barra lateral ativada por padrão** com botão rápido de mostrar/ocultar na barra superior.
 
 > Baseado no [MarkText](https://github.com/marktext/marktext) sob licença MIT.

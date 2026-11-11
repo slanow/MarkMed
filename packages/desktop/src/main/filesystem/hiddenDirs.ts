@@ -155,3 +155,38 @@ export const seedHiddenConfigDirectories = async(options: {
   await writePortablePointer(options.pointerTargetPath, { configDir, imagesDir })
   return { configDir, imagesDir }
 }
+
+/**
+ * Strips AppImage-injected mount variables before re-executing the `.AppImage`
+ * file so the relaunched process mounts a clean FUSE directory without stale
+ * `APPDIR`/`LD_LIBRARY_PATH` state.
+ */
+export const buildCleanAppImageRelaunchEnv = (
+  env: NodeJS.ProcessEnv = process.env
+): NodeJS.ProcessEnv => {
+  const cleanEnv: NodeJS.ProcessEnv = { ...env }
+  const appDir = cleanEnv.APPDIR
+  delete cleanEnv.APPIMAGE
+  delete cleanEnv.APPDIR
+  delete cleanEnv.ARGV0
+  delete cleanEnv.OWD
+
+  if (appDir) {
+    const stripAppDir = (value?: string): string | undefined => {
+      if (!value) return undefined
+      const filtered = value
+        .split(':')
+        .filter((entry) => entry && !entry.startsWith(appDir))
+        .join(':')
+      return filtered || undefined
+    }
+
+    for (const key of ['PATH', 'LD_LIBRARY_PATH', 'XDG_DATA_DIRS', 'GSETTINGS_SCHEMA_DIR'] as const) {
+      const next = stripAppDir(cleanEnv[key])
+      if (next) cleanEnv[key] = next
+      else delete cleanEnv[key]
+    }
+  }
+
+  return cleanEnv
+}

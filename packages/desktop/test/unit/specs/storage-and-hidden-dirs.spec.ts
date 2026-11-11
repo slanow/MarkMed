@@ -1,12 +1,17 @@
 import fs from 'fs/promises'
 import os from 'os'
 import path from 'path'
-import { afterEach, describe, expect, it } from 'vitest'
+import { afterEach, describe, expect, it, vi } from 'vitest'
+
+vi.mock('electron', () => ({}))
+
+import { resolveElectronUserDataPath } from '../../../src/main/app/paths'
 import { evaluateDiskSpace, getStorageSpaceInfo } from '../../../src/main/ipc/storage'
 import {
   HIDDEN_CONFIG_DIR_NAME,
   HIDDEN_IMAGES_DIR_NAME,
   PORTABLE_POINTER_FILENAME,
+  buildCleanAppImageRelaunchEnv,
   resolvePortableUserDataDir,
   seedHiddenConfigDirectories
 } from '../../../src/main/filesystem/hiddenDirs'
@@ -86,5 +91,56 @@ describe('storage space calculation and hidden directories setup', () => {
       defaultAppDataDir: initialUserData
     })
     expect(resolved).toBe(configDir)
+  })
+
+  it('redirects electron runtime userData away from non-symlink filesystems like FAT32/exFAT pendrives', async() => {
+    const pendriveConfig = await createTempDir('mm-exfat-')
+    const tmpBase = await createTempDir('mm-tmp-')
+
+    expect(
+      resolveElectronUserDataPath(pendriveConfig, {
+        platform: 'linux',
+        tempDir: tmpBase,
+        symlinkProbe: () => true
+      })
+    ).toBe(pendriveConfig)
+
+    const fallback = resolveElectronUserDataPath(pendriveConfig, {
+      platform: 'linux',
+      tempDir: tmpBase,
+      symlinkProbe: () => false
+    })
+    expect(fallback.startsWith(tmpBase)).toBe(true)
+    expect(fallback).not.toBe(pendriveConfig)
+
+    expect(
+      resolveElectronUserDataPath(pendriveConfig, {
+        platform: 'win32',
+        tempDir: tmpBase,
+        symlinkProbe: () => false
+      })
+    ).toBe(pendriveConfig)
+  })
+
+  it('strips AppImage FUSE environment variables for clean relaunch', () => {
+    const cleaned = buildCleanAppImageRelaunchEnv({
+      APPIMAGE: '/pendrive/markmed.AppImage',
+      APPDIR: '/tmp/.mount_markme123',
+      ARGV0: 'markmed',
+      OWD: '/pendrive',
+      PATH: '/tmp/.mount_markme123:/tmp/.mount_markme123/usr/sbin:/usr/bin',
+      LD_LIBRARY_PATH: '/tmp/.mount_markme123/usr/lib',
+      XDG_DATA_DIRS: '/tmp/.mount_markme123/usr/share:/usr/share',
+      HOME: '/home/doctor'
+    })
+
+    expect(cleaned.APPIMAGE).toBeUndefined()
+    expect(cleaned.APPDIR).toBeUndefined()
+    expect(cleaned.ARGV0).toBeUndefined()
+    expect(cleaned.OWD).toBeUndefined()
+    expect(cleaned.PATH).toBe('/usr/bin')
+    expect(cleaned.LD_LIBRARY_PATH).toBeUndefined()
+    expect(cleaned.XDG_DATA_DIRS).toBe('/usr/share')
+    expect(cleaned.HOME).toBe('/home/doctor')
   })
 })
