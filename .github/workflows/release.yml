@@ -39,11 +39,11 @@ jobs:
       matrix:
         include:
           - name: linux-x64
-            os: ubuntu-22.04
+            os: ubuntu-latest
             platform: linux
             arch: x64
           - name: linux-arm64
-            os: ubuntu-22.04-arm
+            os: ubuntu-24.04-arm
             platform: linux
             arch: arm64
           - name: windows-x64
@@ -84,7 +84,7 @@ jobs:
       - name: Setup pnpm + Node + dependencies
         uses: ./.github/actions/setup
         with:
-          node-version: '24.14.1'
+          node-version: '22.21.1'
 
       # Cache Electron binary; key on package.json so it busts when Electron version changes.
       - name: Cache Electron binary
@@ -239,7 +239,7 @@ jobs:
         with:
           draft: true
           prerelease: ${{ contains(github.ref_name, '-') }}
-          generate_release_notes: true
+          generate_release_notes: ${{ steps.release-base.outputs.previous_tag != '' }}
           previous_tag: ${{ steps.release-base.outputs.previous_tag }}
           name: ${{ github.ref_name }}
           body_path: release_body.md
