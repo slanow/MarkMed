@@ -468,7 +468,8 @@
         "openFoldersInNewWindow": "새 창에서 폴더 열기",
         "zoom": "확대/축소",
         "openFilesInNewWindowNote": "켜면 파일을 새 창에서 엽니다. 끄면 현재 창의 탭에서 엽니다.",
-        "openFoldersInNewWindowNote": "켜면 폴더를 새 창에서 엽니다. 끄면 현재 창의 폴더를 바꿔서 엽니다."
+        "openFoldersInNewWindowNote": "켜면 폴더를 새 창에서 엽니다. 끄면 현재 창의 폴더를 바꿔서 엽니다.",
+        "promptEjectPendriveOnClose": "Ask to safely unmount/eject pendrive when closing MarkMed"
       },
       "startup": {
         "title": "시작 및 복원",
@@ -972,7 +973,13 @@
     "unsafeFileTitle": "안전하지 않을 수 있는 파일",
     "unsafeFileMessage": "이 링크는 코드를 실행할 수 있는 파일을 엽니다",
     "unsafeFileDetail": "\"{name}\"은(는) 실행 파일 또는 스크립트 파일입니다. 열면 컴퓨터에서 프로그램이 실행될 수 있습니다. 이 문서를 신뢰하는 경우에만 계속하세요.",
-    "openAnyway": "그래도 열기"
+    "openAnyway": "그래도 열기",
+    "pendriveEjectTitle": "Safely unmount and eject USB drive?",
+    "pendriveEjectMessage": "USB drive {mount} is currently in use by MarkMed.",
+    "pendriveEjectDetail": "Unmounting the USB drive on close brings two important benefits:\n1. Prevents corruption of patient records by ensuring all files are physically written to flash memory.\n2. Protects medical confidentiality by reminding you to remove your USB drive from the hospital computer.",
+    "pendriveEjectConfirm": "Unmount Drive and Quit",
+    "pendriveEjectExitWithoutUnmount": "Just Quit (do not unmount)",
+    "pendriveEjectDontAskAgain": "Do not ask again (can be changed in Preferences → General)"
   },
   "error": {
     "configSchemaViolation": "구성 스키마 위반",

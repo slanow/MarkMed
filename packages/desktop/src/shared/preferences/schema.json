@@ -25,6 +25,11 @@
     "type": "boolean",
     "default": true
   },
+  "promptEjectPendriveOnClose": {
+    "description": "General--Prompt to safely unmount/eject the pendrive when closing MarkMed.",
+    "type": "boolean",
+    "default": true
+  },
   "autoRenameFromFirstLine": {
     "description": "General--Automatically rename patient note files based on the first line and creation date/time.",
     "type": "boolean",
@@ -465,7 +470,7 @@
   "spellcheckerEnabled": {
     "description": "Spelling--Whether spell checking is enabled.",
     "type": "boolean",
-    "default": false
+    "default": true
   },
   "spellcheckerNoUnderline": {
     "description": "Spelling--Don't underline spelling mistakes.",

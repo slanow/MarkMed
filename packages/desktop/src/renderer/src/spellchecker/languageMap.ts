@@ -36,7 +36,19 @@ const getHunspellLanguageName = (langCode: string): string | null => {
 const HUNSPELL_DICTIONARY_LANGUAGE_MAP: ReadonlyArray<{ label: string; value: string }> =
   Object.freeze([
     {
+      label: 'Português (Brasil) (pt-BR)',
+      value: 'pt-BR'
+    },
+    {
+      label: 'Português (Portugal) (pt-PT)',
+      value: 'pt-PT'
+    },
+    {
       label: 'English (en-US)',
       value: 'en-US'
+    },
+    {
+      label: 'Español (es-ES)',
+      value: 'es-ES'
     }
   ])

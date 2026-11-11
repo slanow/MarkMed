@@ -15,7 +15,7 @@ const keybindings: Map<string, string> = new Map([
   ['file.save-as', 'Command+Shift+S'],
   ['file.move-file', ''],
   ['file.rename-file', ''],
-  ['file.print', ''],
+  ['file.print', 'Command+P'],
   ['file.close-tab', 'Command+W'],
   ['file.close-window', 'Command+Shift+W'],
   ['file.quit', 'Command+Q'],
@@ -109,7 +109,7 @@ const keybindings: Map<string, string> = new Map([
   ['tabs.switchToEighth', 'Ctrl+8'],
   ['tabs.switchToNinth', 'Ctrl+9'],
   ['tabs.switchToTenth', 'Ctrl+0'],
-  ['file.quick-open', 'Command+P'],
+  ['file.quick-open', 'Command+Option+P'],
   ['file.quick-open-recent', 'Control+R']
 ])
 

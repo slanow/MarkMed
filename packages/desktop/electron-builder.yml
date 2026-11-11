@@ -1,5 +1,6 @@
 appId: com.github.markmed.markmed
 productName: MarkMed
+copyright: Copyright © 2026 MarkMed Project (slanow)
 directories:
   buildResources: build
   output: ../../dist
@@ -118,6 +119,7 @@ fileAssociations:
     icon: icons/md.ico
 win:
   executableName: markmed
+  legalTrademarks: 'MarkMed Open-Source Medical Editor'
   artifactName: 'markmed-win-${arch}-${version}.${ext}'
   target:
     - target: 'nsis'

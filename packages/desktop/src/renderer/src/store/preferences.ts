@@ -23,6 +23,7 @@ export interface PreferencesState {
   autoSaveOnEnter: boolean
   firstRunSetupCompleted: boolean
   showStorageBar: boolean
+  promptEjectPendriveOnClose: boolean
   autoRenameFromFirstLine: boolean
   autoInsertDateTimeOnNewFile: boolean
   titleBarStyle: TitleBarStyle | string
@@ -153,6 +154,7 @@ export const usePreferencesStore = defineStore('preferences', {
     autoSaveOnEnter: false,
     firstRunSetupCompleted: false,
     showStorageBar: true,
+    promptEjectPendriveOnClose: true,
     autoRenameFromFirstLine: true,
     autoInsertDateTimeOnNewFile: true,
     titleBarStyle: 'custom',
@@ -233,7 +235,7 @@ export const usePreferencesStore = defineStore('preferences', {
     darkModeTheme: 'dark',
     customCss: '',
 
-    spellcheckerEnabled: false,
+    spellcheckerEnabled: true,
     spellcheckerNoUnderline: false,
     spellcheckerLanguage: 'en-US',
 

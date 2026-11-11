@@ -49,7 +49,7 @@ export const preferenceDefaults = (dark = false): UserPreferences & Record<strin
 export class PreferenceFile {
   readonly exists: boolean
   readonly readOnly: boolean
-  private readonly _pathname: string
+  private _pathname: string
   private _value: UserPreferences & Record<string, unknown>
   private _raw: Record<string, unknown> = {}
   private readonly _write: (pathname: string, contents: string) => void
@@ -77,6 +77,17 @@ export class PreferenceFile {
       readOnly = (error as NodeJS.ErrnoException).code !== 'ENOENT'
     }
     this.readOnly = readOnly
+  }
+
+  retargetDirectory(directory: string): void {
+    if (!directory) return
+    this._pathname = path.join(directory, 'preferences.json')
+    try {
+      mkdirSync(path.dirname(this._pathname), { recursive: true })
+      this._write(this._pathname, JSON.stringify({ ...this._raw, ...this._value }, null, 2))
+    } catch {
+      // Best-effort sync to the newly created portable config directory.
+    }
   }
 
   get(): UserPreferences & Record<string, unknown> {

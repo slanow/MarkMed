@@ -15,9 +15,7 @@ describe('markdownToPlainText', () => {
     expect(markdownToPlainText(md)).toBe(
       [
         'Evolução Clínica',
-        '',
         'Paciente estável, refere melhora da dor (EVA 2/10) e febre.',
-        '',
         'Manter hidratação e acompanhar exames.'
       ].join('\n')
     )
@@ -28,7 +26,7 @@ describe('markdownToPlainText', () => {
     expect(markdownToPlainText(md)).toBe('Dosagem 2 * 5 mg, campo exame_hemograma, valor *importante*.')
   })
 
-  it('formats lists, task items, tables, fenced code blocks, and strips frontmatter', () => {
+  it('formats lists, task items, tables, fenced code blocks, and strips frontmatter without extra blank lines', () => {
     const md = [
       '---',
       'title: Receita',
@@ -54,10 +52,8 @@ describe('markdownToPlainText', () => {
         '- Omeprazol 20mg',
         '[ ] Hemograma',
         '[x] Eletrocardiograma',
-        '',
         'Exame | Resultado',
         'Glicemia | 92 mg/dL',
-        '',
         'Observação final'
       ].join('\n')
     )

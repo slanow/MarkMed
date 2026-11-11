@@ -6,6 +6,9 @@ import { afterEach, describe, expect, it, vi } from 'vitest'
 vi.mock('electron', () => ({}))
 
 import { resolveElectronUserDataPath } from '../../../src/main/app/paths'
+import EnvPaths from '../../../src/common/envPaths'
+import { detectPendriveMountTarget } from '../../../src/main/filesystem/pendriveEject'
+import { resolveSystemSpellcheckerLanguage } from '../../../src/main/spellchecker'
 import { evaluateDiskSpace, getStorageSpaceInfo } from '../../../src/main/ipc/storage'
 import {
   HIDDEN_CONFIG_DIR_NAME,
@@ -142,5 +145,63 @@ describe('storage space calculation and hidden directories setup', () => {
     expect(cleaned.LD_LIBRARY_PATH).toBeUndefined()
     expect(cleaned.XDG_DATA_DIRS).toBe('/usr/share')
     expect(cleaned.HOME).toBe('/home/doctor')
+  })
+
+  it('detects removable pendrive mounts on Linux, Windows, and macOS', () => {
+    const procMounts = [
+      '/dev/nvme0n1p2 / ext4 rw,relatime 0 0',
+      '/dev/sdb1 /run/media/ronald/MARKMED exfat rw,nosuid,nodev,relatime 0 0'
+    ].join('\n')
+
+    const linuxTarget = detectPendriveMountTarget(
+      ['/run/media/ronald/MARKMED/Pacientes/João.md'],
+      { platform: 'linux', procMountsContent: procMounts }
+    )
+    expect(linuxTarget).toEqual({
+      mountPoint: '/run/media/ronald/MARKMED',
+      device: '/dev/sdb1',
+      label: 'MARKMED (/run/media/ronald/MARKMED)'
+    })
+
+    const nonRemovableLinux = detectPendriveMountTarget(
+      ['/home/ronald/Documentos/Pacientes'],
+      { platform: 'linux', procMountsContent: procMounts }
+    )
+    expect(nonRemovableLinux).toBeNull()
+
+    const winTarget = detectPendriveMountTarget(
+      ['E:\\Prontuarios\\consulta.md'],
+      { platform: 'win32' }
+    )
+    expect(winTarget?.mountPoint).toBe('E:\\')
+
+    const winSystemDrive = detectPendriveMountTarget(
+      ['C:\\Users\\Doctor\\Documents'],
+      { platform: 'win32' }
+    )
+    expect(winSystemDrive).toBeNull()
+
+    const macTarget = detectPendriveMountTarget(
+      ['/Volumes/MARKMED_USB/Pacientes'],
+      { platform: 'darwin' }
+    )
+    expect(macTarget?.mountPoint).toBe('/Volumes/MARKMED_USB')
+  })
+
+  it('retargets EnvPaths userDataPath live without restarting the process', () => {
+    const envPaths = new EnvPaths('/tmp/initial-user-data')
+    expect(envPaths.preferencesPath).toBe('/tmp/initial-user-data')
+
+    envPaths.retargetUserDataPath('/pendrive/.markmed-user-data')
+    expect(envPaths.userDataPath).toBe('/pendrive/.markmed-user-data')
+    expect(envPaths.dataCenterPath).toBe('/pendrive/.markmed-user-data')
+    expect(envPaths.preferencesPath).toBe('/pendrive/.markmed-user-data')
+  })
+
+  it('resolves system locale to a supported spellchecker dictionary tag', () => {
+    expect(resolveSystemSpellcheckerLanguage('pt-BR', ['en-US', 'pt-BR', 'es-ES'])).toBe('pt-BR')
+    expect(resolveSystemSpellcheckerLanguage('pt_BR.UTF-8', ['en-US', 'pt-BR'])).toBe('pt-BR')
+    expect(resolveSystemSpellcheckerLanguage('es', ['en-US', 'es-ES'])).toBe('es-ES')
+    expect(resolveSystemSpellcheckerLanguage('pt-BR', [])).toBe('pt-BR')
   })
 })

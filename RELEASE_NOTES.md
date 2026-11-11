@@ -1,16 +1,20 @@
-## Novidades e Correções — MarkMed v0.26.1
+## Novidades e Melhorias — MarkMed v0.26.2
 
-### Correções para Modo Pendrive (FAT32 / exFAT e AppImage)
+### 1. Interface e Criação Rápida de Prontuários e Pastas
 
-- **Compatibilidade total com pendrives FAT32 / exFAT no Linux:** corrigido o erro que impedia o MarkMed de abrir quando `.markmed-user-data` ficava em um pendrive FAT32/exFAT (onde o sistema de arquivos não permite o link simbólico `SingletonLock` do Chromium). Suas preferências, estado e logs continuam portáteis dentro da pasta oculta do pendrive, enquanto o lock interno do navegador usa um diretório temporário local.
-- **Reinício automático limpo no `.AppImage` e no Windows Portátil:** corrigido o erro de montagem FUSE (`Cannot mount AppImage`) após autorizar a criação das pastas iniciais pela primeira vez, garantindo que o aplicativo reinicie normalmente direto no executável portátil.
+- **Barra de título limpa e sem sobreposição:** agora exibe apenas o **nome do arquivo** (sem o caminho das pastas) e trunca nomes longos com reticências (`...`), nunca sobrepondo os botões `Palavras`, `Auto-salvar` e `Copiar TXT` mesmo quando a janela é reduzida.
+- **Botões rápidos na barra lateral (`Abrir Pasta`, `Criar Pasta` e `Criar Arquivo`):** adicionados botões de 1 clique na tela inicial da barra lateral e no cabeçalho da pasta aberta (`+` arquivo e `+` pasta) para criar prontuários e subpastas imediatamente.
 
-### Recursos da linha 0.26
+### 2. Prontuário Hospitalar (`Copiar TXT`), Ortografia e Atalhos
 
-- **Pastas ocultas automáticas no pendrive (`.markmed-user-data` e `.markmed-imagens`)** com assistente de primeira execução e link direto para a Wiki.
-- **Aviso de pouco espaço + barra de armazenamento no rodapé** com porcentagem, valores livre/total e opção de ocultar.
-- **Backup criptografado de pacientes (`.mmbak` em AES-256-GCM) e descriptografador integrado** dentro do MarkMed.
-- **Nome automático pela 1ª linha (`<Nome-Paciente>_YYYY-MM-DD_HH-mm.md`)**, mantendo a data e a hora apenas no nome do arquivo salvo.
-- **Barra lateral ativada por padrão** com botão rápido de mostrar/ocultar na barra superior.
+- **`Copiar TXT` sem linhas em branco extras entre parágrafos:** corrigido o espaçamento ao colar no sistema eletrônico do hospital — agora cada parágrafo usa quebra de linha simples (`\n`), sem deixar buracos entre os parágrafos.
+- **Corretor ortográfico sempre ativado por padrão no idioma do sistema:** já inicia ativo automaticamente no idioma do computador (como `pt-BR`).
+- **`Ctrl + P` (`Cmd + P`) para Imprimir:** restaurado o atalho universal `Ctrl + P` para impressão; a **Abertura Rápida** de arquivos foi movida para `Ctrl + Alt + P` (`Cmd + Option + P`).
+
+### 3. Modo Pendrive Mais Seguro e Sem Reinicialização
+
+- **Auto-ejetar / desmontar (`umount`) o pendrive ao fechar o MarkMed:** ao fechar o aplicativo usando arquivos ou configurações em um pendrive, o MarkMed explica as vantagens (evitar corrupção de arquivos e lembrar você de remover o pendrive do PC do hospital pelo sigilo médico) e permite **Desmontar Pendrive e Sair** com 1 clique. Pode ser desativado em _Preferências → Geral_.
+- **Criação das pastas iniciais sem fechar o programa:** ao criar `.markmed-user-data` e `.markmed-imagens` na primeira abertura, o MarkMed aplica as pastas imediatamente na sessão atual, sem fechar ou reiniciar o aplicativo.
+- **Metadados de fornecedor no Windows + guia SmartScreen:** incluídos metadados de identificação no executável Windows e instruções passo a passo (**"Mais informações" → "Executar assim mesmo"**) na documentação e na Wiki.
 
 > Baseado no [MarkText](https://github.com/marktext/marktext) sob licença MIT.

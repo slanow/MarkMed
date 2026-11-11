@@ -1,4 +1,3 @@
-import { spawn } from 'child_process'
 import fs from 'fs'
 import path from 'path'
 import { app, BrowserWindow, dialog, ipcMain } from 'electron'
@@ -8,7 +7,6 @@ import {
   HIDDEN_IMAGES_DIR_NAME,
   LEGACY_CONFIG_DIR_NAME,
   PORTABLE_POINTER_FILENAME,
-  buildCleanAppImageRelaunchEnv,
   getPortableBaseDir,
   isPortableExecution,
   seedHiddenConfigDirectories
@@ -87,45 +85,15 @@ export const registerSetupHandlers = (getAccessor: () => Accessor): void => {
           pointerTargetPath: getPointerFilePath()
         })
 
+        accessor.paths.retargetUserDataPath(configDir)
+        accessor.preferences.retargetDirectory(configDir)
         await accessor.dataCenter.setItem('imageFolderPath', imagesDir)
-
-        const currentUserDir = path.resolve(accessor.paths.userDataPath)
-        const targetConfigDir = path.resolve(configDir)
-        const requiresRestart = !import.meta.env.DEV && currentUserDir !== targetConfigDir
-
-        if (requiresRestart) {
-          setTimeout(() => {
-            app.releaseSingleInstanceLock()
-            const appImagePath = process.env.APPIMAGE
-            if (appImagePath) {
-              // Wait briefly so the current FUSE mount exits cleanly before mounting again.
-              const child = spawn('/bin/sh', ['-c', 'sleep 0.8 && exec "$1"', '_', appImagePath], {
-                detached: true,
-                stdio: 'ignore',
-                env: buildCleanAppImageRelaunchEnv(process.env)
-              })
-              child.unref()
-              app.exit(0)
-              return
-            }
-            const portableExe = process.env.PORTABLE_EXECUTABLE_FILE
-            if (portableExe) {
-              app.relaunch({
-                execPath: portableExe,
-                args: process.argv.slice(1)
-              })
-            } else {
-              app.relaunch()
-            }
-            app.exit(0)
-          }, 300)
-        }
 
         return {
           ok: true,
           configDir,
           imagesDir,
-          requiresRestart
+          requiresRestart: false
         }
       } catch (error) {
         return {

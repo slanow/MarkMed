@@ -468,7 +468,8 @@
         "openFoldersInNewWindow": "Ordner in neuem Fenster öffnen",
         "zoom": "Zoom",
         "openFilesInNewWindowNote": "Wenn aktiviert, werden Dateien in einem neuen Fenster geöffnet. Andernfalls werden sie in Tabs im aktuellen Fenster geöffnet.",
-        "openFoldersInNewWindowNote": "Wenn aktiviert, werden Ordner in einem neuen Fenster geöffnet. Andernfalls ersetzen sie den Ordner im aktuellen Fenster."
+        "openFoldersInNewWindowNote": "Wenn aktiviert, werden Ordner in einem neuen Fenster geöffnet. Andernfalls ersetzen sie den Ordner im aktuellen Fenster.",
+        "promptEjectPendriveOnClose": "Ask to safely unmount/eject pendrive when closing MarkMed"
       },
       "startup": {
         "title": "Start und Wiederherstellung",
@@ -972,7 +973,13 @@
     "unsafeFileTitle": "Möglicherweise unsichere Datei",
     "unsafeFileMessage": "Dieser Link öffnet eine Datei, die Code ausführen kann",
     "unsafeFileDetail": "„{name}“ ist eine ausführbare Datei oder ein Skript. Das Öffnen kann Programme auf Ihrem Computer ausführen. Fahren Sie nur fort, wenn Sie diesem Dokument vertrauen.",
-    "openAnyway": "Trotzdem öffnen"
+    "openAnyway": "Trotzdem öffnen",
+    "pendriveEjectTitle": "Safely unmount and eject USB drive?",
+    "pendriveEjectMessage": "USB drive {mount} is currently in use by MarkMed.",
+    "pendriveEjectDetail": "Unmounting the USB drive on close brings two important benefits:\n1. Prevents corruption of patient records by ensuring all files are physically written to flash memory.\n2. Protects medical confidentiality by reminding you to remove your USB drive from the hospital computer.",
+    "pendriveEjectConfirm": "Unmount Drive and Quit",
+    "pendriveEjectExitWithoutUnmount": "Just Quit (do not unmount)",
+    "pendriveEjectDontAskAgain": "Do not ask again (can be changed in Preferences → General)"
   },
   "error": {
     "configSchemaViolation": "Konfigurationsschema-Verletzung",

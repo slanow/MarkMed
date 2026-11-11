@@ -1,5 +1,5 @@
 import path from 'path'
-import { BrowserWindow, dialog, ipcMain } from 'electron'
+import { app, BrowserWindow, dialog, ipcMain } from 'electron'
 import type { BrowserWindowConstructorOptions } from 'electron'
 import log from 'electron-log'
 import { isChildOfDirectory } from 'common/filesystem/paths'
@@ -8,7 +8,12 @@ import type Accessor from '../app/accessor'
 import { zoomIn, zoomOut } from './utils'
 import { TITLE_BAR_HEIGHT, editorWinOptions, isLinux, isOsx } from '../config'
 import { showEditorContextMenu } from '../contextMenu/editor'
-import { switchLanguage } from '../spellchecker'
+import {
+  getAvailableDictionaries,
+  resolveSystemSpellcheckerLanguage,
+  setSpellCheckerEnabled,
+  switchLanguage
+} from '../spellchecker'
 import type { TabOptions } from '@shared/types/files'
 import { ProjectRoots, resolveExistingPath } from './projectRoots'
 import { randomUUID } from 'node:crypto'
@@ -96,9 +101,27 @@ class EditorWindow extends BaseWindow {
     })
     void this.sessionReady.catch(error => host.report(error, this.sessionStateId))
 
-    if (spellcheckerEnabled && !isOsx) {
+    if (spellcheckerEnabled) {
       try {
-        switchLanguage(win, spellcheckerLanguage as string)
+        setSpellCheckerEnabled(win, true)
+        if (!isOsx) {
+          const available = getAvailableDictionaries(win)
+          const systemLocale = app.getLocale() || (preferences.getItem<string>('language') ?? 'en-US')
+          let targetSpellLang = (spellcheckerLanguage as string) || ''
+          if (
+            !targetSpellLang ||
+            !available.includes(targetSpellLang) ||
+            (targetSpellLang === 'en-US' && !/^en/i.test(systemLocale))
+          ) {
+            targetSpellLang = resolveSystemSpellcheckerLanguage(systemLocale, available)
+            if (targetSpellLang && targetSpellLang !== spellcheckerLanguage) {
+              preferences.setItem('spellcheckerLanguage', targetSpellLang)
+            }
+          }
+          if (targetSpellLang) {
+            switchLanguage(win, targetSpellLang)
+          }
+        }
       } catch (error) {
         log.error('Unable to set spell checker language on startup:', error)
       }

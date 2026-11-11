@@ -48,6 +48,14 @@ export default function(
       }
     },
     {
+      label: t('commands.file.quickOpen'),
+      accelerator: keybindings.getAccelerator('file.quick-open') ?? undefined,
+      click(_menuItem, browserWindow) {
+        const win = browserWindow as BrowserWindow | undefined
+        win?.webContents.send('mt::execute-command-by-id', 'file.quick-open')
+      }
+    },
+    {
       label: t('menu.file.addFolder'),
       click(_menuItem, browserWindow) {
         actions.addFolder(browserWindow as BrowserWindow | undefined)

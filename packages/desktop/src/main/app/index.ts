@@ -15,7 +15,7 @@ import { confirmAndTrashItem } from '../filesystem/trash'
 import { registerKeyboardListeners } from '../keyboard'
 import { selectTheme } from '../menu/actions/theme'
 import { dockMenu } from '../menu/templates'
-import registerSpellcheckerListeners from '../spellchecker'
+import registerSpellcheckerListeners, { resolveSystemSpellcheckerLanguage } from '../spellchecker'
 import { watchers } from '../utils/imagePathAutoComplement'
 import { onInternalChannel } from '../utils/internalIpc'
 import { WindowType } from '../windows/base'
@@ -159,6 +159,15 @@ class App {
         log.info(
           `Auto-detected and set language to: ${currentLanguage} (system locale: ${systemLocale})`
         )
+      }
+
+      const systemLocale = app.getLocale()
+      const currentSpellLang = this._accessor.preferences.getItem<string>('spellcheckerLanguage')
+      if (systemLocale && (!currentSpellLang || (currentSpellLang === 'en-US' && !/^en/i.test(systemLocale)))) {
+        const detectedSpellLang = resolveSystemSpellcheckerLanguage(systemLocale, [])
+        if (detectedSpellLang && detectedSpellLang !== currentSpellLang) {
+          this._accessor.preferences.setItem('spellcheckerLanguage', detectedSpellLang)
+        }
       }
 
       setLanguage(currentLanguage)

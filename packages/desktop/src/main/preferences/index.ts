@@ -13,7 +13,7 @@ interface AppPaths {
 }
 
 class Preference extends TypedEmitter<PreferenceEvents> {
-  public readonly preferencesPath: string
+  public preferencesPath: string
   public readonly hasPreferencesFile: boolean
   private readonly file: PreferenceFile
 
@@ -24,6 +24,12 @@ class Preference extends TypedEmitter<PreferenceEvents> {
     this.hasPreferencesFile = this.file.exists
     if (this.file.readOnly) log.warn('Preferences are unavailable; using read-only defaults')
     this._listenForIpcMain()
+  }
+
+  retargetDirectory(directory: string): void {
+    if (!directory) return
+    this.preferencesPath = directory
+    this.file.retargetDirectory(directory)
   }
 
   getAll(): UserPreferences & Record<string, unknown> {

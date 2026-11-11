@@ -108,6 +108,13 @@
           :on-change="(value) => onSelectChange('showStorageBar', value)"
         />
         <bool
+          v-if="show('windowAppearance') || show('save')"
+          id="setting-promptEjectPendriveOnClose"
+          :description="preferenceLabel('promptEjectPendriveOnClose')"
+          :bool="promptEjectPendriveOnClose"
+          :on-change="(value) => onSelectChange('promptEjectPendriveOnClose', value)"
+        />
+        <bool
           v-if="show('windowOpening')"
           id="setting-openFilesInNewWindow"
           :description="preferenceLabel('openFilesInNewWindow')"
@@ -289,6 +296,7 @@ const {
   autoSaveOnEnter,
   autoRenameFromFirstLine,
   showStorageBar,
+  promptEjectPendriveOnClose,
   titleBarStyle,
   openFilesInNewWindow,
   openFolderInNewWindow,

@@ -44,6 +44,10 @@ export const preferenceDefinitions: Record<string, PreferenceDefinition> = {
     "category": "appearance",
     "label": "preferences.general.window.showStorageBar"
   },
+  "promptEjectPendriveOnClose": {
+    "category": "files",
+    "label": "preferences.general.window.promptEjectPendriveOnClose"
+  },
   "titleBarStyle": {
     "category": "appearance",
     "label": "preferences.general.window.titleBarStyle.title",

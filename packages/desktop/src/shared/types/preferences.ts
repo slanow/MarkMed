@@ -32,6 +32,7 @@ export interface UserPreferences extends RecoveryPreferences {
   autoSaveOnEnter: boolean
   firstRunSetupCompleted: boolean
   showStorageBar: boolean
+  promptEjectPendriveOnClose: boolean
   autoRenameFromFirstLine: boolean
   autoInsertDateTimeOnNewFile: boolean
   titleBarStyle: 'custom' | 'native'

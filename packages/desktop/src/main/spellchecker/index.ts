@@ -40,6 +40,41 @@ export const getAvailableDictionaries = (win: BrowserWindow): string[] => {
   return availableLanguages.length > 0 ? availableLanguages : ['en-US']
 }
 
+/**
+ * Matches a system/UI locale (e.g. `pt-BR`, `pt_BR`, `pt`, `es-419`) against
+ * Chromium's available spellchecker dictionaries (`availableSpellCheckerLanguages`).
+ */
+export const resolveSystemSpellcheckerLanguage = (
+  systemLocale: string,
+  availableDictionaries: readonly string[]
+): string => {
+  const normalized = (systemLocale || '').trim().replace(/_/g, '-')
+  if (availableDictionaries.length === 0) {
+    if (/^pt(?:-|$)/i.test(normalized)) return 'pt-BR'
+    if (normalized.length >= 2) return normalized
+    return 'en-US'
+  }
+
+  const lowerTarget = normalized.toLowerCase()
+  const exact = availableDictionaries.find((item) => item.toLowerCase() === lowerTarget)
+  if (exact) return exact
+
+  const baseLang = lowerTarget.split('-')[0]
+  if (baseLang === 'pt') {
+    const ptBr = availableDictionaries.find((item) => item.toLowerCase() === 'pt-br')
+    if (ptBr) return ptBr
+  }
+
+  if (baseLang) {
+    const prefixMatch = availableDictionaries.find(
+      (item) => item.toLowerCase() === baseLang || item.toLowerCase().startsWith(`${baseLang}-`)
+    )
+    if (prefixMatch) return prefixMatch
+  }
+
+  return availableDictionaries.includes('en-US') ? 'en-US' : availableDictionaries[0]
+}
+
 const registerSpellcheckerHandlers = (): void => {
   ipcMain.handle('mt::spellchecker-remove-word', async(e, word: string) => {
     const win = BrowserWindow.fromWebContents(e.sender)

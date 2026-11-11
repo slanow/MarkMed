@@ -16,7 +16,14 @@ export const resolvePlainTextToCopy = ({
   isSourceCode = false
 }: PlainTextCopySource): string => {
   if (selectedText.trim().length > 0) {
-    return isSourceCode ? markdownToPlainText(selectedText) : selectedText
+    if (isSourceCode) return markdownToPlainText(selectedText)
+    return selectedText
+      .replace(/\r\n?/g, '\n')
+      .split('\n')
+      .map((line) => line.replace(/[ \t]+$/g, ''))
+      .join('\n')
+      .replace(/\n{2,}/g, '\n')
+      .trim()
   }
   return markdownToPlainText(markdown)
 }

@@ -107,33 +107,21 @@
         @dblclick.stop="toggleMaxmizeOnMacOS"
       >
         <span v-if="!filename">MarkMed</span>
-        <span v-else>
+        <span
+          v-else
+          class="title-filename-wrap"
+          :title="filename"
+        >
           <span
             class="save-dot"
             :class="{ show: !isSaved }"
           />
-          <span class="path">
-            <bdi dir="ltr">
-              <span
-                v-for="(path, index) of paths"
-                :key="index"
-              >
-                {{ path }}
-                <el-icon
-                  class="path-arrow"
-                  :size="12"
-                >
-                  <ArrowRight />
-                </el-icon>
-              </span>
-              <span
-                class="filename"
-                :class="{ isOsx: platform === 'darwin' }"
-                @click="rename"
-              >
-                {{ filename }}
-              </span>
-            </bdi>
+          <span
+            class="filename"
+            :class="{ isOsx: platform === 'darwin' }"
+            @click="rename"
+          >
+            {{ filename }}
           </span>
         </span>
       </div>
@@ -307,13 +295,10 @@ import bus from '@/bus'
 import { ref, computed, watch, onMounted, onBeforeUnmount } from 'vue'
 import { storeToRefs } from 'pinia'
 import { minimizePath, restorePath, maximizePath, closePath } from '../../assets/window-controls.js'
-import { PATH_SEPARATOR } from '../../config'
 import { isMac as isOsxPlatform } from '@/util'
-import { pathBreadcrumb } from './pathBreadcrumb'
 import { buildWindowTitle } from './windowTitle'
 import { useEditorStore } from '@/store/editor'
 import { useI18n } from 'vue-i18n'
-import { ArrowRight } from '@element-plus/icons-vue'
 import IconTooltip from '@/components/iconTooltip/index.vue'
 import DocumentStatistics from './documentStatistics.vue'
 import MarkMedLogo from '../../assets/images/logo.png'
@@ -431,8 +416,6 @@ const handleCopyPlainTextClick = async (): Promise<void> => {
   }, 1800)
 }
 
-const paths = computed(() => pathBreadcrumb(props.pathname ?? '', PATH_SEPARATOR))
-
 const showCustomTitleBar = computed(() => {
   return titleBarStyle.value === 'custom' && !isOsx
 })
@@ -546,7 +529,7 @@ onBeforeUnmount(() => {
   right: 0;
   z-index: 2;
   display: grid;
-  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  grid-template-columns: auto minmax(0, 1fr) auto;
   align-items: center;
   transition: color 0.4s ease-in-out;
   cursor: default;
@@ -570,6 +553,10 @@ img {
   text-align: center;
   transition: all 0.25s ease-in-out;
   & .filename {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
     transition: all 0.25s ease-in-out;
   }
   &::after {
@@ -584,26 +571,11 @@ img {
 }
 div.title > span {
   display: flex;
-  align-items: baseline;
+  align-items: center;
   justify-content: center;
-}
-
-/* Workaround for GH#339: the RTL context clips an over-long path from the left
-   so the filename stays visible. The save dot is a sibling rather than a child
-   so that clipping can never swallow it. */
-div.title > span > .path {
-  direction: rtl;
-  overflow: hidden;
-  text-overflow: clip;
-  white-space: nowrap;
   min-width: 0;
-}
-
-/* The RTL context above only exists to clip long paths from the left. Isolating
-   each segment keeps an RTL folder name from dragging its separator — or the
-   segments around it — out of order. */
-div.title > span > .path > bdi > span {
-  unicode-bidi: isolate;
+  max-width: 100%;
+  overflow: hidden;
 }
 
 .title-bar .title .filename.isOsx:hover {

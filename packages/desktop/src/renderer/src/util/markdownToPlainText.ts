@@ -162,6 +162,6 @@ export const markdownToPlainText = (markdown: string): string => {
   return output
     .map((line) => line.replace(/[ \t]+$/g, ''))
     .join('\n')
-    .replace(/\n{3,}/g, '\n\n')
+    .replace(/\n{2,}/g, '\n')
     .trim()
 }

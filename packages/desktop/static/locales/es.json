@@ -468,7 +468,8 @@
         "openFoldersInNewWindow": "Abrir carpetas en nueva ventana",
         "zoom": "Zoom",
         "openFilesInNewWindowNote": "Si se activa, los archivos se abren en una ventana nueva. Si se desactiva, se abren en pestañas de la ventana actual.",
-        "openFoldersInNewWindowNote": "Si se activa, las carpetas se abren en una ventana nueva. Si se desactiva, reemplazan la carpeta de la ventana actual."
+        "openFoldersInNewWindowNote": "Si se activa, las carpetas se abren en una ventana nueva. Si se desactiva, reemplazan la carpeta de la ventana actual.",
+        "promptEjectPendriveOnClose": "Preguntar si desea desmontar/expulsar la memoria USB al cerrar MarkMed"
       },
       "startup": {
         "title": "Inicio y recuperación",
@@ -972,7 +973,13 @@
     "unsafeFileTitle": "Archivo potencialmente peligroso",
     "unsafeFileMessage": "Este enlace abre un archivo que puede ejecutar código",
     "unsafeFileDetail": "«{name}» es un archivo ejecutable o de script. Abrirlo podría ejecutar programas en tu equipo. Continúa solo si confías en este documento.",
-    "openAnyway": "Abrir de todos modos"
+    "openAnyway": "Abrir de todos modos",
+    "pendriveEjectTitle": "¿Desmontar y expulsar la memoria USB de forma segura?",
+    "pendriveEjectMessage": "Se detectó que la memoria USB {mount} está en uso por MarkMed.",
+    "pendriveEjectDetail": "Desmontar la memoria USB al cerrar aporta dos ventajas importantes:\n1. Evita la corrupción de las historias clínicas garantizando que todos los archivos se hayan grabado físicamente.\n2. Protege el secreto médico recordándole retirar la memoria USB del ordenador del hospital.",
+    "pendriveEjectConfirm": "Desmontar USB y Salir",
+    "pendriveEjectExitWithoutUnmount": "Solo Salir (sin desmontar)",
+    "pendriveEjectDontAskAgain": "No volver a preguntar (se puede cambiar en Preferencias → General)"
   },
   "error": {
     "configSchemaViolation": "Violación del esquema de configuración",

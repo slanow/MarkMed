@@ -50,6 +50,10 @@ import { contentSha256 } from 'common/filesystem'
 import { applyWindowGeometry, captureWindowGeometry } from './windowGeometry'
 import type { SidebarMoveRequest, SidebarMoveResult } from '@shared/types/project'
 import { confirmAndMoveSidebarItem } from '../filesystem/sidebarMove'
+import {
+  detectPendriveMountTarget,
+  scheduleDetachedPendriveUnmount
+} from '../filesystem/pendriveEject'
 import { containsPath } from 'common/filesystem/paths'
 import { relocateResourcePath, type ResourceMove } from 'common/filesystem/resourceMove'
 
@@ -143,14 +147,18 @@ export class SessionHost {
       event.preventDefault()
       if (this._quitting) return
       this._quitting = true
-      void this._coordinator
-        .quit()
-        .then(() => {
-          if (this._owner().getState().session.lifecycle === SessionLifecycle.CLOSED && this._editors.size === 0) {
-            this._quitAllowed = true
-            app.quit()
-          }
-        })
+      void (async() => {
+        const proceed = await this._promptPendriveEjectBeforeExit()
+        if (!proceed) return
+        await this._coordinator.quit()
+        if (
+          this._owner().getState().session.lifecycle === SessionLifecycle.CLOSED &&
+          this._editors.size === 0
+        ) {
+          this._quitAllowed = true
+          app.quit()
+        }
+      })()
         .catch((error) => this.report(error))
         .finally(() => {
           this._quitting = false
@@ -896,8 +904,91 @@ export class SessionHost {
 
   async closeWindow(editor: EditorWindow): Promise<void> {
     await editor.sessionReady
+    if (this._editors.size <= 1) {
+      const proceed = await this._promptPendriveEjectBeforeExit(editor.browserWindow ?? undefined)
+      if (!proceed) return
+    }
     if (editor.sessionStateId) await this._coordinator.closeWindow(editor.sessionStateId)
     if (this._editors.size === 0 && process.platform !== 'darwin') app.quit()
+  }
+
+  private _collectSessionPaths(): string[] {
+    const candidates: string[] = []
+    if (process.env.APPIMAGE) candidates.push(process.env.APPIMAGE)
+    if (process.env.PORTABLE_EXECUTABLE_DIR) candidates.push(process.env.PORTABLE_EXECUTABLE_DIR)
+    if (this._accessor.paths?.userDataPath) candidates.push(this._accessor.paths.userDataPath)
+
+    for (const editor of this._editors.values()) {
+      for (const root of editor.projectRoots.roots) {
+        if (root.pathname) candidates.push(root.pathname)
+      }
+    }
+    const state = this._service?.getState()
+    if (state) {
+      for (const win of state.session.windows) {
+        for (const root of win.workspace?.roots ?? []) {
+          candidates.push(root.location.path)
+        }
+        for (const doc of win.documents) {
+          if (doc.resource.kind === 'file') {
+            candidates.push(doc.resource.location.path)
+          }
+        }
+      }
+    }
+    return candidates
+  }
+
+  private _pendrivePromptHandled = false
+
+  private async _promptPendriveEjectBeforeExit(parentWindow?: BrowserWindow): Promise<boolean> {
+    if (this._pendrivePromptHandled) return true
+    const promptEnabled = this._accessor.preferences.getItem<boolean>('promptEjectPendriveOnClose')
+    if (promptEnabled === false) return true
+
+    const target = detectPendriveMountTarget(this._collectSessionPaths())
+    if (!target) return true
+
+    const activeWin =
+      parentWindow && !parentWindow.isDestroyed()
+        ? parentWindow
+        : [...this._editors.values()].find((e) => e.browserWindow && !e.browserWindow.isDestroyed())
+          ?.browserWindow
+
+    const options: Electron.MessageBoxOptions = {
+      type: 'question',
+      buttons: [
+        t('dialog.pendriveEjectConfirm'),
+        t('dialog.pendriveEjectExitWithoutUnmount'),
+        t('dialog.cancel')
+      ],
+      defaultId: 0,
+      cancelId: 2,
+      noLink: true,
+      title: t('dialog.pendriveEjectTitle'),
+      message: t('dialog.pendriveEjectMessage', { mount: target.label }),
+      detail: t('dialog.pendriveEjectDetail'),
+      checkboxLabel: t('dialog.pendriveEjectDontAskAgain'),
+      checkboxChecked: false
+    }
+
+    const { response, checkboxChecked } = activeWin
+      ? await dialog.showMessageBox(activeWin, options)
+      : await dialog.showMessageBox(options)
+
+    if (response === 2) {
+      return false
+    }
+
+    if (checkboxChecked) {
+      this._accessor.preferences.setItem('promptEjectPendriveOnClose', false)
+    }
+
+    this._pendrivePromptHandled = true
+    if (response === 0) {
+      scheduleDetachedPendriveUnmount(target)
+    }
+    return true
   }
 
   rendererGone(editor: EditorWindow): void {

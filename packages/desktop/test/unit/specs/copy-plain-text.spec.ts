@@ -8,16 +8,16 @@ describe('resolvePlainTextToCopy', () => {
       selectedText: '',
       isSourceCode: false
     })
-    expect(result).toBe('Receita\n\n- Dipirona 500mg')
+    expect(result).toBe('Receita\n- Dipirona 500mg')
   })
 
-  it('returns WYSIWYG selected text directly without touching full document', () => {
+  it('returns WYSIWYG selected text directly and collapses double paragraph breaks', () => {
     const result = resolvePlainTextToCopy({
       markdown: '# Receita\n\n- **Dipirona** 500mg\n',
-      selectedText: 'Dipirona 500mg',
+      selectedText: 'Linha 1\n\nLinha 2',
       isSourceCode: false
     })
-    expect(result).toBe('Dipirona 500mg')
+    expect(result).toBe('Linha 1\nLinha 2')
   })
 
   it('strips Markdown markers from selected text in source code mode', () => {

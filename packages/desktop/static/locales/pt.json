@@ -468,7 +468,8 @@
         "openFoldersInNewWindow": "Abrir pastas em nova janela",
         "zoom": "Zoom",
         "openFilesInNewWindowNote": "Quando ativado, os ficheiros abrem numa nova janela. Quando desativado, abrem em separadores na janela atual.",
-        "openFoldersInNewWindowNote": "Quando ativado, as pastas abrem numa nova janela. Quando desativado, substituem a pasta na janela atual."
+        "openFoldersInNewWindowNote": "Quando ativado, as pastas abrem numa nova janela. Quando desativado, substituem a pasta na janela atual.",
+        "promptEjectPendriveOnClose": "Perguntar se deseja desmontar/ejetar o pendrive ao fechar o MarkMed"
       },
       "startup": {
         "title": "Arranque e recuperação",
@@ -972,7 +973,13 @@
     "unsafeFileTitle": "Arquivo potencialmente inseguro",
     "unsafeFileMessage": "Este link abre um arquivo que pode executar código",
     "unsafeFileDetail": "\"{name}\" é um arquivo executável ou de script. Abri-lo pode executar programas no seu computador. Continue apenas se confiar neste documento.",
-    "openAnyway": "Abrir mesmo assim"
+    "openAnyway": "Abrir mesmo assim",
+    "pendriveEjectTitle": "Desmontar e ejetar o pendrive com segurança?",
+    "pendriveEjectMessage": "Detectamos que o pendrive {mount} está em uso pelo MarkMed.",
+    "pendriveEjectDetail": "Desmontar o pendrive ao fechar traz duas vantagens importantes:\n1. Evita corrupção dos prontuários, garantindo que todos os arquivos foram gravados fisicamente na memória.\n2. Protege o sigilo médico, lembrando você de retirar o pendrive do computador do hospital.",
+    "pendriveEjectConfirm": "Desmontar Pendrive e Sair",
+    "pendriveEjectExitWithoutUnmount": "Apenas Sair (sem desmontar)",
+    "pendriveEjectDontAskAgain": "Não perguntar novamente (pode ser alterado em Preferências → Geral)"
   },
   "error": {
     "configSchemaViolation": "Violação do esquema de configuração",

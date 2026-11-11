@@ -468,7 +468,8 @@
         "openFoldersInNewWindow": "在新窗口中打开文件夹",
         "zoom": "缩放",
         "openFilesInNewWindowNote": "启用后，文件在新窗口中打开；关闭后，在当前窗口的标签页中打开。",
-        "openFoldersInNewWindowNote": "启用后，文件夹在新窗口中打开；关闭后，在当前窗口中打开并替换当前文件夹。"
+        "openFoldersInNewWindowNote": "启用后，文件夹在新窗口中打开；关闭后，在当前窗口中打开并替换当前文件夹。",
+        "promptEjectPendriveOnClose": "Ask to safely unmount/eject pendrive when closing MarkMed"
       },
       "startup": {
         "title": "启动与恢复",
@@ -972,7 +973,13 @@
     "unsafeFileTitle": "潜在不安全的文件",
     "unsafeFileMessage": "此链接将打开一个可执行代码的文件",
     "unsafeFileDetail": "“{name}”是可执行文件或脚本文件。打开它可能会在你的计算机上运行程序。请仅在信任此文档时继续。",
-    "openAnyway": "仍然打开"
+    "openAnyway": "仍然打开",
+    "pendriveEjectTitle": "Safely unmount and eject USB drive?",
+    "pendriveEjectMessage": "USB drive {mount} is currently in use by MarkMed.",
+    "pendriveEjectDetail": "Unmounting the USB drive on close brings two important benefits:\n1. Prevents corruption of patient records by ensuring all files are physically written to flash memory.\n2. Protects medical confidentiality by reminding you to remove your USB drive from the hospital computer.",
+    "pendriveEjectConfirm": "Unmount Drive and Quit",
+    "pendriveEjectExitWithoutUnmount": "Just Quit (do not unmount)",
+    "pendriveEjectDontAskAgain": "Do not ask again (can be changed in Preferences → General)"
   },
   "error": {
     "configSchemaViolation": "配置架构违规",

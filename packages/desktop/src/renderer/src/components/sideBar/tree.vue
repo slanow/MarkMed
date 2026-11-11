@@ -125,6 +125,26 @@
             <ArrowRight />
           </el-icon>
           <span class="text-overflow">{{ projectStore.ROOT_LABEL(root) }}</span>
+          <icon-tooltip :content="t('sideBar.tree.createFile')">
+            <button
+              type="button"
+              class="plain-button root-action-btn"
+              :aria-label="t('sideBar.tree.createFile')"
+              @click.stop="createFileInTarget(root)"
+            >
+              <DocumentAdd aria-hidden="true" />
+            </button>
+          </icon-tooltip>
+          <icon-tooltip :content="t('contextMenu.sideBar.newDirectory')">
+            <button
+              type="button"
+              class="plain-button root-action-btn"
+              :aria-label="t('contextMenu.sideBar.newDirectory')"
+              @click.stop="createFolderInTarget(root)"
+            >
+              <FolderAdd aria-hidden="true" />
+            </button>
+          </icon-tooltip>
         </div>
         <div
           v-show="!root.tree.isCollapsed"
@@ -185,6 +205,12 @@
               >
                 {{ t('sideBar.tree.createFile') }}
               </button>
+              <button
+                class="button-primary"
+                @click.stop="createFolder(root)"
+              >
+                {{ t('contextMenu.sideBar.newDirectory') }}
+              </button>
             </div>
           </div>
         </div>
@@ -201,6 +227,22 @@
             @click="projectStore.ASK_FOR_OPEN_PROJECT()"
           >
             {{ t('sideBar.tree.openFolder') }}
+          </el-button>
+          <el-button
+            text
+            bg
+            type="primary"
+            @click="openFolderAndCreate('directory')"
+          >
+            {{ t('contextMenu.sideBar.newDirectory') }}
+          </el-button>
+          <el-button
+            text
+            bg
+            type="primary"
+            @click="openFolderAndCreate('file')"
+          >
+            {{ t('sideBar.tree.createFile') }}
           </el-button>
         </div>
       </div>
@@ -226,7 +268,7 @@ import bus from '../../bus'
 import { showRootContextMenu } from '../../contextMenu/sideBar'
 import type { RootView } from '@/store/project'
 import { useI18n } from 'vue-i18n'
-import { ArrowRight } from '@element-plus/icons-vue'
+import { ArrowRight, DocumentAdd, FolderAdd } from '@element-plus/icons-vue'
 import { PATH_SEPARATOR } from '@/config'
 import { isMac } from '@/util'
 import { computeRevealScrollTop } from '@/util/revealTreeRow'
@@ -317,6 +359,59 @@ const createFile = (root: RootView): void => {
   projectStore.CHANGE_ACTIVE_ITEM(root.tree)
   bus.emit('SIDEBAR::new', 'file')
 }
+
+const createFolder = (root: RootView): void => {
+  projectStore.CHANGE_ACTIVE_ITEM(root.tree)
+  bus.emit('SIDEBAR::new', 'directory')
+}
+
+const resolveTargetNodeInRoot = (root: RootView) => {
+  const current = activeItem.value
+  if (
+    current &&
+    typeof current.pathname === 'string' &&
+    projectStore.FIND_ROOT(current.pathname)?.key === root.key
+  ) {
+    return current
+  }
+  return root.tree
+}
+
+const createFileInTarget = (root: RootView): void => {
+  projectStore.SET_FOLDER_COLLAPSED(root.tree, false)
+  projectStore.CHANGE_ACTIVE_ITEM(resolveTargetNodeInRoot(root))
+  bus.emit('SIDEBAR::new', 'file')
+}
+
+const createFolderInTarget = (root: RootView): void => {
+  projectStore.SET_FOLDER_COLLAPSED(root.tree, false)
+  projectStore.CHANGE_ACTIVE_ITEM(resolveTargetNodeInRoot(root))
+  bus.emit('SIDEBAR::new', 'directory')
+}
+
+let pendingCreateAfterOpen: 'file' | 'directory' | null = null
+
+const openFolderAndCreate = (type: 'file' | 'directory'): void => {
+  pendingCreateAfterOpen = type
+  projectStore.ASK_FOR_OPEN_PROJECT()
+}
+
+watch(
+  () => roots.value,
+  (nextRoots) => {
+    if (!pendingCreateAfterOpen || nextRoots.length === 0) return
+    const readyRoot = nextRoots.find((r) => r.status === 'ready') ?? nextRoots[0]
+    if (!readyRoot) return
+    const action = pendingCreateAfterOpen
+    pendingCreateAfterOpen = null
+    nextTick(() => {
+      projectStore.SET_FOLDER_COLLAPSED(readyRoot.tree, false)
+      projectStore.CHANGE_ACTIVE_ITEM(readyRoot.tree)
+      bus.emit('SIDEBAR::new', action)
+    })
+  },
+  { deep: true }
+)
 
 const toggleRoot = (root: RootView): void => {
   projectStore.CHANGE_ACTIVE_ITEM(root.tree)
@@ -749,6 +844,27 @@ onUnmounted(() => {
   user-select: none;
 }
 
+.project-tree > .title .root-action-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  margin-left: 4px;
+  border-radius: 4px;
+  color: var(--sideBarIconColor);
+}
+
+.project-tree > .title .root-action-btn:hover {
+  color: var(--highlightThemeColor);
+  background: var(--sideBarItemHoverBgColor);
+}
+
+.project-tree > .title .root-action-btn svg {
+  width: 15px;
+  height: 15px;
+}
+
 .project-tree > .title > a {
   pointer-events: auto;
   cursor: pointer;
@@ -788,11 +904,13 @@ onUnmounted(() => {
 .open-project .centered-group {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: stretch;
+  gap: 10px;
 }
 
 .open-project .el-button {
-  margin-top: 20px;
+  margin-top: 0;
+  margin-left: 0 !important;
 }
 .open-project .el-button.is-text.is-has-bg,
 .empty-project .el-button.is-text.is-has-bg {
@@ -840,8 +958,15 @@ onUnmounted(() => {
   padding-top: 40px;
   align-items: center;
   color: var(--sideBarTextColor);
-  & button {
+  & .centered-group {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
     margin-top: 10px;
+  }
+  & button {
+    margin-top: 0;
   }
 }
 

@@ -55,12 +55,14 @@ O objetivo principal do MarkMed é oferecer um **ambiente confiável para criaç
 
 ## Principais Recursos
 
-- **Botão `Copiar TXT` (sem Markdown):** converte a evolução em texto comum limpo com um único clique (na barra superior, menu _Editar_ ou clique direito), evitando caracteres de formatação ou quebras estranhas ao colar no sistema do hospital.
+- **Botão `Copiar TXT` (sem Markdown e sem linhas em branco extras):** converte a evolução em texto comum limpo com um único clique (na barra superior, menu _Editar_ ou clique direito), sem espaços duplos entre parágrafos para colar perfeitamente em qualquer sistema hospitalar (MV, Tasy, Philips, etc.).
 - **Auto-salvar flexível:** escolha entre salvar automaticamente por **intervalo de tempo** (`1s` a `60s`) ou ativar o salvamento automático **sempre que apertar `Enter`**, garantindo que cada parágrafo digitado já fique gravado no disco ou no pendrive.
 - **Nome automático pela 1ª linha + data e hora:** basta digitar o nome do paciente na primeira linha do arquivo para sugerir/renomear automaticamente no padrão `<Nome-Paciente>_YYYY-MM-DD_HH-mm.md`.
+- **Desmontagem e ejeção segura do pendrive ao fechar (`umount`):** ao encerrar o MarkMed usando um pendrive, o programa explica as vantagens e oferece desmontar/ejetar automaticamente a unidade — prevenindo corrupção de arquivos e lembrando você de retirar o pendrive do computador do hospital (desativável em _Preferências → Geral_).
 - **Backup criptografado com senha (`.mmbak`):** crie cópias compactadas e criptografadas (**AES-256-GCM**) dos prontuários e imagens para guardar no Google Drive com tranquilidade pela LGPD, e descriptografe diretamente dentro do próprio MarkMed.
-- **Modo Portátil (Pendrive) com pastas ocultas:** na primeira abertura, o MarkMed configura automaticamente as pastas ocultas `.markmed-user-data` e `.markmed-imagens` no pendrive (ou na pasta escolhida) e monitora o espaço livre em disco com barra discreta no rodapé.
-- **Barra lateral visível e botão rápido:** acesso direto à árvore de prontuários com botão de mostrar/ocultar na barra superior.
+- **Modo Portátil (Pendrive) com pastas ocultas imediatas:** na primeira abertura, o MarkMed configura automaticamente as pastas ocultas `.markmed-user-data` e `.markmed-imagens` no pendrive sem precisar fechar ou reiniciar o aplicativo, e monitora o espaço livre em disco com barra discreta no rodapé.
+- **Corretor ortográfico ativo por padrão no idioma do sistema:** já vem ligado automaticamente em português (`pt-BR`) ou no idioma do seu sistema operacional.
+- **Barra lateral com botões rápidos (`Abrir Pasta`, `Criar Pasta`, `Criar Arquivo`):** crie novas pastas e prontuários com 1 clique diretamente na barra lateral.
 - **Temas Claro e Escuro:** interface limpa para uso confortável tanto em consultórios bem iluminados quanto em plantões noturnos.
 - **Escrita sem distrações:** modos Foco e Máquina de Escrever, suporte a listas, tabelas, títulos e exportação rápida para **PDF** e **HTML**.
 
@@ -81,6 +83,14 @@ Baixe a versão mais recente para o seu sistema na página oficial de lançament
   4. Crie também uma pasta **`Prontuarios`** no pendrive para salvar suas evoluções em `.md`.
 - **Para instalar no seu computador pessoal:**
   - Baixe e execute o instalador `markmed-win-x64-<versao>-setup.exe`.
+
+> [!NOTE]
+> **Aviso "O Windows protegeu o computador" (Fornecedor desconhecido / SmartScreen):**
+> Como o MarkMed é um projeto gratuito e de código aberto (sem certificado comercial pago da Microsoft), na primeira abertura o Windows pode exibir uma janela azul do **Microsoft Defender SmartScreen**. Isso é normal para aplicativos independentes:
+>
+> 1. Clique em **Mais informações** (_More info_).
+> 2. Clique no botão **Executar assim mesmo** (_Run anyway_).
+>    Nas aberturas seguintes naquele computador, o Windows abrirá o MarkMed diretamente sem perguntar novamente.
 
 ### Linux
 

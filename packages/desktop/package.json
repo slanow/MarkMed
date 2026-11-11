@@ -1,12 +1,12 @@
 {
   "name": "marktext",
-  "version": "0.26.1",
-  "description": "MarkMed",
+  "version": "0.26.2",
+  "description": "MarkMed — Editor de Prontuários e Textos Médicos",
   "main": "./out/main/index.js",
   "author": {
-    "name": "Jocs",
+    "name": "MarkMed Project (slanow)",
     "email": "ransixi@gmail.com",
-    "url": "https://github.com/Jocs"
+    "url": "https://github.com/slanow/MarkMed"
   },
   "maintainer": [
     {
