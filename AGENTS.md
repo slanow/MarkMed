@@ -299,3 +299,10 @@ See `packages/website/content/docs/dev/IPC.md` for conventions and examples.
 - Run `pnpm run lint` before submitting.
 - All PRs must pass CI before merge.
 - See `.github/CONTRIBUTING.md` for the full contributing guide.
+
+## MarkMed Release & Communication Notes
+
+- Whenever creating a new MarkMed release or shipping user-facing updates, always generate a ready-to-copy-and-paste **Ko-fi post** in `pt-BR` for <https://ko-fi.com/ronymarkmed> with:
+  - A clear title and concise summary written for physicians (`médicos`) explaining practical benefits in plain language;
+  - Links to the release download (`https://github.com/slanow/MarkMed/releases`) and Wiki (`https://github.com/slanow/MarkMed/wiki`) when relevant.
+- Update the GitHub Wiki (`git@github.com:slanow/MarkMed.wiki.git`) when user-facing features, installation steps, or workflows change.
