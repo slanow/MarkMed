@@ -16,6 +16,9 @@
   <a href="https://github.com/sponsors/slanow">
     <img src="https://img.shields.io/badge/Apoiar-GitHub%20Sponsors-ea4aaa?logo=githubsponsors" alt="Apoiar no GitHub Sponsors">
   </a>
+  <a href="https://ko-fi.com/ronymarkmed">
+    <img src="https://img.shields.io/badge/Apoiar-Ko--fi-ff5e5b?logo=ko-fi&logoColor=white" alt="Apoiar no Ko-fi">
+  </a>
   <a href="LICENSE">
     <img src="https://img.shields.io/github/license/slanow/MarkMed.svg" alt="Licença MIT">
   </a>
@@ -147,7 +150,7 @@ pnpm run build:mac
 
 ## Apoiar o Projeto
 
-O **MarkMed** é gratuito e de código aberto. Se ele ajuda no seu dia a dia médico ou no plantão, você pode apoiar o desenvolvimento contínuo pelo **[GitHub Sponsors](https://github.com/sponsors/slanow)** ou pelo botão **Sponsor** no topo do repositório.
+O **MarkMed** é gratuito e de código aberto. Se ele ajuda no seu dia a dia médico ou no plantão, você pode apoiar o desenvolvimento contínuo pelo **[Ko-fi](https://ko-fi.com/ronymarkmed)**, pelo **[GitHub Sponsors](https://github.com/sponsors/slanow)** ou pelo botão **Sponsor** no topo do repositório.
 
 ---
 
