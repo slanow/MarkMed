@@ -213,6 +213,12 @@ jobs:
             echo 'xattr -d com.apple.quarantine /Applications/MarkMed.app'
             echo '```'
             echo ""
+            echo "## 🛡️ Note for Windows users"
+            echo "As MarkMed is an open-source project without a paid corporate Microsoft certificate, Windows may show SmartScreen or download warnings on first run:"
+            echo "- If Windows warns when copying the executable, right-click the file -> **Properties** -> check **Unblock** -> **OK**."
+            echo "- If Microsoft Defender SmartScreen displays a blue banner, click **More info** -> **Run anyway**."
+            echo "- Full tutorial in Portuguese: [Avisos de Segurança no Windows (Wiki)](https://github.com/slanow/MarkMed/wiki/Avisos-de-Seguranca-no-Windows)"
+            echo ""
             echo "## Verifying downloads"
             echo "All artifacts are listed with their SHA-256 in \`SHA256SUMS.txt\`. Verify with:"
             echo '```'
