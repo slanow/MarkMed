@@ -67,7 +67,7 @@ O objetivo principal do MarkMed é oferecer um **ambiente confiável para criaç
 - **Corretor ortográfico ativo por padrão no idioma do sistema:** já vem ligado automaticamente em português (`pt-BR`) ou no idioma do seu sistema operacional.
 - **Barra lateral com botões rápidos (`Abrir Pasta`, `Criar Pasta`, `Criar Arquivo`):** crie novas pastas e prontuários com 1 clique diretamente na barra lateral.
 - **Temas Claro e Escuro:** interface limpa para uso confortável tanto em consultórios bem iluminados quanto em plantões noturnos.
-- **Escrita sem distrações:** modos Foco e Máquina de Escrever, suporte a listas, tabelas, títulos e exportação rápida para **PDF** e **HTML** — consulte o **[Tutorial Completo de Markdown para Leigos](https://github.com/slanow/MarkMed/wiki/Tutorial-de-Markdown)** na nossa Wiki.
+- **Escrita sem distrações:** modos Foco e Máquina de Escrever, suporte a listas, tabelas, títulos e exportação rápida para **PDF** e **HTML** — consulte o **[Tutorial Completo de Markdown](https://github.com/slanow/MarkMed/wiki/Tutorial-de-Markdown)** na nossa Wiki.
 
 ---
 
