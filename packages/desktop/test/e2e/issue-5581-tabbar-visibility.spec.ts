@@ -79,8 +79,8 @@ test.describe('Issue #5581 tab bar visibility', () => {
 
     await app.evaluate(({ Menu, BrowserWindow }) => {
       const fileMenu = Menu.getApplicationMenu()?.items.find(item => item.label === 'File')
-      const newTab = fileMenu?.submenu?.items.find(item => item.label === 'New Tab')
-      if (!newTab) throw new Error('New Tab menu item is missing')
+      const newTab = fileMenu?.submenu?.items.find(item => item.label === 'New File')
+      if (!newTab) throw new Error('New File menu item is missing')
       const win = BrowserWindow.getAllWindows()[0]
       newTab.click(undefined, win, win.webContents)
     })

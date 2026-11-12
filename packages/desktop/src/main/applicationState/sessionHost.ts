@@ -52,7 +52,8 @@ import type { SidebarMoveRequest, SidebarMoveResult } from '@shared/types/projec
 import { confirmAndMoveSidebarItem } from '../filesystem/sidebarMove'
 import {
   detectPendriveMountTarget,
-  scheduleDetachedPendriveUnmount
+  scheduleDetachedPendriveUnmount,
+  type PendriveMountTarget
 } from '../filesystem/pendriveEject'
 import { containsPath } from 'common/filesystem/paths'
 import { relocateResourcePath, type ResourceMove } from 'common/filesystem/resourceMove'
@@ -103,7 +104,7 @@ export class SessionHost {
     paths?: { userDataPath: string }
     preferences: Preference
     menu: Pick<AppMenu, 'removeWindowMenu' | 'addRecentlyUsedDocument' | 'relocateRecentlyUsedDocuments'>
-    windowManager: Pick<WindowManager, 'withIgnoredFileDeletions'>
+    windowManager: Pick<WindowManager, 'withIgnoredFileDeletions'> & Partial<Pick<WindowManager, 'closeWatcher'>>
   }) {
     const stateRoot = this._accessor.paths?.userDataPath ?? app.getPath('userData')
     this._metadata = new ApplicationStateStore(stateRoot)
@@ -157,12 +158,27 @@ export class SessionHost {
         ) {
           this._quitAllowed = true
           app.quit()
+        } else {
+          this._pendrivePromptHandled = false
+          this._pendingPendriveEjectTarget = null
         }
       })()
         .catch((error) => this.report(error))
         .finally(() => {
           this._quitting = false
         })
+    })
+    app.on('will-quit', () => {
+      if (!this._pendingPendriveEjectTarget) return
+      const target = this._pendingPendriveEjectTarget
+      this._pendingPendriveEjectTarget = null
+      this._accessor.windowManager.closeWatcher?.()
+      try {
+        process.chdir(process.platform === 'win32' ? (process.env.SystemRoot || 'C:\\Windows') : '/')
+      } catch {
+        // Best-effort cwd release before unmount.
+      }
+      scheduleDetachedPendriveUnmount(target)
     })
   }
 
@@ -907,15 +923,30 @@ export class SessionHost {
     if (this._editors.size <= 1) {
       const proceed = await this._promptPendriveEjectBeforeExit(editor.browserWindow ?? undefined)
       if (!proceed) return
+      if (process.platform !== 'darwin') {
+        app.quit()
+        return
+      }
     }
     if (editor.sessionStateId) await this._coordinator.closeWindow(editor.sessionStateId)
-    if (this._editors.size === 0 && process.platform !== 'darwin') app.quit()
+    if (this._editors.size === 0 && process.platform !== 'darwin') {
+      app.quit()
+    } else if (this._editors.size > 0) {
+      this._pendrivePromptHandled = false
+      this._pendingPendriveEjectTarget = null
+    }
   }
 
   private _collectSessionPaths(): string[] {
     const candidates: string[] = []
     if (process.env.APPIMAGE) candidates.push(process.env.APPIMAGE)
     if (process.env.PORTABLE_EXECUTABLE_DIR) candidates.push(process.env.PORTABLE_EXECUTABLE_DIR)
+    if (process.execPath) candidates.push(process.execPath)
+    try {
+      candidates.push(process.cwd())
+    } catch {
+      // Ignore unavailable cwd.
+    }
     if (this._accessor.paths?.userDataPath) candidates.push(this._accessor.paths.userDataPath)
 
     for (const editor of this._editors.values()) {
@@ -940,6 +971,7 @@ export class SessionHost {
   }
 
   private _pendrivePromptHandled = false
+  private _pendingPendriveEjectTarget: PendriveMountTarget | null = null
 
   private async _promptPendriveEjectBeforeExit(parentWindow?: BrowserWindow): Promise<boolean> {
     if (this._pendrivePromptHandled) return true
@@ -985,9 +1017,7 @@ export class SessionHost {
     }
 
     this._pendrivePromptHandled = true
-    if (response === 0) {
-      scheduleDetachedPendriveUnmount(target)
-    }
+    this._pendingPendriveEjectTarget = response === 0 ? target : null
     return true
   }
 

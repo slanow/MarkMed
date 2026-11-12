@@ -12,7 +12,7 @@
     },
     "file": {
       "file": "Archivo",
-      "newTab": "Nueva Pestaña",
+      "newTab": "Nuevo Archivo",
       "newWindow": "Nueva Ventana",
       "openFile": "Abrir Archivo...",
       "openFolder": "Abrir Carpeta...",
@@ -809,7 +809,7 @@
     },
     "file": {
       "newWindow": "Nueva Ventana",
-      "newTab": "Nueva Pestaña",
+      "newTab": "Nuevo Archivo",
       "openFile": "Abrir Archivo",
       "openFolder": "Abrir Carpeta",
       "save": "Guardar",
@@ -1127,7 +1127,7 @@
     "includeImages": "Include notes images folder",
     "includeConfig": "Include MarkMed configuration folder",
     "passwordLabel": "Encryption password:",
-    "passwordPlaceholder": "Enter a strong password",
+    "passwordPlaceholder": "Ingrese cualquier contraseña",
     "confirmPasswordLabel": "Confirm password:",
     "confirmPasswordPlaceholder": "Repeat password",
     "createAction": "Create Encrypted Backup",
@@ -1144,6 +1144,17 @@
     "errorNoDestination": "Select a destination folder.",
     "errorGeneric": "Operation could not be completed.",
     "createSuccess": "Backup created ({count} file(s)) at: {path}",
-    "decryptSuccess": "Decrypted {count} file(s) into: {dir}"
+    "decryptSuccess": "Decrypted {count} file(s) into: {dir}",
+    "passwordStrength": {
+      "prefix": "Seguridad:",
+      "weak": "Débil",
+      "fair": "Aceptable",
+      "good": "Buena",
+      "strong": "Fuerte",
+      "hintWeak": "Opcional: puede usar esta contraseña igualmente, aunque una más larga protege mejor.",
+      "hintFair": "Opcional: agregue mayúsculas, números o símbolos para fortalecer.",
+      "hintGood": "Buena protección para sus archivos.",
+      "hintStrong": "Excelente protección para confidencialidad médica."
+    }
   }
 }

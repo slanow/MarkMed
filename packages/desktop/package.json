@@ -1,6 +1,6 @@
 {
   "name": "marktext",
-  "version": "0.26.2",
+  "version": "0.26.3",
   "description": "MarkMed — Editor de Prontuários e Textos Médicos",
   "main": "./out/main/index.js",
   "author": {

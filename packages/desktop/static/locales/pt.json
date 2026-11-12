@@ -12,7 +12,7 @@
     },
     "file": {
       "file": "Arquivo",
-      "newTab": "Nova Aba",
+      "newTab": "Novo Arquivo",
       "newWindow": "Nova Janela",
       "openFile": "Abrir Arquivo...",
       "openFolder": "Abrir Pasta...",
@@ -809,7 +809,7 @@
     },
     "file": {
       "newWindow": "Nova Janela",
-      "newTab": "Nova Aba",
+      "newTab": "Novo Arquivo",
       "openFile": "Abrir Arquivo",
       "openFolder": "Abrir Pasta",
       "save": "Salvar",
@@ -1127,7 +1127,7 @@
     "includeImages": "Incluir pasta de imagens dos prontuários",
     "includeConfig": "Incluir pasta de configurações do MarkMed",
     "passwordLabel": "Senha de criptografia:",
-    "passwordPlaceholder": "Digite uma senha forte",
+    "passwordPlaceholder": "Digite qualquer senha de sua preferência",
     "confirmPasswordLabel": "Confirmar senha:",
     "confirmPasswordPlaceholder": "Repita a senha",
     "createAction": "Gerar Backup Criptografado",
@@ -1144,6 +1144,17 @@
     "errorNoDestination": "Selecione a pasta de destino para restaurar.",
     "errorGeneric": "Não foi possível concluir a operação.",
     "createSuccess": "Backup criado com sucesso ({count} arquivo(s)) em: {path}",
-    "decryptSuccess": "{count} arquivo(s) descriptografado(s) com sucesso em: {dir}"
+    "decryptSuccess": "{count} arquivo(s) descriptografado(s) com sucesso em: {dir}",
+    "passwordStrength": {
+      "prefix": "Força da senha:",
+      "weak": "Fraca",
+      "fair": "Razoável",
+      "good": "Boa",
+      "strong": "Forte",
+      "hintWeak": "Opcional: você pode usar esta senha mesmo assim, mas senhas maiores com números e símbolos protegem melhor.",
+      "hintFair": "Opcional: adicione maiúsculas, números ou símbolos para fortalecer.",
+      "hintGood": "Boa proteção para seus arquivos.",
+      "hintStrong": "Excelente proteção para sigilo médico."
+    }
   }
 }

@@ -47,6 +47,29 @@
               size="small"
               :placeholder="t('backup.passwordPlaceholder')"
             />
+            <div
+              v-if="backupPassword.length > 0"
+              class="password-strength"
+            >
+              <div class="strength-bar-track">
+                <div
+                  class="strength-bar-fill"
+                  :style="{
+                    width: `${passwordStrength.percent}%`,
+                    backgroundColor: passwordStrength.color
+                  }"
+                />
+              </div>
+              <div class="strength-text-row">
+                <span
+                  class="strength-label"
+                  :style="{ color: passwordStrength.color }"
+                >
+                  {{ t('backup.passwordStrength.prefix') }} {{ t(passwordStrength.labelKey) }}
+                </span>
+                <span class="strength-hint">{{ t(passwordStrength.hintKey) }}</span>
+              </div>
+            </div>
           </div>
 
           <div class="backup-field">
@@ -162,10 +185,11 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, onUnmounted, ref } from 'vue'
+import { computed, onMounted, onUnmounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import bus from '@/bus'
 import { useProjectStore } from '@/store/project'
+import { evaluatePasswordStrength } from '@/util/passwordStrength'
 
 interface FeedbackState {
   type: 'success' | 'error'
@@ -185,6 +209,7 @@ const includeConfigFolder = ref(false)
 const backupPassword = ref('')
 const backupPasswordConfirm = ref('')
 const backupFeedback = ref<FeedbackState | null>(null)
+const passwordStrength = computed(() => evaluatePasswordStrength(backupPassword.value))
 
 const archiveFilePath = ref('')
 const restoreDestinationDir = ref('')
@@ -340,6 +365,39 @@ onUnmounted(() => {
   display: flex;
   flex-direction: column;
   gap: 5px;
+}
+.password-strength {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-top: 2px;
+}
+.strength-bar-track {
+  width: 100%;
+  height: 5px;
+  border-radius: 3px;
+  background: var(--floatBorderColor, rgba(128, 128, 128, 0.25));
+  overflow: hidden;
+}
+.strength-bar-fill {
+  height: 100%;
+  border-radius: 3px;
+  transition: width 0.2s ease, background-color 0.2s ease;
+}
+.strength-text-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: baseline;
+  font-size: 11px;
+  line-height: 1.35;
+}
+.strength-label {
+  font-weight: 700;
+  white-space: nowrap;
+}
+.strength-hint {
+  opacity: 0.78;
 }
 .field-label {
   font-size: 12px;

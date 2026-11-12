@@ -232,7 +232,7 @@
             text
             bg
             type="primary"
-            @click="openFolderAndCreate('directory')"
+            @click="openFolderAndCreateDirectory"
           >
             {{ t('contextMenu.sideBar.newDirectory') }}
           </el-button>
@@ -240,7 +240,7 @@
             text
             bg
             type="primary"
-            @click="openFolderAndCreate('file')"
+            @click="createNewTabFile"
           >
             {{ t('sideBar.tree.createFile') }}
           </el-button>
@@ -389,25 +389,28 @@ const createFolderInTarget = (root: RootView): void => {
   bus.emit('SIDEBAR::new', 'directory')
 }
 
-let pendingCreateAfterOpen: 'file' | 'directory' | null = null
+let pendingCreateDirectoryAfterOpen = false
 
-const openFolderAndCreate = (type: 'file' | 'directory'): void => {
-  pendingCreateAfterOpen = type
+const openFolderAndCreateDirectory = (): void => {
+  pendingCreateDirectoryAfterOpen = true
   projectStore.ASK_FOR_OPEN_PROJECT()
+}
+
+const createNewTabFile = (): void => {
+  editorStore.NEW_UNTITLED_TAB({})
 }
 
 watch(
   () => roots.value,
   (nextRoots) => {
-    if (!pendingCreateAfterOpen || nextRoots.length === 0) return
+    if (!pendingCreateDirectoryAfterOpen || nextRoots.length === 0) return
     const readyRoot = nextRoots.find((r) => r.status === 'ready') ?? nextRoots[0]
     if (!readyRoot) return
-    const action = pendingCreateAfterOpen
-    pendingCreateAfterOpen = null
+    pendingCreateDirectoryAfterOpen = false
     nextTick(() => {
       projectStore.SET_FOLDER_COLLAPSED(readyRoot.tree, false)
       projectStore.CHANGE_ACTIVE_ITEM(readyRoot.tree)
-      bus.emit('SIDEBAR::new', action)
+      bus.emit('SIDEBAR::new', 'directory')
     })
   },
   { deep: true }

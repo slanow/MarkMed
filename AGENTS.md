@@ -306,3 +306,6 @@ See `packages/website/content/docs/dev/IPC.md` for conventions and examples.
   - A clear title and concise summary written for physicians (`médicos`) explaining practical benefits in plain language;
   - Links to the release download (`https://github.com/slanow/MarkMed/releases`) and Wiki (`https://github.com/slanow/MarkMed/wiki`) when relevant.
 - Update the GitHub Wiki (`git@github.com:slanow/MarkMed.wiki.git`) when user-facing features, installation steps, or workflows change.
+- **Shortcut `"limpar"`:** Whenever the user types `"limpar"`, reset MarkMed to a fresh first-run state on both the host PC and any mounted USB pendrive (`/run/media/ronald/*`):
+  1. Remove `~/.config/marktext`, `~/.config/MarkMed`, `~/.config/markmed`, and `/tmp/markmed-electron-runtime`.
+  2. Remove `.markmed-user-data`, `.markmed-imagens`, `.markmed-portable.json`, `.markmed-portable-root`, `markmed-user-data`, and `.Trash-1000` inside `dist/`, `~/Downloads`, and `/run/media/ronald/*`, then run `sync`.

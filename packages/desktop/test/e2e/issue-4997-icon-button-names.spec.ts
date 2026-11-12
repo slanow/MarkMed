@@ -182,7 +182,7 @@ test.describe('#4997 icon-only controls in the editor window', () => {
       page.locator('.editor-tabs').getByRole('button', { name: `Close ${filename}` })
     ).toHaveCount(1)
 
-    await tabTo(page, 'New Tab')
+    await tabTo(page, 'New File')
     await page.keyboard.press('Enter')
     await expect(tabs).toHaveCount(before + 1)
   })

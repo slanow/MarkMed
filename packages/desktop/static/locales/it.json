@@ -12,7 +12,7 @@
     },
     "file": {
       "file": "File",
-      "newTab": "Nuova scheda",
+      "newTab": "Nuovo file",
       "newWindow": "Nuova finestra",
       "openFile": "Apri file…",
       "openFolder": "Apri cartella…",
@@ -809,7 +809,7 @@
     },
     "file": {
       "newWindow": "Nuova finestra",
-      "newTab": "Nuova scheda",
+      "newTab": "Nuovo file",
       "openFile": "Apri file",
       "openFolder": "Apri cartella",
       "save": "Salva",
@@ -1144,6 +1144,17 @@
     "errorNoDestination": "Select a destination folder.",
     "errorGeneric": "Operation could not be completed.",
     "createSuccess": "Backup created ({count} file(s)) at: {path}",
-    "decryptSuccess": "Decrypted {count} file(s) into: {dir}"
+    "decryptSuccess": "Decrypted {count} file(s) into: {dir}",
+    "passwordStrength": {
+      "prefix": "Password strength:",
+      "weak": "Weak",
+      "fair": "Fair",
+      "good": "Good",
+      "strong": "Strong",
+      "hintWeak": "Optional: you can still use this password, though longer passwords with numbers and symbols offer stronger protection.",
+      "hintFair": "Optional: add uppercase letters, numbers, or symbols to strengthen.",
+      "hintGood": "Good protection for your files.",
+      "hintStrong": "Excellent protection for medical confidentiality."
+    }
   }
 }
