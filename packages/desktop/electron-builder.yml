@@ -7,8 +7,13 @@ directories:
 files:
   - '!**/.vscode/*'
   - '!src/*'
+  - '!test/**'
+  - '!patches/**'
   - '!scripts/*'
   - '!electron.vite.config.{js,ts,mjs,cjs}'
+  - '!playwright.config.ts'
+  - '!vitest.config.ts'
+  - '!tsconfig*.json'
   - '!{.eslintcache,eslint.config.mjs,.prettierignore,.prettierrc.yaml,dev-app-update.yml,CHANGELOG.md,README.md}'
   - '!{.env,.env.*,.npmrc,pnpm-lock.yaml}'
   - '!node_modules/dragula/resources'
@@ -163,8 +168,8 @@ dmg:
 linux:
   artifactName: 'markmed-linux-${version}.${ext}'
   executableName: 'markmed'
-  description: 'A simple and elegant open-source markdown editor based on MarkText.'
-  maintainer: 'MarkMed Contributors'
+  description: 'MarkMed — Editor de Prontuários e Textos Médicos.'
+  maintainer: 'MarkMed Project (slanow)'
   category: 'Office;TextEditor;Utility'
   mimeTypes:
     - 'text/markdown'
@@ -212,7 +217,6 @@ deb:
     - 'xdg-utils'
     - 'libatspi2.0-0'
     - 'libuuid1'
-    - 'libsecret-1-0'
     - 'libasound2t64 | libasound2'
     - 'libgbm1'
 rpm:

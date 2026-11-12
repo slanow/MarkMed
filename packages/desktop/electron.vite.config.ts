@@ -69,7 +69,7 @@ export default defineConfig({
     },
     optimizeDeps: {
       // Vite's dev client exposes define.global at runtime for optimized deps.
-      include: ['pako', 'pathe']
+      include: ['pathe']
     },
     plugins: [vue(), svgLoader()] as PluginOption[],
     css: {

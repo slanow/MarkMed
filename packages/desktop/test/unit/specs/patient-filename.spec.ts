@@ -14,6 +14,10 @@ describe('patientFilename helpers', () => {
       'Maria-Oliveira-Leito-04'
     )
     expect(extractPatientNameFromMarkdown('   #   \n\n**Data/Hora:** 11/11/2026 04:00')).toBeNull()
+    expect(extractPatientNameFromMarkdown('\n\n**Data/Hora:** 12/11/2026 02:10\n\n')).toBeNull()
+    expect(
+      extractPatientNameFromMarkdown('# \nCarlos Eduardo\n\n**Data/Hora:** 12/11/2026 02:10')
+    ).toBe('Carlos-Eduardo')
     expect(extractPatientNameFromMarkdown('   \n   \n')).toBeNull()
   })
 

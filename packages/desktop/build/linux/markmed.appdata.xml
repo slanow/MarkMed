@@ -7,7 +7,7 @@
   <summary>Next generation markdown editor</summary>
   <description>
     <p>
-      MarkMed is a free and open-source realtime preview markdown editor based on MarkText, supporting both CommonMark Spec and GitHub Flavored Markdown Spec. It is a concise text editor, dedicated to improving your writing efficiency.
+      MarkMed is a free and open-source realtime preview markdown editor for medical records and clinical notes, supporting both CommonMark Spec and GitHub Flavored Markdown Spec. It is a concise text editor, dedicated to improving your writing efficiency.
     </p>
     <p>Features:</p>
     <ul>

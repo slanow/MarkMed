@@ -4,7 +4,7 @@
     "version": "0.0.1",
     "private": true,
     "description": "Playwright end-to-end test suite for @muyajs/core",
-    "author": "jocs <ransixi@gmail.com>",
+    "author": "MarkMed Project (slanow)",
     "license": "MIT",
     "scripts": {
         "e2e": "playwright test",

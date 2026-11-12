@@ -15,12 +15,17 @@ export class AtomicJsonFile<T> {
   private _protectedReason: 'invalid-data' | 'unreadable' | 'unsupported-version' | null = null
 
   constructor(
-    private readonly _pathname: string,
+    private _pathname: string,
     private readonly _parse: (value: unknown) => T,
     defaults: () => T,
     private readonly _hooks: StorageHooks = {}
   ) {
     this._fallback = defaults()
+  }
+
+  retargetPathname(pathname: string): void {
+    if (!pathname) return
+    this._pathname = pathname
   }
 
   private _enqueue<R>(operation: () => Promise<R>): Promise<R> {

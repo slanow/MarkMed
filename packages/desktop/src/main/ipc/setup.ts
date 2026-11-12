@@ -36,6 +36,15 @@ const hasPortableFoldersInBase = (baseDir: string): boolean => {
   )
 }
 
+const getWorkspaceBaseDirectory = (accessor: Accessor): string => {
+  const userDataDir = accessor.paths.userDataPath
+  const dirName = path.basename(userDataDir)
+  if (dirName === HIDDEN_CONFIG_DIR_NAME || dirName === LEGACY_CONFIG_DIR_NAME) {
+    return path.dirname(userDataDir)
+  }
+  return getSuggestedBaseDirectory()
+}
+
 export const registerSetupHandlers = (getAccessor: () => Accessor): void => {
   ipcMain.handle('mt::setup::get-initial-status', (): FirstRunSetupStatus => {
     const accessor = getAccessor()
@@ -87,6 +96,10 @@ export const registerSetupHandlers = (getAccessor: () => Accessor): void => {
 
         accessor.paths.retargetUserDataPath(configDir)
         accessor.preferences.retargetDirectory(configDir)
+        accessor.dataCenter.retargetDirectory(configDir)
+        accessor.sessionHost?.retargetDirectory(configDir)
+        accessor.menu?.retargetDirectory(configDir)
+        accessor.keybindings?.retargetDirectory(configDir)
         await accessor.dataCenter.setItem('imageFolderPath', imagesDir)
 
         return {
@@ -111,4 +124,32 @@ export const registerSetupHandlers = (getAccessor: () => Accessor): void => {
     const accessor = getAccessor()
     accessor.preferences.setItem('firstRunSetupCompleted', true)
   })
+
+  ipcMain.handle(
+    'mt::project-create-root-folder',
+    async(event, folderName: string): Promise<{ ok: boolean; pathname?: string; error?: string }> => {
+      try {
+        const accessor = getAccessor()
+        const win = BrowserWindow.fromWebContents(event.sender)
+        const sanitized = Array.from(String(folderName ?? '').trim())
+          .map((ch) => (ch.charCodeAt(0) < 32 || '<>:"/\\|?*'.includes(ch) ? '_' : ch))
+          .join('')
+        if (!sanitized) {
+          return { ok: false, error: 'Nome de pasta inválido.' }
+        }
+        const baseDir = getWorkspaceBaseDirectory(accessor)
+        const targetDir = path.join(baseDir, sanitized)
+        await fs.promises.mkdir(targetDir, { recursive: true })
+        if (win && !win.isDestroyed()) {
+          ipcMain.emit('app-add-directory-by-id', win.id, targetDir)
+        }
+        return { ok: true, pathname: targetDir }
+      } catch (error) {
+        return {
+          ok: false,
+          error: error instanceof Error ? error.message : String(error)
+        }
+      }
+    }
+  )
 }

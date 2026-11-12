@@ -469,7 +469,7 @@
         "zoom": "ズーム",
         "openFilesInNewWindowNote": "有効にすると、ファイルを新しいウィンドウで開きます。無効にすると、現在のウィンドウのタブで開きます。",
         "openFoldersInNewWindowNote": "有効にすると、フォルダーを新しいウィンドウで開きます。無効にすると、現在のウィンドウのフォルダーを置き換えて開きます。",
-        "promptEjectPendriveOnClose": "Ask to safely unmount/eject pendrive when closing MarkMed"
+        "promptEjectPendriveOnClose": "Remind to safely eject USB drive when closing MarkMed"
       },
       "startup": {
         "title": "起動と復元",
@@ -799,8 +799,8 @@
     }
   },
   "about": {
-    "copyright": "Copyright © Luo Ran 2017-{year}",
-    "copyrightContributors": "著作権貢献者"
+    "copyright": "Copyright © {year} MarkMed Project (slanow)",
+    "copyrightContributors": "Medical Records and Text Editor"
   },
   "commands": {
     "mt": {
@@ -974,12 +974,12 @@
     "unsafeFileMessage": "このリンクはコードを実行できるファイルを開きます",
     "unsafeFileDetail": "「{name}」は実行可能ファイルまたはスクリプトファイルです。開くとコンピューター上でプログラムが実行される可能性があります。この文書を信頼できる場合のみ続行してください。",
     "openAnyway": "それでも開く",
-    "pendriveEjectTitle": "Safely unmount and eject USB drive?",
-    "pendriveEjectMessage": "USB drive {mount} is currently in use by MarkMed.",
-    "pendriveEjectDetail": "Unmounting the USB drive on close brings two important benefits:\n1. Prevents corruption of patient records by ensuring all files are physically written to flash memory.\n2. Protects medical confidentiality by reminding you to remove your USB drive from the hospital computer.",
-    "pendriveEjectConfirm": "Unmount Drive and Quit",
-    "pendriveEjectExitWithoutUnmount": "Just Quit (do not unmount)",
-    "pendriveEjectDontAskAgain": "Do not ask again (can be changed in Preferences → General)"
+    "pendriveReminderTitle": "Safely eject USB drive",
+    "pendriveReminderMessage": "USB drive “{mount}” was used during this MarkMed session.",
+    "pendriveReminderDetail": "Remember to safely eject or unmount the device in your operating system before physically unplugging it from the USB port (using 'Safely Remove' or 'Eject/Power off safely').\n\nThis prevents corruption of patient records and protects medical confidentiality when removing the drive from shared clinic/hospital computers.",
+    "pendriveReminderCloseApp": "Close MarkMed",
+    "pendriveReminderTutorial": "How to safely eject? (Tutorial)",
+    "pendriveReminderDontAskAgain": "Do not show this reminder again"
   },
   "error": {
     "configSchemaViolation": "設定スキーマ違反",

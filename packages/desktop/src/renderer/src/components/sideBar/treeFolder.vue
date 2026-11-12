@@ -6,11 +6,17 @@
       :data-tree-path="folder.pathname"
       data-tree-directory="true"
       :draggable="!renameCache && !createCache.dirname"
-      :style="{ 'padding-left': `${depth * 6 + 15}px` }"
+      :style="{ 'padding-left': `${depth * 18 + 12}px` }"
       :class="[{ active: folder.id === activeItem.id }]"
       :title="folder.pathname"
       @click="folderNameClick"
     >
+      <span
+        v-for="level in depth"
+        :key="level"
+        class="tree-indent-guide"
+        :style="{ left: `${(level - 1) * 18 + 17}px` }"
+      />
       <el-icon
         class="icon-arrow"
         :class="{ fold: isCollapsed }"
@@ -35,6 +41,7 @@
     <div
       v-if="!isCollapsed"
       class="folder-contents"
+      :style="{ '--guide-left': `${depth * 18 + 18}px` }"
     >
       <tree-folder
         v-for="childFolder of folder.folders"
@@ -48,7 +55,7 @@
         v-model="nameInputValue"
         type="text"
         class="new-input"
-        :style="{ 'margin-left': `${depth * 5 + 15}px` }"
+        :style="{ 'margin-left': `${(depth + 1) * 18 + 12}px`, width: `calc(100% - ${(depth + 1) * 18 + 24}px)` }"
         @keypress.enter="handleInputEnter"
       >
       <File
@@ -62,7 +69,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, nextTick } from 'vue'
+import { ref, computed, onMounted, onUnmounted, nextTick } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useProjectStore } from '@/store/project'
 import { showContextMenu } from '../../contextMenu/sideBar'
@@ -145,11 +152,17 @@ onMounted(() => {
   bus.on('SIDEBAR::show-new-input', handleInputFocus)
   bus.on('SIDEBAR::show-rename-input', focusRenameInput)
 })
+
+onUnmounted(() => {
+  bus.off('SIDEBAR::show-new-input', handleInputFocus)
+  bus.off('SIDEBAR::show-rename-input', focusRenameInput)
+})
 </script>
 
 <style scoped>
 .side-bar-folder {
   & > .folder-name {
+    position: relative;
     cursor: default;
     user-select: none;
     display: flex;
@@ -174,6 +187,18 @@ onMounted(() => {
       background: var(--themeColor20);
     }
   }
+}
+.tree-indent-guide {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: var(--sideBarGuideLineColor, rgba(145, 155, 175, 0.35));
+  pointer-events: none;
+  z-index: 1;
+}
+.folder-contents {
+  position: relative;
 }
 .new-input,
 input.rename {

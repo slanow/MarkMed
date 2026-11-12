@@ -7,8 +7,8 @@
       "charactersWithSpaces": "Caracteres (com espaços)",
       "paragraphs": "Parágrafos",
       "allCharacters": "Todos os caracteres",
-      "document": "Documento",
-      "documentSelection": "Documento / Seleção"
+      "document": "Prontuário",
+      "documentSelection": "Prontuário / Seleção"
     },
     "file": {
       "file": "Arquivo",
@@ -79,15 +79,15 @@
       "table": "Tabela",
       "codeFences": "Blocos de Código",
       "quoteBlock": "Bloco de Citação",
-      "githubAlerts": "Alertas do GitHub",
+      "githubAlerts": "Alertas e Notas Clínicas",
       "mathBlock": "Bloco Matemático",
       "htmlBlock": "Bloco HTML",
       "orderedList": "Lista Ordenada",
       "bulletList": "Lista com Marcadores",
-      "taskList": "Lista de Tarefas",
+      "taskList": "Lista de Condutas / Tarefas",
       "looseListItem": "Item de Lista Solta",
       "horizontalRule": "Linha Horizontal",
-      "frontMatter": "Front Matter"
+      "frontMatter": "Front Matter (Metadados do Prontuário)"
     },
     "window": {
       "title": "Janela",
@@ -245,34 +245,34 @@
   },
   "sideBar": {
     "search": {
-      "backToFiles": "Voltar aos arquivos",
-      "searchInFolder": "Pesquisar na pasta...",
+      "backToFiles": "Voltar aos prontuários",
+      "searchInFolder": "Pesquisar prontuários na pasta...",
       "noFolderOpen": "Nenhuma pasta aberta",
       "noResultsFound": "Nenhum resultado encontrado.",
       "cancel": "Cancelar",
-      "openFolder": "Add Folder…",
+      "openFolder": "Adicionar Pasta…",
       "showMoreMatches": "Mostrar mais correspondências",
       "searchInFolders": "Localizar na Pasta",
-      "partialSearch": "Some folders could not be searched.",
-      "noSearchableFolders": "No available folders to search."
+      "partialSearch": "Algumas pastas não puderam ser pesquisadas.",
+      "noSearchableFolders": "Nenhuma pasta disponível para pesquisar."
     },
     "tree": {
-      "openedFiles": "Arquivos abertos",
+      "openedFiles": "Prontuários abertos",
       "saveAll": "Salvar Todos",
       "closeAll": "Fechar Todos",
-      "emptyProject": "Projeto vazio",
-      "createFile": "Criar Arquivo",
+      "emptyProject": "Nenhum prontuário nesta pasta",
+      "createFile": "Novo Prontuário",
       "openFolder": "Abrir Pasta",
-      "noFolders": "No folders added",
-      "removeFolder": "Remove from Sidebar",
-      "retryFolder": "Retry",
-      "loadingFolder": "Loading folder…",
-      "unavailableFolder": "Folder unavailable",
-      "overlappingFolder": "This folder overlaps an existing folder. Remove the existing item first.",
-      "folderAlreadyAdded": "This folder has already been added.",
-      "fileOutsideFolders": "This file is not in an added folder.",
-      "sessionSaveFailed": "Unable to save session",
-      "resizeOpenedFiles": "Redimensionar a lista de arquivos abertos"
+      "noFolders": "Nenhuma pasta de prontuários aberta",
+      "removeFolder": "Remover da Barra Lateral",
+      "retryFolder": "Tentar novamente",
+      "loadingFolder": "Carregando prontuários…",
+      "unavailableFolder": "Pasta indisponível",
+      "overlappingFolder": "Esta pasta sobrepõe uma pasta já aberta. Remova o item existente primeiro.",
+      "folderAlreadyAdded": "Esta pasta já foi adicionada.",
+      "fileOutsideFolders": "Este prontuário não pertence a nenhuma pasta adicionada.",
+      "sessionSaveFailed": "Não foi possível salvar a sessão",
+      "resizeOpenedFiles": "Redimensionar a lista de prontuários abertos"
     },
     "toc": {
       "expand": "Expandir sumário",
@@ -284,7 +284,7 @@
       "collapseAll": "Recolher tudo"
     },
     "icons": {
-      "files": "Arquivos",
+      "files": "Prontuários",
       "search": "Pesquisar",
       "settings": "Configurações"
     },
@@ -311,12 +311,12 @@
     "restore": "Restaurar",
     "close": "Fechar",
     "documentStatistics": {
-      "title": "Estatísticas do documento",
-      "fileInformation": "Informações do arquivo",
+      "title": "Estatísticas do prontuário",
+      "fileInformation": "Informações do prontuário",
       "created": "Criado",
       "lastModified": "Modificado",
       "unavailable": "—",
-      "open": "Abrir estatísticas do documento"
+      "open": "Abrir estatísticas do prontuário"
     },
     "copyPlainText": "Copiar TXT",
     "copyPlainTextTooltip": "Copiar em texto simples sem Markdown (.txt)",
@@ -331,17 +331,17 @@
     "placeholder": "Digite um comando para executar",
     "placeholders": {
       "selectOption": "Selecionar opção",
-      "searchFileToOpen": "Pesquisar arquivo para abrir",
+      "searchFileToOpen": "Pesquisar prontuário para abrir",
       "selectLanguage": "Selecionar idioma",
-      "searchRecentFilesAndFolders": "Pesquisar arquivos e pastas recentes"
+      "searchRecentFilesAndFolders": "Pesquisar prontuários e pastas recentes"
     },
     "recentlyOpened": "abertos recentemente",
-    "fileResults": "resultados de arquivos",
+    "fileResults": "prontuários encontrados",
     "folders": "pastas",
-    "files": "arquivos",
+    "files": "prontuários",
     "removeFromRecent": "Remover dos abertos recentemente",
     "noResults": "Nenhum resultado correspondente",
-    "noRecentFiles": "Nenhum arquivo ou pasta recente"
+    "noRecentFiles": "Nenhum prontuário ou pasta recente"
   },
   "exportSettings": {
     "autoNumberingHeadings": "Numeração automática de cabeçalhos",
@@ -452,8 +452,8 @@
         "onEnterShort": "Salvar ao apertar Enter",
         "intervalLabel": "Intervalo de salvamento"
       },
-      "autoRenameFromFirstLine": "Renomear arquivo automaticamente pela 1ª linha (Nome do paciente + data/hora)",
-      "autoInsertDateTimeOnNewFile": "Inserir data e hora automática ao criar novo arquivo",
+      "autoRenameFromFirstLine": "Identificar paciente e renomear pela 1ª linha (Nome + data/hora)",
+      "autoInsertDateTimeOnNewFile": "Inserir data e hora automáticas ao criar novo prontuário",
       "window": {
         "title": "Janela",
         "titleBarStyle": {
@@ -467,25 +467,25 @@
         "openFilesInNewWindow": "Abrir arquivos em nova janela",
         "openFoldersInNewWindow": "Abrir pastas em nova janela",
         "zoom": "Zoom",
-        "openFilesInNewWindowNote": "Quando ativado, os ficheiros abrem numa nova janela. Quando desativado, abrem em separadores na janela atual.",
+        "openFilesInNewWindowNote": "Quando ativado, os arquivos abrem numa nova janela. Quando desativado, abrem em abas na janela atual.",
         "openFoldersInNewWindowNote": "Quando ativado, as pastas abrem numa nova janela. Quando desativado, substituem a pasta na janela atual.",
-        "promptEjectPendriveOnClose": "Perguntar se deseja desmontar/ejetar o pendrive ao fechar o MarkMed"
+        "promptEjectPendriveOnClose": "Lembrar de ejetar o pendrive com segurança ao fechar o MarkMed"
       },
       "startup": {
         "title": "Arranque e recuperação",
         "openDefaultDirectory": "Abrir a pasta selecionada",
-        "openLastFolder": "Abrir o último espaço de trabalho",
+        "openLastFolder": "Abrir a última pasta de prontuários",
         "restoreAll": "Restaurar todas as janelas",
         "selectFolder": "Selecionar Pasta",
-        "openBlankPage": "Novo documento em branco",
+        "openBlankPage": "Novo prontuário em branco",
         "action": "Ao iniciar",
         "restoreLastWindow": "Restaurar a última janela ativa",
         "restoreLayoutState": "Restaurar a disposição das janelas",
         "restoreLayoutStateNote": "Restaurar o tamanho, a posição e a disposição de elementos como a barra lateral ao reiniciar.",
-        "restoreEditors": "Restaurar os arquivos abertos",
-        "restoreEditorsNote": "Reabrir as abas de arquivos anteriores ao reiniciar.",
+        "restoreEditors": "Restaurar os prontuários abertos",
+        "restoreEditorsNote": "Reabrir os prontuários anteriores ao reiniciar o MarkMed.",
         "restoreViewState": "Restaurar as posições de leitura e seleções",
-        "restoreViewStateNote": "Restaurar a última posição de leitura e seleção ao restaurar um arquivo.",
+        "restoreViewStateNote": "Restaurar a última posição de leitura e seleção ao reabrir um prontuário.",
         "failure": "Não foi possível salvar as configurações. As configurações anteriores continuam em uso."
       },
       "pandoc": {
@@ -501,11 +501,11 @@
         "tocPosition": "Posição do índice",
         "tocLeft": "Esquerda",
         "tocRight": "Direita",
-        "showOpenedFiles": "Mostrar arquivos abertos",
-        "autoReveal": "Mostrar o arquivo ativo na barra lateral",
-        "openFilesInPreviewMode": "Abrir arquivos da barra lateral em abas de visualização. Editar ou clicar duas vezes mantém a aba.",
-        "excludePatterns": "Regras de exclusão da árvore de arquivos",
-        "excludePatternsNotes": "Os caminhos que correspondem a qualquer regra glob são excluídos da árvore de arquivos. Pressione Enter para adicionar uma regra e clique em × para removê-la; as vírgulas dentro de uma regra são preservadas. Abra a pasta novamente para aplicar todas as alterações.",
+        "showOpenedFiles": "Mostrar lista de prontuários abertos",
+        "autoReveal": "Localizar o prontuário ativo na barra lateral",
+        "openFilesInPreviewMode": "Abrir prontuários da barra lateral em abas de visualização. Editar ou clicar duas vezes mantém a aba fixa.",
+        "excludePatterns": "Regras de exclusão da árvore de prontuários",
+        "excludePatternsNotes": "Os caminhos que correspondem a qualquer regra glob são excluídos da árvore de prontuários. Pressione Enter para adicionar uma regra e clique em × para removê-la; as vírgulas dentro de uma regra são preservadas. Abra a pasta novamente para aplicar todas as alterações.",
         "removePattern": "Remover",
         "newPattern": "Nova regra de exclusão",
         "patternExample": "Por exemplo: **/drafts/** ou *.tmp",
@@ -799,8 +799,8 @@
     }
   },
   "about": {
-    "copyright": "Copyright © Luo Ran 2017-{year}",
-    "copyrightContributors": "Copyright Contribuidores"
+    "copyright": "Copyright © {year} MarkMed Project (slanow)",
+    "copyrightContributors": "Editor de Prontuários e Textos Médicos"
   },
   "commands": {
     "mt": {
@@ -974,12 +974,12 @@
     "unsafeFileMessage": "Este link abre um arquivo que pode executar código",
     "unsafeFileDetail": "\"{name}\" é um arquivo executável ou de script. Abri-lo pode executar programas no seu computador. Continue apenas se confiar neste documento.",
     "openAnyway": "Abrir mesmo assim",
-    "pendriveEjectTitle": "Desmontar e ejetar o pendrive com segurança?",
-    "pendriveEjectMessage": "Detectamos que o pendrive {mount} está em uso pelo MarkMed.",
-    "pendriveEjectDetail": "Desmontar o pendrive ao fechar traz duas vantagens importantes:\n1. Evita corrupção dos prontuários, garantindo que todos os arquivos foram gravados fisicamente na memória.\n2. Protege o sigilo médico, lembrando você de retirar o pendrive do computador do hospital.",
-    "pendriveEjectConfirm": "Desmontar Pendrive e Sair",
-    "pendriveEjectExitWithoutUnmount": "Apenas Sair (sem desmontar)",
-    "pendriveEjectDontAskAgain": "Não perguntar novamente (pode ser alterado em Preferências → Geral)"
+    "pendriveReminderTitle": "Ejetar pendrive com segurança",
+    "pendriveReminderMessage": "O pendrive “{mount}” foi utilizado nesta sessão do MarkMed.",
+    "pendriveReminderDetail": "Lembre-se de ejetar o dispositivo com segurança no sistema operacional antes de desconectá-lo fisicamente da porta USB (usando a opção 'Remover com segurança' ou 'Ejetar/Desligar unidade com segurança').\n\nIsso previne a perda ou corrupção de prontuários médicos e garante a confidencialidade dos dados ao retirar o pendrive de computadores de clínicas ou hospitais.",
+    "pendriveReminderCloseApp": "Fechar MarkMed",
+    "pendriveReminderTutorial": "Como ejetar com segurança? (Tutorial)",
+    "pendriveReminderDontAskAgain": "Não mostrar este aviso novamente"
   },
   "error": {
     "configSchemaViolation": "Violação do esquema de configuração",
@@ -1011,8 +1011,8 @@
       "exportSuccessTitle": "Exportado com sucesso",
       "exportSuccessMessage": "“{name}” foi exportado com sucesso!",
       "exportLinkedMediaMessage": "\"{name}\" foi exportado. Este formato liga as imagens em vez de incorporá-las: mantenha as imagens junto do arquivo e compartilhe a pasta inteira.",
-      "fileRemovedOnDisk": "“{name}” foi removido no disco.",
-      "fileChangedOnDisk": "“{name}” foi alterado no disco. Deseja recarregar?"
+      "fileRemovedOnDisk": "O prontuário “{name}” foi removido no disco.",
+      "fileChangedOnDisk": "O prontuário “{name}” foi alterado no disco. Deseja recarregar?"
     }
   },
   "spellchecker": {
@@ -1074,18 +1074,18 @@
     }
   },
   "readingMode": {
-    "title": "Modo de leitura",
+    "title": "Modo de leitura (Proteção do Prontuário)",
     "edit": "Modo de edição",
-    "lock": "Ativar o modo de leitura",
-    "unlock": "Alternar para o modo de edição",
+    "lock": "Ativar proteção de leitura",
+    "unlock": "Liberar para edição do prontuário",
     "defaultMode": "Modo padrão ao abrir arquivos",
     "defaultNote": "Aplica-se aos arquivos existentes abertos a partir de agora. Novos documentos continuam editáveis.",
-    "unsaved": "O modo de leitura está ativado. As alterações não salvas são mantidas e o salvamento automático está pausado.",
-    "failed": "Não foi possível alterar o modo do documento",
+    "unsaved": "O modo de leitura está ativado. O prontuário está protegido contra alterações acidentais e o salvamento automático está pausado.",
+    "failed": "Não foi possível alterar o modo do prontuário",
     "closeSave": "Alternar para o modo de edição e salvar",
     "exportSource": "Escolha um destino de exportação diferente do arquivo de origem.",
     "unavailable": "Indisponível no modo de leitura",
-    "skipped": "Documentos somente leitura com alterações não salvas foram ignorados.",
+    "skipped": "Prontuários somente leitura com alterações não salvas foram ignorados.",
     "viewImage": "Ver imagem",
     "copyLink": "Copiar endereço do link",
     "resumed": "O modo de edição está ativado. O salvamento automático foi retomado."

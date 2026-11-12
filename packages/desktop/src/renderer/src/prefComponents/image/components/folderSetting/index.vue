@@ -30,7 +30,7 @@
         <bool
           id="setting-imagePreferRelativeDirectory"
           :description="preferenceLabel('imagePreferRelativeDirectory')"
-          more="https://github.com/slanow/MarkMed/blob/main/packages/website/content/docs/end-user/IMAGES.md"
+          more="https://github.com/slanow/MarkMed/wiki"
           :bool="imagePreferRelativeDirectory"
           :on-change="(value) => onSelectChange('imagePreferRelativeDirectory', value)"
         />

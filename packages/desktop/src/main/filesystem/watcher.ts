@@ -3,7 +3,7 @@ import fsPromises from 'fs/promises'
 import log from 'electron-log'
 import chokidar, { type FSWatcher } from 'chokidar'
 import { exists } from 'common/filesystem'
-import { hasMarkdownExtension, checkPathExcludePattern } from 'common/filesystem/paths'
+import { hasMarkdownExtension, checkPathExcludePattern, isSamePathSync } from 'common/filesystem/paths'
 import { getUniqueId } from '../utils'
 import { loadMarkdownFile } from '../filesystem/markdown'
 import { isLinux, isOsx } from '../config'
@@ -482,9 +482,18 @@ class Watcher {
   ignoreChangedEvent(
     windowId: number,
     pathname: string,
-    duration: number = WATCHER_STABILITY_THRESHOLD + WATCHER_STABILITY_POLL_INTERVAL * 2
+    duration: number = WATCHER_STABILITY_THRESHOLD + 4000
   ): void {
-    this._ignoreChangeEvents.push({ windowId, pathname, duration, start: new Date() })
+    const now = new Date()
+    const existing = this._ignoreChangeEvents.find(
+      (entry) => entry.windowId === windowId && isSamePathSync(entry.pathname, pathname)
+    )
+    if (existing) {
+      existing.start = now
+      existing.duration = Math.max(existing.duration, duration)
+      return
+    }
+    this._ignoreChangeEvents.push({ windowId, pathname, duration, start: now })
   }
 
   /**
@@ -502,12 +511,15 @@ class Watcher {
       const currentTime = new Date()
       for (let i = 0; i < _ignoreChangeEvents.length; ++i) {
         const { windowId, pathname: pathToIgnore, start, duration } = _ignoreChangeEvents[i]
-        if (windowId === winId && pathToIgnore === pathname) {
+        const elapsed = currentTime.getTime() - start.getTime()
+        if (elapsed >= duration + 2000) {
           _ignoreChangeEvents.splice(i, 1)
           --i
-
-          // Modification origin is the editor and we should ignore the event.
-          if (currentTime.getTime() - start.getTime() < duration) {
+          continue
+        }
+        if ((windowId === winId || !winId) && isSamePathSync(pathToIgnore, pathname)) {
+          // Modification origin is the editor and we should ignore all events within the window.
+          if (elapsed < duration) {
             return true
           }
 

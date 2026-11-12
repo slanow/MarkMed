@@ -11,7 +11,6 @@ vi.mock('electron', () => ({
   BrowserWindow: { fromWebContents: vi.fn() },
   dialog: { showOpenDialog: vi.fn() }
 }))
-vi.mock('keytar', () => ({ default: { getPassword: vi.fn(), setPassword: vi.fn() } }))
 vi.mock('electron-log', () => ({ default: { error: vi.fn(), warn: vi.fn() } }))
 
 vi.mock('electron-store', async() => {
@@ -101,5 +100,16 @@ describe('DataCenter startup isolation', () => {
       currentUploader: 'picgo'
     })
     expect(emit).toHaveBeenCalledWith('broadcast-user-data-changed', { currentUploader: 'picgo' })
+  })
+
+  it('retargets live storage directory when first-run hidden folders are initialized', async() => {
+    const initialDir = profile()
+    const dataCenter = new DataCenter({ dataCenterPath: initialDir, userDataPath: initialDir })
+    const newDir = profile()
+    dataCenter.retargetDirectory(newDir)
+    await dataCenter.setItem('imageFolderPath', join(newDir, '.markmed-imagens'))
+    expect(JSON.parse(readFileSync(join(newDir, 'dataCenter.json'), 'utf8'))).toMatchObject({
+      imageFolderPath: join(newDir, '.markmed-imagens')
+    })
   })
 })

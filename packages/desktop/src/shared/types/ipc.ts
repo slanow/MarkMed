@@ -48,6 +48,10 @@ export interface IpcInvokeChannels extends StateIpcInvokeChannels {
   'mt::get-recently-used-documents': { args: []; ret: RecentDocument[] }
   'mt::project-remove-root': { args: [key: string]; ret: boolean }
   'mt::project-retry-root': { args: [key: string]; ret: boolean }
+  'mt::project-create-root-folder': {
+    args: [folderName: string]
+    ret: { ok: boolean; pathname?: string; error?: string }
+  }
   'mt::clipboard::write-text': { args: [text: string]; ret: boolean }
   'mt::set-document-read-only': { args: [tabId: string, readOnly: boolean]; ret: void }
   'mt::ask-for-image-path': { args: []; ret: string[] }

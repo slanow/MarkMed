@@ -155,7 +155,7 @@
           </div>
           <cur-select
             :description="t('exportSettings.theme.theme')"
-            more="https://github.com/slanow/MarkMed/blob/main/packages/website/content/docs/end-user/EXPORT_THEMES.md"
+            more="https://github.com/slanow/MarkMed/wiki"
             :value="theme"
             :options="themeList"
             :on-change="(value: unknown) => onSelectChange('theme', value)"

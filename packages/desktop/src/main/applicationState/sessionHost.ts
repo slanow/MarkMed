@@ -1,4 +1,4 @@
-import { app, BrowserWindow, dialog, ipcMain, screen, type WebContents } from 'electron'
+import { app, BrowserWindow, dialog, ipcMain, screen, shell, type WebContents } from 'electron'
 import { readFile, stat, rename, readdir } from 'node:fs/promises'
 import path from 'node:path'
 import log from 'electron-log'
@@ -51,9 +51,7 @@ import { applyWindowGeometry, captureWindowGeometry } from './windowGeometry'
 import type { SidebarMoveRequest, SidebarMoveResult } from '@shared/types/project'
 import { confirmAndMoveSidebarItem } from '../filesystem/sidebarMove'
 import {
-  detectPendriveMountTarget,
-  scheduleDetachedPendriveUnmount,
-  type PendriveMountTarget
+  detectPendriveMountTarget
 } from '../filesystem/pendriveEject'
 import { containsPath } from 'common/filesystem/paths'
 import { relocateResourcePath, type ResourceMove } from 'common/filesystem/resourceMove'
@@ -149,19 +147,14 @@ export class SessionHost {
       if (this._quitting) return
       this._quitting = true
       void (async() => {
-        const proceed = await this._promptPendriveEjectBeforeExit()
-        if (!proceed) return
-        await this._coordinator.quit()
-        if (
-          this._owner().getState().session.lifecycle === SessionLifecycle.CLOSED &&
-          this._editors.size === 0
-        ) {
-          this._quitAllowed = true
-          app.quit()
-        } else {
+        const proceed = await this._promptPendriveReminderBeforeExit()
+        if (!proceed) {
           this._pendrivePromptHandled = false
-          this._pendingPendriveEjectTarget = null
+          return
         }
+        await this._coordinator.quit()
+        this._quitAllowed = true
+        app.quit()
       })()
         .catch((error) => this.report(error))
         .finally(() => {
@@ -169,17 +162,17 @@ export class SessionHost {
         })
     })
     app.on('will-quit', () => {
-      if (!this._pendingPendriveEjectTarget) return
-      const target = this._pendingPendriveEjectTarget
-      this._pendingPendriveEjectTarget = null
       this._accessor.windowManager.closeWatcher?.()
-      try {
-        process.chdir(process.platform === 'win32' ? (process.env.SystemRoot || 'C:\\Windows') : '/')
-      } catch {
-        // Best-effort cwd release before unmount.
-      }
-      scheduleDetachedPendriveUnmount(target)
     })
+  }
+
+  retargetDirectory(userDataPath: string): void {
+    if (!userDataPath) return
+    this._metadata.retargetDirectory(userDataPath)
+    this._recovery.retargetDirectory(userDataPath)
+    if (this._service) {
+      void this._metadata.write(this._service.getState()).catch(() => {})
+    }
   }
 
   private _owner(): CheckpointService {
@@ -921,19 +914,15 @@ export class SessionHost {
   async closeWindow(editor: EditorWindow): Promise<void> {
     await editor.sessionReady
     if (this._editors.size <= 1) {
-      const proceed = await this._promptPendriveEjectBeforeExit(editor.browserWindow ?? undefined)
+      const proceed = await this._promptPendriveReminderBeforeExit(editor.browserWindow ?? undefined)
       if (!proceed) return
-      if (process.platform !== 'darwin') {
-        app.quit()
-        return
-      }
     }
     if (editor.sessionStateId) await this._coordinator.closeWindow(editor.sessionStateId)
     if (this._editors.size === 0 && process.platform !== 'darwin') {
+      this._quitAllowed = true
       app.quit()
     } else if (this._editors.size > 0) {
       this._pendrivePromptHandled = false
-      this._pendingPendriveEjectTarget = null
     }
   }
 
@@ -971,9 +960,8 @@ export class SessionHost {
   }
 
   private _pendrivePromptHandled = false
-  private _pendingPendriveEjectTarget: PendriveMountTarget | null = null
 
-  private async _promptPendriveEjectBeforeExit(parentWindow?: BrowserWindow): Promise<boolean> {
+  private async _promptPendriveReminderBeforeExit(parentWindow?: BrowserWindow): Promise<boolean> {
     if (this._pendrivePromptHandled) return true
     const promptEnabled = this._accessor.preferences.getItem<boolean>('promptEjectPendriveOnClose')
     if (promptEnabled === false) return true
@@ -987,38 +975,44 @@ export class SessionHost {
         : [...this._editors.values()].find((e) => e.browserWindow && !e.browserWindow.isDestroyed())
           ?.browserWindow
 
-    const options: Electron.MessageBoxOptions = {
-      type: 'question',
-      buttons: [
-        t('dialog.pendriveEjectConfirm'),
-        t('dialog.pendriveEjectExitWithoutUnmount'),
-        t('dialog.cancel')
-      ],
-      defaultId: 0,
-      cancelId: 2,
-      noLink: true,
-      title: t('dialog.pendriveEjectTitle'),
-      message: t('dialog.pendriveEjectMessage', { mount: target.label }),
-      detail: t('dialog.pendriveEjectDetail'),
-      checkboxLabel: t('dialog.pendriveEjectDontAskAgain'),
-      checkboxChecked: false
-    }
+    while (true) {
+      const options: Electron.MessageBoxOptions = {
+        type: 'info',
+        buttons: [
+          t('dialog.pendriveReminderCloseApp'),
+          t('dialog.pendriveReminderTutorial'),
+          t('dialog.cancel')
+        ],
+        defaultId: 0,
+        cancelId: 2,
+        noLink: true,
+        title: t('dialog.pendriveReminderTitle'),
+        message: t('dialog.pendriveReminderMessage', { mount: target.label }),
+        detail: t('dialog.pendriveReminderDetail'),
+        checkboxLabel: t('dialog.pendriveReminderDontAskAgain'),
+        checkboxChecked: false
+      }
 
-    const { response, checkboxChecked } = activeWin
-      ? await dialog.showMessageBox(activeWin, options)
-      : await dialog.showMessageBox(options)
+      const { response, checkboxChecked } = activeWin
+        ? await dialog.showMessageBox(activeWin, options)
+        : await dialog.showMessageBox(options)
 
-    if (response === 2) {
+      if (checkboxChecked) {
+        this._accessor.preferences.setItem('promptEjectPendriveOnClose', false)
+      }
+
+      if (response === 1) {
+        void shell.openExternal('https://github.com/slanow/MarkMed/wiki/Ejetar-Pendrive-com-Seguranca')
+        continue
+      }
+
+      if (response === 0) {
+        this._pendrivePromptHandled = true
+        return true
+      }
+
       return false
     }
-
-    if (checkboxChecked) {
-      this._accessor.preferences.setItem('promptEjectPendriveOnClose', false)
-    }
-
-    this._pendrivePromptHandled = true
-    this._pendingPendriveEjectTarget = response === 0 ? target : null
-    return true
   }
 
   rendererGone(editor: EditorWindow): void {
@@ -1152,7 +1146,9 @@ export class SessionHost {
           }
         }
         const written = await documentWrites.write(sender.id, documentId, epoch, async() => {
+          ipcMain.emit('window-file-saved', native.id, destination)
           await writeMarkdownFile(destination, capture.markdown, capture.snapshot.saveFormat)
+          ipcMain.emit('window-file-saved', native.id, destination)
           return true
         })
         if (!written) throw new Error('Document became read-only before the save completed')
@@ -1290,6 +1286,9 @@ export class SessionHost {
           ? [document.resource.location.path, document.resource.location.canonicalPath]
           : [])
         await this._accessor.windowManager.withIgnoredFileDeletions(this._native(windowId), oldPaths, async() => {
+          for (const { destination } of affected) {
+            ipcMain.emit('window-file-saved', this._native(windowId).id, destination)
+          }
           await move()
           await this._owner().settlePendingSaves(affected.map(({ document }) => document.id))
           for (const { document, destination } of affected) {
@@ -1300,7 +1299,9 @@ export class SessionHost {
               createFileLocation(destination),
               path.basename(destination)
             )
+            ipcMain.emit('window-file-saved', this._native(windowId).id, destination)
             this._editors.get(windowId)?.changeOpenedFilePath(destination, previous)
+            ipcMain.emit('window-file-saved', this._native(windowId).id, destination)
             this._native(windowId).webContents.send(
               'mt::state::document-relocated',
               this._owner().getDocument(document.id),
@@ -1392,13 +1393,16 @@ export class SessionHost {
         return { status: 'skipped', reason: 'target-exists' }
       }
       const sender = this._native(windowId).webContents
+      const nativeId = this._native(windowId).id
       let savedMarkdown = ''
       let savedFormat = document.saveFormat
       const result = await this._owner().saveDocument(windowId, documentId, async(capture) => {
         const epoch = documentWrites.capture(sender.id, documentId)
         if (epoch === null) throw new Error('Document is read-only')
         const written = await documentWrites.write(sender.id, documentId, epoch, async() => {
+          ipcMain.emit('window-file-saved', nativeId, candidate)
           await writeMarkdownFile(candidate, capture.markdown, capture.snapshot.saveFormat)
+          ipcMain.emit('window-file-saved', nativeId, candidate)
           return true
         })
         if (!written) throw new Error('Document became read-only before the save completed')
@@ -1423,9 +1427,10 @@ export class SessionHost {
       const saved = this._owner().getDocument(documentId)
       if (saved.resource.kind === 'file') {
         const savedPath = saved.resource.location.path
+        ipcMain.emit('window-file-saved', nativeId, savedPath)
         this._editors.get(windowId)?.addToOpenedFiles(savedPath)
         this._accessor.menu.addRecentlyUsedDocument(savedPath)
-        ipcMain.emit('window-file-saved', this._native(windowId).id, savedPath)
+        ipcMain.emit('window-file-saved', nativeId, savedPath)
         const response: Extract<ManagedSaveResult, { status: 'saved' }> = {
           status: 'saved',
           document: saved,
@@ -1434,9 +1439,9 @@ export class SessionHost {
           metadataRevision: this._owner().getState().revision
         }
         this._native(windowId).webContents.send('mt::state::document-saved', response)
-        return { status: 'renamed', pathname: savedPath, filename: path.basename(savedPath) }
+        return { status: 'renamed', pathname: savedPath, filename: path.basename(savedPath), savedMarkdown }
       }
-      return { status: 'renamed', pathname: candidate, filename: path.basename(candidate) }
+      return { status: 'renamed', pathname: candidate, filename: path.basename(candidate), savedMarkdown }
     }
 
     if (document.resource.kind !== 'file' || document.resource.pendingCreation) {

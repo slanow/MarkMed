@@ -65,10 +65,10 @@ body:
       required: true
 
   - type: input
-    id: marktext-version
+    id: markmed-version
     attributes:
-      label: MarkText Version
-      placeholder: 'e.g. 0.17.1'
+      label: MarkMed Version
+      placeholder: 'e.g. 0.26.4'
     validations:
       required: true
 

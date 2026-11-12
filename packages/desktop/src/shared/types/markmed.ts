@@ -60,5 +60,6 @@ export interface AutoRenameResult {
   status: 'renamed' | 'unchanged' | 'skipped' | 'failed'
   pathname?: string
   filename?: string
+  savedMarkdown?: string
   reason?: string
 }

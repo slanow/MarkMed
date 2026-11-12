@@ -67,7 +67,7 @@ class AppMenu {
   private readonly _preferences: Preference
   private readonly _keybindings: Keybindings
   private readonly _recentDocuments: RecentDocumentsStore
-  public readonly RECENTS_PATH: string
+  public RECENTS_PATH: string
   public readonly isOsxOrWindows: boolean
   public activeWindowId: number
   public windowMenus: Map<number, WindowMenuEntry>
@@ -85,6 +85,12 @@ class AppMenu {
     this._initializeLanguage()
 
     this._listenForIpcMain()
+  }
+
+  retargetDirectory(userDataPath: string): void {
+    if (!userDataPath) return
+    this.RECENTS_PATH = path.join(userDataPath, RECENTLY_USED_DOCUMENTS_FILE_NAME)
+    this._recentDocuments.retargetStoragePath(this.RECENTS_PATH)
   }
 
   addRecentlyUsedDocument(filePath: string): void {

@@ -1,7 +1,6 @@
 import { createApp, type App } from 'vue'
 import { createRouter, createWebHashHistory } from 'vue-router'
 import bootstrapRenderer from './bootstrap'
-import axios from './axios'
 import pinia from './store'
 import './assets/symbolIcon'
 
@@ -40,8 +39,6 @@ const router = createRouter({
 app.use(router)
 app.use(pinia)
 app.use(i18nPlugin)
-
-app.config.globalProperties.$http = axios
 
 ;(services as unknown as Array<Record<string, unknown> & { name: string }>).forEach((s) => {
   app.config.globalProperties['$' + s.name] = s[s.name]

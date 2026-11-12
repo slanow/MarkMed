@@ -69,13 +69,8 @@ const handleDocumentKeydown = (event: KeyboardEvent): void => {
   // Wait briefly so the editor finishes committing the Enter keystroke to the tab state.
   enterSaveTimer = setTimeout(() => {
     enterSaveTimer = null
-    if (preferencesStore.autoRenameFromFirstLine) {
-      void editorStore.TRY_AUTO_RENAME(targetId)
-    }
-    if (preferencesStore.autoSaveOnEnter && active.pathname) {
-      editorStore.SAVE_ON_ENTER(targetId)
-    }
-  }, 25)
+    editorStore.SAVE_ON_ENTER(targetId)
+  }, 60)
 }
 
 onBeforeUnmount(() => {

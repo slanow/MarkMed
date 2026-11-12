@@ -1,7 +1,6 @@
 import fs from 'fs'
 import path from 'path'
 import { BrowserWindow, dialog, ipcMain } from 'electron'
-import keytar from 'keytar'
 import schema from './schema.json'
 import Store, { type Schema } from 'electron-store'
 import log from 'electron-log'
@@ -21,11 +20,9 @@ interface DataCenterPaths {
 }
 
 class DataCenter extends TypedEmitter<DataCenterEvents> {
-  private readonly _serviceName = 'marktext'
-  private readonly _encryptKeys: string[] = []
-  private readonly _defaults: Record<string, unknown>
+  private _defaults: Record<string, unknown>
   // Unavailable storage uses detached defaults without allowing writes to replace the original.
-  private readonly _store: Store<Record<string, unknown>> | null = null
+  private _store: Store<Record<string, unknown>> | null = null
 
   constructor(paths: DataCenterPaths) {
     super()
@@ -38,6 +35,11 @@ class DataCenter extends TypedEmitter<DataCenterEvents> {
       cloudImages: [],
       currentUploader: 'picgo'
     }
+    this._initStore(dataCenterPath)
+    this._listenForIpcMain()
+  }
+
+  private _initStore(dataCenterPath: string): void {
     const hasDataCenterFile = fs.existsSync(path.join(dataCenterPath, `${DATA_CENTER_NAME}.json`))
     try {
       const store = new Store<Record<string, unknown>>({
@@ -54,31 +56,35 @@ class DataCenter extends TypedEmitter<DataCenterEvents> {
       }
       this._store = store
     } catch (error) {
+      this._store = null
       log.error('DataCenter is unavailable; using read-only defaults', error)
     }
-    this._listenForIpcMain()
+  }
+
+  retargetDirectory(newUserDataPath: string): void {
+    if (!newUserDataPath) return
+    const previousData = structuredClone(this._store?.store ?? {})
+    this._defaults = {
+      ...this._defaults,
+      imageFolderPath: path.join(newUserDataPath, 'images'),
+      screenshotFolderPath: path.join(newUserDataPath, 'screenshot')
+    }
+    this._initStore(newUserDataPath)
+    if (this._store && Object.keys(previousData).length > 0) {
+      for (const [key, val] of Object.entries(previousData)) {
+        if (key === 'screenshotFolderPath') {
+          const nextScreenshotDir = path.join(newUserDataPath, 'screenshot')
+          ensureDirSync(nextScreenshotDir)
+          this._store.set(key, nextScreenshotDir)
+        } else {
+          this._store.set(key, val)
+        }
+      }
+    }
   }
 
   async getAll(): Promise<Record<string, unknown>> {
-    const data = structuredClone(this._store?.store ?? this._defaults)
-    try {
-      const encryptData = await Promise.all(
-        this._encryptKeys.map((key) => {
-          return keytar.getPassword(this._serviceName, key)
-        })
-      )
-      const encryptObj = this._encryptKeys.reduce<Record<string, string | null>>((acc, k, i) => {
-        return {
-          ...acc,
-          [k]: encryptData[i]
-        }
-      }, {})
-
-      return Object.assign(data, encryptObj)
-    } catch (err) {
-      log.error('Failed to decrypt secure keys:', err)
-      return data
-    }
+    return structuredClone(this._store?.store ?? this._defaults)
   }
 
   addImage(key: string, url: string): void {
@@ -110,12 +116,8 @@ class DataCenter extends TypedEmitter<DataCenterEvents> {
   }
 
   getItem(key: string): Promise<unknown> {
-    if (this._encryptKeys.includes(key)) {
-      return keytar.getPassword(this._serviceName, key)
-    } else {
-      const value = this._store ? this._store.get(key) : structuredClone(this._defaults[key])
-      return Promise.resolve(value)
-    }
+    const value = this._store ? this._store.get(key) : structuredClone(this._defaults[key])
+    return Promise.resolve(value)
   }
 
   async setItem(key: string, value: unknown): Promise<void> {
@@ -126,16 +128,7 @@ class DataCenter extends TypedEmitter<DataCenterEvents> {
     if (key === 'screenshotFolderPath') {
       ensureDirSync(value as string)
     }
-    if (this._encryptKeys.includes(key)) {
-      try {
-        await keytar.setPassword(this._serviceName, key, value as string)
-      } catch (err) {
-        log.error('Keytar error:', err)
-        return
-      }
-    } else {
-      this._store.set(key, value)
-    }
+    this._store.set(key, value)
     ipcMain.emit('broadcast-user-data-changed', { [key]: value })
   }
 

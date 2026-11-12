@@ -469,7 +469,7 @@
         "zoom": "Yakınlaştırma",
         "openFilesInNewWindowNote": "Etkinleştirildiğinde dosyalar yeni bir pencerede açılır. Devre dışı bırakıldığında geçerli pencerenin sekmelerinde açılır.",
         "openFoldersInNewWindowNote": "Etkinleştirildiğinde klasörler yeni bir pencerede açılır. Devre dışı bırakıldığında geçerli penceredeki klasörün yerini alır.",
-        "promptEjectPendriveOnClose": "Ask to safely unmount/eject pendrive when closing MarkMed"
+        "promptEjectPendriveOnClose": "Remind to safely eject USB drive when closing MarkMed"
       },
       "startup": {
         "title": "Başlangıç ve kurtarma",
@@ -799,8 +799,8 @@
     }
   },
   "about": {
-    "copyright": "Telif Hakkı © Luo Ran 2017-{year}",
-    "copyrightContributors": "Github Katkıda Bulunanlar tarafından <3 ile yapıldı"
+    "copyright": "Copyright © {year} MarkMed Project (slanow)",
+    "copyrightContributors": "Medical Records and Text Editor"
   },
   "commands": {
     "mt": {
@@ -974,12 +974,12 @@
     "unsafeFileMessage": "Bu bağlantı, kod çalıştırabilen bir dosyayı açar",
     "unsafeFileDetail": "\"{name}\" bir yürütülebilir veya betik dosyasıdır. Açmak, bilgisayarınızda program çalıştırabilir. Yalnızca bu belgeye güveniyorsanız devam edin.",
     "openAnyway": "Yine de aç",
-    "pendriveEjectTitle": "Safely unmount and eject USB drive?",
-    "pendriveEjectMessage": "USB drive {mount} is currently in use by MarkMed.",
-    "pendriveEjectDetail": "Unmounting the USB drive on close brings two important benefits:\n1. Prevents corruption of patient records by ensuring all files are physically written to flash memory.\n2. Protects medical confidentiality by reminding you to remove your USB drive from the hospital computer.",
-    "pendriveEjectConfirm": "Unmount Drive and Quit",
-    "pendriveEjectExitWithoutUnmount": "Just Quit (do not unmount)",
-    "pendriveEjectDontAskAgain": "Do not ask again (can be changed in Preferences → General)"
+    "pendriveReminderTitle": "Safely eject USB drive",
+    "pendriveReminderMessage": "USB drive “{mount}” was used during this MarkMed session.",
+    "pendriveReminderDetail": "Remember to safely eject or unmount the device in your operating system before physically unplugging it from the USB port (using 'Safely Remove' or 'Eject/Power off safely').\n\nThis prevents corruption of patient records and protects medical confidentiality when removing the drive from shared clinic/hospital computers.",
+    "pendriveReminderCloseApp": "Close MarkMed",
+    "pendriveReminderTutorial": "How to safely eject? (Tutorial)",
+    "pendriveReminderDontAskAgain": "Do not show this reminder again"
   },
   "error": {
     "configSchemaViolation": "Yapılandırma şeması ihlali",

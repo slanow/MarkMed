@@ -2,6 +2,7 @@ const CREATION_STAMP_PATTERN = /_(\d{4}-\d{2}-\d{2}_\d{2}-\d{2})(?=\.[^./\\]+$|$
 const INVALID_FILENAME_CHARS = /[<>:"/\\|?*]/g
 const LEADING_MARKDOWN_SYNTAX = /^(?:[#>*-]|\d+[.)]|\[[ xX]\])+\s*/
 const MARKDOWN_EXTENSIONS_RE = /\.(md|markdown|mdown|mkd|mkdn|txt)$/i
+const METADATA_OR_DIVIDER_LINE_RE = /^(?:\*\*Data\/Hora:\*\*|Data\/Hora:|[-*_]{3,})\s*/i
 
 const stripControlChars = (input: string): string =>
   Array.from(input)
@@ -42,26 +43,34 @@ export const createInitialPatientNoteMarkdown = (
  */
 export const extractPatientNameFromMarkdown = (markdown: string): string | null => {
   const lines = markdown.split(/\r?\n/)
-  const firstNonEmpty = lines.find((line) => line.trim().length > 0)
-  if (!firstNonEmpty) return null
+  for (const rawLine of lines) {
+    const trimmed = rawLine.trim()
+    if (!trimmed || METADATA_OR_DIVIDER_LINE_RE.test(trimmed)) {
+      continue
+    }
 
-  let cleaned = firstNonEmpty.trim()
-  while (LEADING_MARKDOWN_SYNTAX.test(cleaned)) {
-    cleaned = cleaned.replace(LEADING_MARKDOWN_SYNTAX, '').trim()
+    let cleaned = trimmed
+    while (LEADING_MARKDOWN_SYNTAX.test(cleaned)) {
+      cleaned = cleaned.replace(LEADING_MARKDOWN_SYNTAX, '').trim()
+    }
+    if (!cleaned || METADATA_OR_DIVIDER_LINE_RE.test(cleaned)) {
+      continue
+    }
+
+    cleaned = stripControlChars(cleaned)
+      .replace(/[*_`~]/g, '')
+      .replace(INVALID_FILENAME_CHARS, ' ')
+      .replace(/\s+/g, '-')
+      .replace(/-+/g, '-')
+      .replace(/^[-.]+|[-.]+$/g, '')
+
+    if (!cleaned) continue
+    if (cleaned.length > 60) {
+      cleaned = cleaned.slice(0, 60).replace(/-+$/g, '')
+    }
+    if (cleaned) return cleaned
   }
-
-  cleaned = stripControlChars(cleaned)
-    .replace(/[*_`~]/g, '')
-    .replace(INVALID_FILENAME_CHARS, ' ')
-    .replace(/\s+/g, '-')
-    .replace(/-+/g, '-')
-    .replace(/^[-.]+|[-.]+$/g, '')
-
-  if (!cleaned) return null
-  if (cleaned.length > 60) {
-    cleaned = cleaned.slice(0, 60).replace(/-+$/g, '')
-  }
-  return cleaned || null
+  return null
 }
 
 export const extractCreationStampFromFilename = (filename: string): string | null => {

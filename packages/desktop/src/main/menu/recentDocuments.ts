@@ -16,9 +16,14 @@ export const isVolumeRootPath = (pathname: string): boolean => {
 }
 
 export class RecentDocumentsStore {
-  private readonly storagePath: string
+  private storagePath: string
 
   constructor(storagePath: string) {
+    this.storagePath = storagePath
+  }
+
+  retargetStoragePath(storagePath: string): void {
+    if (!storagePath) return
     this.storagePath = storagePath
   }
 

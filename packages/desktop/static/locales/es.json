@@ -469,7 +469,7 @@
         "zoom": "Zoom",
         "openFilesInNewWindowNote": "Si se activa, los archivos se abren en una ventana nueva. Si se desactiva, se abren en pestañas de la ventana actual.",
         "openFoldersInNewWindowNote": "Si se activa, las carpetas se abren en una ventana nueva. Si se desactiva, reemplazan la carpeta de la ventana actual.",
-        "promptEjectPendriveOnClose": "Preguntar si desea desmontar/expulsar la memoria USB al cerrar MarkMed"
+        "promptEjectPendriveOnClose": "Recordar expulsar la memoria USB con seguridad al cerrar MarkMed"
       },
       "startup": {
         "title": "Inicio y recuperación",
@@ -799,8 +799,8 @@
     }
   },
   "about": {
-    "copyright": "Derechos de autor © Luo Ran 2017-{year}",
-    "copyrightContributors": "Derechos de Autor Contribuidores"
+    "copyright": "Copyright © {year} MarkMed Project (slanow)",
+    "copyrightContributors": "Medical Records and Text Editor"
   },
   "commands": {
     "mt": {
@@ -974,12 +974,12 @@
     "unsafeFileMessage": "Este enlace abre un archivo que puede ejecutar código",
     "unsafeFileDetail": "«{name}» es un archivo ejecutable o de script. Abrirlo podría ejecutar programas en tu equipo. Continúa solo si confías en este documento.",
     "openAnyway": "Abrir de todos modos",
-    "pendriveEjectTitle": "¿Desmontar y expulsar la memoria USB de forma segura?",
-    "pendriveEjectMessage": "Se detectó que la memoria USB {mount} está en uso por MarkMed.",
-    "pendriveEjectDetail": "Desmontar la memoria USB al cerrar aporta dos ventajas importantes:\n1. Evita la corrupción de las historias clínicas garantizando que todos los archivos se hayan grabado físicamente.\n2. Protege el secreto médico recordándole retirar la memoria USB del ordenador del hospital.",
-    "pendriveEjectConfirm": "Desmontar USB y Salir",
-    "pendriveEjectExitWithoutUnmount": "Solo Salir (sin desmontar)",
-    "pendriveEjectDontAskAgain": "No volver a preguntar (se puede cambiar en Preferencias → General)"
+    "pendriveReminderTitle": "Expulsar memoria USB con seguridad",
+    "pendriveReminderMessage": "La memoria USB «{mount}» se utilizó durante esta sesión de MarkMed.",
+    "pendriveReminderDetail": "Recuerde expulsar o desmontar la unidad en su sistema operativo antes de retirarla físicamente del puerto USB (usando la opción 'Quitar con seguridad' o 'Expulsar/Apagar unidad con seguridad').\n\nEsto evita la pérdida o corrupción de las historias clínicas y garantiza el secreto médico al retirar el dispositivo de ordenadores en clínicas u hospitales.",
+    "pendriveReminderCloseApp": "Cerrar MarkMed",
+    "pendriveReminderTutorial": "¿Cómo expulsar con seguridad? (Tutorial)",
+    "pendriveReminderDontAskAgain": "No mostrar este aviso de nuevo"
   },
   "error": {
     "configSchemaViolation": "Violación del esquema de configuración",

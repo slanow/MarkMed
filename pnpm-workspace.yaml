@@ -16,8 +16,5 @@ allowBuilds:
   ced: true
   electron-winstaller: true
   esbuild: true
-  keytar: true
   native-keymap: true
-  sharp: true
   unrs-resolver: true
-  workerd: true

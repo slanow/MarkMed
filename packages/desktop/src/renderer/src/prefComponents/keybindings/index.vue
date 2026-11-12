@@ -5,7 +5,7 @@
       {{ t('preferences.keybindings.description') }}
       <help-link
         class="shortcut-docs"
-        href="https://github.com/slanow/MarkMed/blob/main/packages/website/content/docs/end-user/KEYBINDINGS.md"
+        href="https://github.com/slanow/MarkMed/wiki"
         :label="t('preferences.keybindings.online')"
       />
     </setting-note>

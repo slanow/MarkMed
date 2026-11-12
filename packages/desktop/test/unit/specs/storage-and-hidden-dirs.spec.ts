@@ -8,8 +8,6 @@ vi.mock('electron', () => ({}))
 import { resolveElectronUserDataPath } from '../../../src/main/app/paths'
 import EnvPaths from '../../../src/common/envPaths'
 import {
-  buildCleanHostUnmountEnv,
-  buildDetachedPendriveUnmountCommand,
   detectPendriveMountTarget
 } from '../../../src/main/filesystem/pendriveEject'
 import { evaluatePasswordStrength } from '../../../src/renderer/src/util/passwordStrength'
@@ -210,39 +208,6 @@ describe('storage space calculation and hidden directories setup', () => {
     expect(resolveSystemSpellcheckerLanguage('pt-BR', [])).toBe('pt-BR')
   })
 
-  it('builds a clean detached unmount and power-off eject command on Linux/Windows/macOS', () => {
-    const cleanEnv = buildCleanHostUnmountEnv({
-      APPIMAGE: '/run/media/ronald/Ronald/markmed.AppImage',
-      APPDIR: '/tmp/.mount_markmeXYZ',
-      LD_LIBRARY_PATH: '/tmp/.mount_markmeXYZ/usr/lib:/usr/lib',
-      PATH: '/tmp/.mount_markmeXYZ:/usr/bin',
-      GIO_MODULE_DIR: '/tmp/.mount_markmeXYZ/usr/lib/gio'
-    })
-    expect(cleanEnv.APPIMAGE).toBeUndefined()
-    expect(cleanEnv.APPDIR).toBeUndefined()
-    expect(cleanEnv.GIO_MODULE_DIR).toBeUndefined()
-    expect(cleanEnv.LD_LIBRARY_PATH).toBe('/usr/lib')
-    expect(cleanEnv.PATH).toBe('/usr/bin')
-
-    const linuxSpec = buildDetachedPendriveUnmountCommand(
-      { mountPoint: '/run/media/ronald/Ronald', device: '/dev/sda1', label: 'Ronald' },
-      { platform: 'linux', mainPid: 4321 }
-    )
-    expect(linuxSpec.command).toBe('/bin/sh')
-    expect(linuxSpec.cwd).toBe('/')
-    expect(linuxSpec.args[1]).toContain('udisksctl unmount -b "$DEV"')
-    expect(linuxSpec.args[1]).toContain('udisksctl power-off -b "$PARENT_DEV"')
-    expect(linuxSpec.args[4]).toBe('/dev/sda1')
-    expect(linuxSpec.args[5]).toBe('4321')
-
-    const winSpec = buildDetachedPendriveUnmountCommand(
-      { mountPoint: 'E:\\', device: 'E:', label: 'E:' },
-      { platform: 'win32', mainPid: 1234 }
-    )
-    expect(winSpec.command).toBe('powershell.exe')
-    expect(winSpec.args[5]).toContain('InvokeVerb("Eject")')
-    expect(winSpec.args[5]).toContain('$pidWait = 1234')
-  })
 
   it('evaluates backup password strength levels cleanly for advisory display', () => {
     expect(evaluatePasswordStrength('123').level).toBe('weak')

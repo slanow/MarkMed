@@ -148,6 +148,39 @@ export interface EditorState {
 const autoSaveTimers = new Map<string, ReturnType<typeof setTimeout>>()
 const autoRenameTimers = new Map<string, ReturnType<typeof setTimeout>>()
 const activeAutoRenames = new Set<string>()
+const activeSaves = new Set<string>()
+const pendingSaveRetry = new Set<string>()
+const recentSavedMarkdowns = new Map<string, Set<string>>()
+
+const normalizeMarkdownForCompare = (str: string): string => {
+  return str.replace(/\r\n/g, '\n').trimEnd()
+}
+
+const recordSelfSavedMarkdown = (id: string, markdown: string): void => {
+  if (!id || typeof markdown !== 'string') return
+  let set = recentSavedMarkdowns.get(id)
+  if (!set) {
+    set = new Set<string>()
+    recentSavedMarkdowns.set(id, set)
+  }
+  set.add(markdown)
+  set.add(normalizeMarkdownForCompare(markdown))
+  if (set.size > 40) {
+    const oldest = set.values().next().value
+    if (typeof oldest === 'string') {
+      set.delete(oldest)
+    }
+  }
+}
+
+const isMatchingSelfSaved = (id: string, markdown: string): boolean => {
+  if (!id || typeof markdown !== 'string') return false
+  const set = recentSavedMarkdowns.get(id)
+  if (!set) return false
+  if (set.has(markdown)) return true
+  if (set.has(normalizeMarkdownForCompare(markdown))) return true
+  return false
+}
 
 interface OpenIntent {
   focus: boolean
@@ -554,8 +587,12 @@ export const useEditorStore = defineStore('editor', {
       if (!session) return
       const targetId = this.currentFile.id
       this.flushActiveEditor()
+      recordSelfSavedMarkdown(targetId, this.currentFile.markdown)
       const promise = session.save(targetId).then((res) => {
         if (res.status === 'saved') {
+          if (typeof res.savedMarkdown === 'string') {
+            recordSelfSavedMarkdown(targetId, res.savedMarkdown)
+          }
           void this.TRY_AUTO_RENAME(targetId)
         }
         return res
@@ -808,6 +845,12 @@ export const useEditorStore = defineStore('editor', {
         const timer = autoRenameTimers.get(file.id)
         if (timer) clearTimeout(timer)
         autoRenameTimers.delete(file.id)
+      }
+      if (file.id) {
+        activeAutoRenames.delete(file.id)
+        activeSaves.delete(file.id)
+        pendingSaveRetry.delete(file.id)
+        recentSavedMarkdowns.delete(file.id)
       }
 
       this.updateTabIdToIndex() // Update before sending it out to prevent stale mappings.
@@ -1211,19 +1254,46 @@ export const useEditorStore = defineStore('editor', {
 
     SAVE_IF_MODIFIED(id: string): void {
       const tab = this.tabs.find((t) => t.id === id)
-      if (tab && tab.pathname && !tab.isSaved && !tab.readOnly && !tab.modeChanging && !tab.diskConflict) {
-        const session = getSessionActions()
-        if (session) {
-          void session
-            .save(id)
-            .then((res) => {
-              if (res.status === 'saved') {
-                void this.TRY_AUTO_RENAME(id)
+      if (!tab || !tab.pathname || tab.isSaved || tab.readOnly || tab.modeChanging || tab.diskConflict) {
+        return
+      }
+      if (activeSaves.has(id) || activeAutoRenames.has(id)) {
+        pendingSaveRetry.add(id)
+        return
+      }
+      const session = getSessionActions()
+      if (!session) return
+
+      if (this.currentFile?.id === id) {
+        this.flushActiveEditor()
+      }
+      recordSelfSavedMarkdown(id, tab.markdown)
+      activeSaves.add(id)
+      void session
+        .save(id)
+        .then((res) => {
+          if (res.status === 'saved') {
+            if (typeof res.savedMarkdown === 'string') {
+              recordSelfSavedMarkdown(id, res.savedMarkdown)
+            }
+            const currentTab = this.tabs.find((t) => t.id === id)
+            if (currentTab) {
+              recordSelfSavedMarkdown(id, currentTab.markdown)
+            }
+          }
+        })
+        .catch(console.error)
+        .finally(() => {
+          activeSaves.delete(id)
+          void this.TRY_AUTO_RENAME(id)
+            .catch(console.error)
+            .finally(() => {
+              if (pendingSaveRetry.has(id)) {
+                pendingSaveRetry.delete(id)
+                this.SAVE_IF_MODIFIED(id)
               }
             })
-            .catch(console.error)
-        }
-      }
+        })
     },
 
     SCHEDULE_AUTO_RENAME(id: string): void {
@@ -1241,7 +1311,7 @@ export const useEditorStore = defineStore('editor', {
     async TRY_AUTO_RENAME(id: string): Promise<void> {
       const preferencesStore = usePreferencesStore()
       if (!preferencesStore.autoRenameFromFirstLine) return
-      if (activeAutoRenames.has(id)) return
+      if (activeAutoRenames.has(id) || activeSaves.has(id)) return
 
       if (this.currentFile?.id === id) {
         this.flushActiveEditor()
@@ -1275,24 +1345,36 @@ export const useEditorStore = defineStore('editor', {
         const session = getSessionActions()
         if (!session || !session.autoRename) return
 
+        recordSelfSavedMarkdown(id, tab.markdown)
         activeAutoRenames.add(id)
         try {
           const res = await session.autoRename(id, targetFilename)
           if (res.status === 'renamed' && res.pathname && res.filename) {
             tab.pathname = res.pathname
             tab.filename = res.filename
+            if (typeof res.savedMarkdown === 'string') {
+              recordSelfSavedMarkdown(id, res.savedMarkdown)
+            }
+            recordSelfSavedMarkdown(id, tab.markdown)
           }
         } catch (error) {
           console.error('Auto rename failed:', error)
         } finally {
           activeAutoRenames.delete(id)
+          if (pendingSaveRetry.has(id)) {
+            pendingSaveRetry.delete(id)
+            this.SAVE_IF_MODIFIED(id)
+          }
         }
         return
       }
 
       if (!shouldAutoRenamePath(tab.pathname)) return
 
-      const diskFilename = window.path.basename(tab.pathname)
+      const diskFilename =
+        typeof window.path?.basename === 'function'
+          ? window.path.basename(tab.pathname)
+          : tab.pathname.split(/[/\\]/).pop() || tab.filename
       const targetFilename = buildDatedPatientFilename({
         currentFilename: diskFilename,
         patientName
@@ -1304,12 +1386,14 @@ export const useEditorStore = defineStore('editor', {
       if (!session || !session.autoRename) return
 
       const oldPathname = tab.pathname
+      recordSelfSavedMarkdown(id, tab.markdown)
       activeAutoRenames.add(id)
       try {
         const res = await session.autoRename(id, targetFilename)
         if (res.status === 'renamed' && res.pathname && res.filename) {
           tab.pathname = res.pathname
           tab.filename = res.filename
+          recordSelfSavedMarkdown(id, tab.markdown)
           if (projectStore.activeItem?.pathname === oldPathname) {
             projectStore.CHANGE_ACTIVE_ITEM({
               ...projectStore.activeItem,
@@ -1322,6 +1406,10 @@ export const useEditorStore = defineStore('editor', {
         console.error('Auto rename failed:', error)
       } finally {
         activeAutoRenames.delete(id)
+        if (pendingSaveRetry.has(id)) {
+          pendingSaveRetry.delete(id)
+          this.SAVE_IF_MODIFIED(id)
+        }
       }
     },
 
@@ -1331,7 +1419,24 @@ export const useEditorStore = defineStore('editor', {
         clearTimeout(timer)
         autoSaveTimers.delete(id)
       }
-      this.SAVE_IF_MODIFIED(id)
+      if (autoRenameTimers.has(id)) {
+        clearTimeout(autoRenameTimers.get(id))
+        autoRenameTimers.delete(id)
+      }
+      const preferencesStore = usePreferencesStore()
+      const tab = this.tabs.find((t) => t.id === id)
+      if (!tab) return
+      if (!tab.pathname) {
+        if (preferencesStore.autoRenameFromFirstLine) {
+          void this.TRY_AUTO_RENAME(id)
+        }
+        return
+      }
+      if (preferencesStore.autoSaveOnEnter) {
+        this.SAVE_IF_MODIFIED(id)
+      } else if (preferencesStore.autoRenameFromFirstLine) {
+        void this.TRY_AUTO_RENAME(id)
+      }
     },
 
     SELECTION_CHANGE(changes: SelectionChange): void {
@@ -1520,10 +1625,17 @@ export const useEditorStore = defineStore('editor', {
               const wasMissing = tab.diskMissing
               tab.diskMissing = false
               // Only the file's metadata changed on disk (e.g. a git checkout
-              // that left the content byte-identical) — there is nothing to
-              // reload and no reason to warn the user (#1861).
+              // that left the content byte-identical) or the event is a delayed
+              // watcher echo of a snapshot MarkMed itself just saved (#1861).
               const newMarkdown = (change as unknown as FileChangePayload).data?.markdown
-              if (typeof newMarkdown === 'string' && newMarkdown === tab.markdown) {
+              if (
+                activeSaves.has(id) ||
+                activeAutoRenames.has(id) ||
+                (typeof newMarkdown === 'string' &&
+                  (newMarkdown === tab.markdown ||
+                    normalizeMarkdownForCompare(newMarkdown) === normalizeMarkdownForCompare(tab.markdown) ||
+                    isMatchingSelfSaved(id, newMarkdown)))
+              ) {
                 if (wasMissing)
                   tab.notifications = tab.notifications.filter(
                     (item) => item.exclusiveType !== 'file_changed'

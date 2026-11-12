@@ -1,6 +1,6 @@
 {
   "name": "markmed-monorepo",
-  "version": "0.26.3",
+  "version": "0.26.4",
   "description": "MarkMed monorepo root",
   "private": true,
   "homepage": "https://github.com/slanow/MarkMed",

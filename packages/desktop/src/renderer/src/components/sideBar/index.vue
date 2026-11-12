@@ -52,6 +52,16 @@
           <Lock aria-hidden="true" />
         </button>
       </icon-tooltip>
+      <icon-tooltip :content="t('contextMenu.sideBar.newDirectory')">
+        <button
+          type="button"
+          class="plain-button new-folder-button"
+          :aria-label="t('contextMenu.sideBar.newDirectory')"
+          @click="createNewFolder"
+        >
+          <FolderAdd aria-hidden="true" />
+        </button>
+      </icon-tooltip>
       <icon-tooltip :content="t('menu.file.addFolder')">
         <button
           type="button"
@@ -76,7 +86,7 @@ import { useLayoutStore } from '@/store/layout'
 import { useProjectStore } from '@/store/project'
 import { useEditorStore } from '@/store/editor'
 
-import { Search, Setting, Plus, Lock } from '@element-plus/icons-vue'
+import { Search, Setting, Plus, Lock, FolderAdd } from '@element-plus/icons-vue'
 import { useI18n } from 'vue-i18n'
 import bus from '@/bus'
 import Tree from './tree.vue'
@@ -100,6 +110,10 @@ const { tabs } = storeToRefs(editorStore)
 
 const openBackupDialog = (): void => {
   bus.emit('backupDialog', 'backup')
+}
+
+const createNewFolder = (): void => {
+  bus.emit('SIDEBAR::create-new-folder')
 }
 
 watch(sideBarWidth, (width) => {

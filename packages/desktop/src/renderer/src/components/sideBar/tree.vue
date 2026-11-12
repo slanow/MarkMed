@@ -179,7 +179,7 @@
             v-model="nameInputValue"
             type="text"
             class="new-input"
-            :style="{ 'margin-left': `${depth * 5 + 15}px` }"
+            :style="{ 'margin-left': `${depth * 18 + 12}px`, width: `calc(100% - ${depth * 18 + 24}px)` }"
             @keypress.enter="handleInputEnter"
           >
           <file
@@ -232,10 +232,41 @@
             text
             bg
             type="primary"
-            @click="openFolderAndCreateDirectory"
+            @click="startNewRootFolderInput"
           >
             {{ t('contextMenu.sideBar.newDirectory') }}
           </el-button>
+          <div
+            v-if="showNewRootFolderInput"
+            class="new-root-folder-form"
+            @click.stop
+          >
+            <input
+              ref="newRootFolderInputEl"
+              v-model="newRootFolderName"
+              type="text"
+              class="new-root-folder-input"
+              placeholder="Nome da pasta (ex: Pacientes, Consultas)..."
+              @keydown.enter.stop.prevent="submitNewRootFolder"
+              @keydown.esc.stop.prevent="cancelNewRootFolder"
+            >
+            <div class="new-root-folder-actions">
+              <button
+                type="button"
+                class="button-primary"
+                @click.stop="submitNewRootFolder"
+              >
+                Criar
+              </button>
+              <button
+                type="button"
+                class="plain-button cancel-btn"
+                @click.stop="cancelNewRootFolder"
+              >
+                Cancelar
+              </button>
+            </div>
+          </div>
           <el-button
             text
             bg
@@ -287,10 +318,13 @@ const { t } = useI18n()
 
 const props = defineProps<{ tabs?: TabDescriptor[] }>()
 
-const depth = 0
+const depth = 1
 
 const input = ref<HTMLInputElement | null>(null)
 const treeWrapper = ref<HTMLDivElement | null>(null)
+const showNewRootFolderInput = ref(false)
+const newRootFolderName = ref('')
+const newRootFolderInputEl = ref<HTMLInputElement | null>(null)
 
 const rootRows = new Map<string, HTMLElement>()
 const rowRegistry: TreeRowRegistry = new Map()
@@ -389,32 +423,35 @@ const createFolderInTarget = (root: RootView): void => {
   bus.emit('SIDEBAR::new', 'directory')
 }
 
-let pendingCreateDirectoryAfterOpen = false
+const startNewRootFolderInput = (): void => {
+  showNewRootFolderInput.value = true
+  newRootFolderName.value = ''
+  nextTick(() => {
+    newRootFolderInputEl.value?.focus()
+  })
+}
 
-const openFolderAndCreateDirectory = (): void => {
-  pendingCreateDirectoryAfterOpen = true
-  projectStore.ASK_FOR_OPEN_PROJECT()
+const cancelNewRootFolder = (): void => {
+  showNewRootFolderInput.value = false
+  newRootFolderName.value = ''
+}
+
+const submitNewRootFolder = async (): Promise<void> => {
+  const folderName = newRootFolderName.value.trim()
+  if (!folderName) return
+  const result = await window.electron.ipcRenderer.invoke(
+    'mt::project-create-root-folder',
+    folderName
+  )
+  if (result.ok) {
+    showNewRootFolderInput.value = false
+    newRootFolderName.value = ''
+  }
 }
 
 const createNewTabFile = (): void => {
   editorStore.NEW_UNTITLED_TAB({})
 }
-
-watch(
-  () => roots.value,
-  (nextRoots) => {
-    if (!pendingCreateDirectoryAfterOpen || nextRoots.length === 0) return
-    const readyRoot = nextRoots.find((r) => r.status === 'ready') ?? nextRoots[0]
-    if (!readyRoot) return
-    pendingCreateDirectoryAfterOpen = false
-    nextTick(() => {
-      projectStore.SET_FOLDER_COLLAPSED(readyRoot.tree, false)
-      projectStore.CHANGE_ACTIVE_ITEM(readyRoot.tree)
-      bus.emit('SIDEBAR::new', 'directory')
-    })
-  },
-  { deep: true }
-)
 
 const toggleRoot = (root: RootView): void => {
   projectStore.CHANGE_ACTIVE_ITEM(root.tree)
@@ -676,7 +713,18 @@ watch(
   { flush: 'post' }
 )
 
+const handleCreateNewFolderRequest = (): void => {
+  if (roots.value.length > 0) {
+    const targetRoot =
+      roots.value.find((r) => r.pathname === projectStore.activeItem?.pathname) ?? roots.value[0]
+    createFolderInTarget(targetRoot)
+  } else {
+    startNewRootFolderInput()
+  }
+}
+
 onMounted(() => {
+  bus.on('SIDEBAR::create-new-folder', handleCreateNewFolderRequest)
   bus.on('SIDEBAR::focus-root', focusRoot)
   bus.on('SIDEBAR::show-new-input', handleInputFocus)
   bus.on('SIDEBAR::focus-tree', focusTree)
@@ -690,6 +738,7 @@ onMounted(() => {
 })
 
 onUnmounted(() => {
+  bus.off('SIDEBAR::create-new-folder', handleCreateNewFolderRequest)
   bus.off('SIDEBAR::focus-root', focusRoot)
   bus.off('SIDEBAR::show-new-input', handleInputFocus)
   bus.off('SIDEBAR::focus-tree', focusTree)
@@ -837,9 +886,24 @@ onUnmounted(() => {
 }
 
 .project-tree > .title {
-  padding: 0 15px;
+  padding: 0 10px 0 12px;
   display: flex;
   align-items: center;
+}
+
+.tree-contents {
+  position: relative;
+}
+
+.tree-contents::before {
+  content: '';
+  position: absolute;
+  top: 2px;
+  bottom: 4px;
+  left: 17px;
+  width: 1px;
+  background: var(--sideBarGuideLineColor, rgba(145, 155, 175, 0.35));
+  pointer-events: none;
 }
 
 .project-tree > .title > span {
@@ -909,6 +973,48 @@ onUnmounted(() => {
   flex-direction: column;
   align-items: stretch;
   gap: 10px;
+  width: 170px;
+}
+
+.new-root-folder-form {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 8px;
+  border-radius: 6px;
+  background: var(--sideBarItemHoverBgColor);
+  border: 1px solid var(--floatBorderColor);
+}
+
+.new-root-folder-input {
+  outline: none;
+  height: 26px;
+  padding: 0 8px;
+  color: var(--sideBarColor);
+  border: 1px solid var(--focusColor);
+  background: var(--inputBgColor);
+  border-radius: 4px;
+  font-size: 13px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.new-root-folder-actions {
+  display: flex;
+  gap: 6px;
+}
+
+.new-root-folder-actions button {
+  flex: 1;
+  height: 26px;
+  font-size: 12px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.new-root-folder-actions .cancel-btn {
+  color: var(--sideBarTextColor);
+  border: 1px solid var(--floatBorderColor);
 }
 
 .open-project .el-button {

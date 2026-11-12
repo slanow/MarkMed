@@ -44,6 +44,11 @@ class Keybindings {
     this._loadLocalKeybindings()
   }
 
+  retargetDirectory(userDataPath: string): void {
+    if (!userDataPath) return
+    this.configPath = path.join(userDataPath, 'keybindings.json')
+  }
+
   getAccelerator(id: string): string | null {
     const name = this.keys.get(id)
     if (!name) {

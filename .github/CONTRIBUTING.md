@@ -62,4 +62,4 @@ There are also other ways you can help MarkMed:
 
 ## Developer Documentation
 
-For more details, please [visit the developer documentation](https://github.com/slanow/MarkMed/blob/main/packages/website/content/docs/dev/README.md).
+For more details, please [visit the MarkMed Wiki](https://github.com/slanow/MarkMed/wiki).

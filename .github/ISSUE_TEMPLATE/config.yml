@@ -4,5 +4,5 @@ contact_links:
     url: https://github.com/slanow/MarkMed/discussions
     about: Use GitHub Discussions for questions, help, and general conversation about MarkMed.
   - name: Documentation
-    url: https://github.com/slanow/MarkMed/tree/main/packages/website/content/docs
+    url: https://github.com/slanow/MarkMed/wiki
     about: Check the docs before asking — your answer may already be there.

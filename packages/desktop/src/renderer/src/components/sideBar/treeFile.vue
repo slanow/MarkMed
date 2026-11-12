@@ -6,13 +6,19 @@
     :data-tree-path="file.pathname"
     data-tree-directory="false"
     :draggable="!renameCache && !projectStore.createCache.dirname"
-    :style="{ 'padding-left': `${depth * 6 + 15}px`, opacity: file.isMarkdown ? 1 : 0.75 }"
+    :style="{ 'padding-left': `${depth * 18 + 12}px`, opacity: file.isMarkdown ? 1 : 0.75 }"
     :class="[
       { current: currentFile?.pathname === file.pathname, active: file.id === activeItem.id }
     ]"
     @click="handleFileClick"
     @dblclick="handleFileDblClick"
   >
+    <span
+      v-for="level in depth"
+      :key="level"
+      class="tree-indent-guide"
+      :style="{ left: `${(level - 1) * 18 + 17}px` }"
+    />
     <file-icon :name="file.name" />
     <input
       v-if="renameCache === file.pathname"
@@ -28,7 +34,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, nextTick } from 'vue'
+import { ref, onMounted, onUnmounted, nextTick } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useProjectStore } from '@/store/project'
 import { useEditorStore } from '@/store/editor'
@@ -116,6 +122,10 @@ onMounted(() => {
   bus.on('SIDEBAR::show-rename-input', focusRenameInput)
 })
 
+onUnmounted(() => {
+  bus.off('SIDEBAR::show-rename-input', focusRenameInput)
+})
+
 </script>
 
 <style scoped>
@@ -161,6 +171,15 @@ onMounted(() => {
 }
 .side-bar-file.active > span {
   color: var(--sideBarTitleColor);
+}
+.tree-indent-guide {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: var(--sideBarGuideLineColor, rgba(145, 155, 175, 0.35));
+  pointer-events: none;
+  z-index: 1;
 }
 input.rename {
   height: 22px;

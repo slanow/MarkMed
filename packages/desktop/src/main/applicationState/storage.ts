@@ -31,6 +31,10 @@ export class ApplicationStateStore implements ApplicationStateStorage {
   write(state: ApplicationState): Promise<void> {
     return this._file.write(state)
   }
+  retargetDirectory(userDataPath: string): void {
+    if (!userDataPath) return
+    this._file.retargetPathname(path.join(userDataPath, 'state', 'application-state.json'))
+  }
 }
 
 export class RecoveryStore implements DocumentRecoveryStorage {
@@ -38,9 +42,15 @@ export class RecoveryStore implements DocumentRecoveryStorage {
   private _pending: Promise<void> = Promise.resolve()
 
   constructor(
-    private readonly _userDataPath: string,
+    private _userDataPath: string,
     private readonly _hooks: StorageHooks = {}
   ) {}
+
+  retargetDirectory(userDataPath: string): void {
+    if (!userDataPath) return
+    this._userDataPath = userDataPath
+    this._files.clear()
+  }
 
   private _enqueue(operation: () => Promise<void>): Promise<void> {
     const task = this._pending.then(operation)
