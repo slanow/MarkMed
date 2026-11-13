@@ -10,6 +10,9 @@
 <br>
 
 <div align="center">
+  <a href="https://slanow.github.io/MarkMed/">
+    <img src="https://img.shields.io/badge/Demo-Testar%20Online-2ea44f?logo=googlechrome&logoColor=white" alt="Testar Online">
+  </a>
   <a href="https://github.com/slanow/MarkMed/releases">
     <img src="https://img.shields.io/github/v/release/slanow/MarkMed?label=Download" alt="Download MarkMed">
   </a>
@@ -71,9 +74,13 @@ O objetivo principal do MarkMed é oferecer um **ambiente confiável para criaç
 
 ---
 
-## Como Instalar e Usar (PC ou Pendrive)
+## Como Testar Online e Baixar (PC ou Pendrive)
 
-Baixe a versão mais recente para o seu sistema na página oficial de lançamentos:
+Você pode experimentar o MarkMed diretamente no seu navegador antes de baixar:
+
+👉 **[🌐 Testar Demonstração Online (Live Demo)](https://slanow.github.io/MarkMed/)**
+
+Para usar offline no plantão ou instalar no computador, baixe a versão para o seu sistema:
 
 👉 **[Baixar o MarkMed (Releases no GitHub)](https://github.com/slanow/MarkMed/releases)**
 

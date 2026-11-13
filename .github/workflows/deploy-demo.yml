@@ -1,0 +1,49 @@
+name: Deploy Live Demo to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'packages/muya/**'
+      - '.github/workflows/deploy-demo.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: 'pages'
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7.0.1
+
+      - name: Setup pnpm + Node
+        uses: ./.github/actions/setup
+        with:
+          node-version: '22.21.1'
+
+      - name: Build Muya types
+        run: pnpm --filter @muyajs/core build:types
+
+      - name: Build Web Demo
+        run: pnpm --filter muya-examples build
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v4
+        with:
+          path: packages/muya/examples/dist
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
