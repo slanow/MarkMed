@@ -34,10 +34,29 @@ jobs:
       - name: Build Web Demo
         run: pnpm --filter muya-examples build
 
+      - name: Prepare demo directory structure
+        run: |
+          mkdir -p site/demo
+          cp -r packages/muya/examples/dist/* site/demo/
+          # Optional landing redirect so visiting root redirects cleanly to /demo/
+          cat << 'EOF' > site/index.html
+          <!doctype html>
+          <html>
+            <head>
+              <meta charset="utf-8">
+              <meta http-equiv="refresh" content="0; url=./demo/">
+              <title>MarkMed</title>
+            </head>
+            <body>
+              <p>Redirecionando para a demonstração do MarkMed: <a href="./demo/">Clique aqui</a></p>
+            </body>
+          </html>
+          EOF
+
       - name: Deploy to gh-pages branch
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./packages/muya/examples/dist
+          publish_dir: ./site
           publish_branch: gh-pages
           force_orphan: true

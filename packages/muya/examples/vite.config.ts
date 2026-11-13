@@ -1,7 +1,7 @@
 import { defineConfig } from 'vite'
 
 export default defineConfig({
-  base: './',
+  base: '/MarkMed/demo/',
   server: {
     port: 5173
   }
